@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Lighthouse Design Build</title>
+  <link rel="stylesheet" href="/dist/css/styles.css">
+  <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <style>
+    .admin-bg {
+      background: linear-gradient(135deg, #152D45 0%, #1C3D5A 50%, #5C88A0 100%);
+    }
+    .login-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+  </style>
+</head>
+<body class="admin-bg min-h-screen flex items-center justify-center p-4">
+
+  <div x-data="loginForm()" class="w-full max-w-md">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-16 mx-auto mb-4">
+      <h1 class="text-white text-2xl font-semibold">Admin Portal</h1>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card rounded-2xl shadow-2xl p-8">
+      <!-- Error Message -->
+      <div x-show="error" x-cloak
+           class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <span x-text="error"></span>
+      </div>
+
+      <!-- Login Form -->
+      <form @submit.prevent="login">
+        <div class="space-y-5">
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <input type="text" id="username" x-model="username" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent transition"
+                   placeholder="Enter your username">
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <input type="password" id="password" x-model="password" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent transition"
+                   placeholder="Enter your password">
+          </div>
+
+          <button type="submit" :disabled="loading"
+                  class="w-full py-3 px-4 bg-lighthouse-gold text-white font-semibold rounded-lg hover:bg-lighthouse-light-gold transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span x-show="!loading">Sign In</span>
+            <span x-show="loading" class="flex items-center justify-center">
+              <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Signing in...
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Back to site link -->
+    <p class="text-center mt-6 text-white/70 text-sm">
+      <a href="/pages/index.html" class="hover:text-white transition">&larr; Back to main site</a>
+    </p>
+  </div>
+
+  <script>
+    function loginForm() {
+      return {
+        username: '',
+        password: '',
+        error: '',
+        loading: false,
+
+        async init() {
+          // Check if already logged in
+          try {
+            const res = await fetch('/api/auth/check');
+            const data = await res.json();
+            if (data.authenticated) {
+              window.location.href = '/admin/dashboard.html';
+            }
+          } catch (err) {
+            console.error('Auth check failed:', err);
+          }
+        },
+
+        async login() {
+          this.error = '';
+          this.loading = true;
+
+          try {
+            const res = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                username: this.username,
+                password: this.password
+              })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+              this.error = data.message || 'Login failed';
+              return;
+            }
+
+            window.location.href = '/admin/dashboard.html';
+          } catch (err) {
+            this.error = 'Network error. Please try again.';
+          } finally {
+            this.loading = false;
+          }
+        }
+      };
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management | Lighthouse Admin</title>
+  <link rel="stylesheet" href="/dist/css/styles.css">
+  <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .sidebar { width: 260px; }
+    .main-content { margin-left: 260px; }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen" x-data="userManager()">
+
+  <!-- Sidebar -->
+  <aside class="sidebar fixed top-0 left-0 h-full bg-lighthouse-navy text-white transition-transform duration-300"
+         :class="{ 'open': sidebarOpen }">
+    <div class="p-6">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-12">
+    </div>
+
+    <nav class="mt-6">
+      <a href="/admin/dashboard.html"
+         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="/admin/gallery-manage.html"
+         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Gallery Manager
+      </a>
+      <a href="/admin/users-manage.html"
+         class="flex items-center px-6 py-3 bg-white/10 text-white">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        User Management
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium" x-text="currentUser?.username"></p>
+          <p class="text-xs text-white/50 capitalize" x-text="currentUser?.role"></p>
+        </div>
+        <button @click="logout" class="text-white/70 hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <header class="lg:hidden fixed top-0 left-0 right-0 bg-lighthouse-navy text-white p-4 z-40 flex items-center justify-between">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+    <span class="font-semibold">User Management</span>
+    <button @click="logout" class="p-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Overlay -->
+  <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
+       class="lg:hidden fixed inset-0 bg-black/50 z-40"></div>
+
+  <!-- Main Content -->
+  <main class="main-content min-h-screen pt-16 lg:pt-0">
+    <div class="p-6 lg:p-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-bold text-lighthouse-navy">User Management</h1>
+          <p class="text-gray-600 mt-1">Manage admin and editor accounts</p>
+        </div>
+        <button @click="showCreateModal = true"
+                class="inline-flex items-center px-4 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Add User
+        </button>
+      </div>
+
+      <!-- Success/Error Messages -->
+      <div x-show="message" x-cloak
+           :class="messageType === 'success' ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'"
+           class="mb-6 p-4 border rounded-lg flex items-center justify-between">
+        <span x-text="message"></span>
+        <button @click="message = ''" class="ml-4">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Users Table -->
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b">
+              <tr>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Username</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Role</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Last Login</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Created</th>
+                <th class="px-6 py-4 text-right text-sm font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <template x-for="user in users" :key="user.id">
+                <tr class="hover:bg-gray-50 transition">
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 bg-lighthouse-navy rounded-full flex items-center justify-center text-white font-semibold"
+                           x-text="user.username.charAt(0).toUpperCase()"></div>
+                      <div>
+                        <p class="font-medium text-gray-900" x-text="user.username"></p>
+                        <p class="text-sm text-gray-500" x-show="user.id === currentUser?.id">(You)</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium capitalize"
+                          :class="user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'"
+                          x-text="user.role"></span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-600" x-text="user.lastLogin ? formatDate(user.lastLogin) : 'Never'"></td>
+                  <td class="px-6 py-4 text-sm text-gray-600" x-text="formatDate(user.createdAt)"></td>
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex items-center justify-end gap-2">
+                      <button @click="editUser(user)"
+                              class="p-2 text-gray-500 hover:text-lighthouse-navy hover:bg-gray-100 rounded-lg transition"
+                              :disabled="user.id === currentUser?.id">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                      </button>
+                      <button @click="confirmDelete(user)"
+                              class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                              :disabled="user.id === currentUser?.id">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div x-show="!loading && users.length === 0" class="text-center py-12">
+          <p class="text-gray-500">No users found</p>
+        </div>
+
+        <!-- Loading State -->
+        <div x-show="loading" class="text-center py-12">
+          <svg class="animate-spin h-8 w-8 mx-auto text-lighthouse-gold" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Create User Modal -->
+  <div x-show="showCreateModal" x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       @click.self="showCreateModal = false">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
+      <div class="p-6 border-b">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-lighthouse-navy">Create User</h2>
+          <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <form @submit.prevent="createUser" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <input type="text" x-model="newUser.username" required minlength="3"
+                   pattern="[a-zA-Z0-9_]+"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent"
+                   placeholder="Letters, numbers, underscores only">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <input type="password" x-model="newUser.password" required minlength="8"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent"
+                   placeholder="At least 8 characters">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <select x-model="newUser.role"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent">
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+            </select>
+            <p class="text-xs text-gray-500 mt-1">Editors can manage gallery. Admins can also manage users.</p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" @click="showCreateModal = false; resetNewUser()"
+                  class="px-4 py-2 text-gray-600 hover:text-gray-800 transition">
+            Cancel
+          </button>
+          <button type="submit"
+                  :disabled="creating"
+                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50">
+            <span x-show="!creating">Create User</span>
+            <span x-show="creating">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit User Modal -->
+  <div x-show="showEditModal" x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       @click.self="showEditModal = false">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
+      <div class="p-6 border-b">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-lighthouse-navy">Edit User</h2>
+          <button @click="showEditModal = false" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <form @submit.prevent="updateUser" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <input type="text" :value="editingUser?.username" disabled
+                   class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <select x-model="editingRole"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent">
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div class="pt-4 border-t">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Reset Password (optional)</label>
+            <input type="password" x-model="editingPassword" minlength="8"
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent"
+                   placeholder="Leave empty to keep current password">
+            <p class="text-xs text-gray-500 mt-1">User will be required to change password on next login</p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button type="button" @click="showEditModal = false"
+                  class="px-4 py-2 text-gray-600 hover:text-gray-800 transition">
+            Cancel
+          </button>
+          <button type="submit"
+                  :disabled="saving"
+                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50">
+            <span x-show="!saving">Save Changes</span>
+            <span x-show="saving">Saving...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div x-show="showDeleteModal" x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       @click.self="showDeleteModal = false">
+    <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full">
+      <div class="p-6 text-center">
+        <div class="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete User?</h3>
+        <p class="text-gray-600 text-sm mb-2">Are you sure you want to delete user:</p>
+        <p class="font-medium text-lighthouse-navy mb-6" x-text="deletingUser?.username"></p>
+
+        <div class="flex gap-3 justify-center">
+          <button @click="showDeleteModal = false"
+                  class="px-4 py-2 text-gray-600 hover:text-gray-800 transition">
+            Cancel
+          </button>
+          <button @click="deleteUser"
+                  :disabled="deleting"
+                  class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50">
+            <span x-show="!deleting">Delete</span>
+            <span x-show="deleting">Deleting...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function userManager() {
+      return {
+        currentUser: null,
+        users: [],
+        loading: true,
+        sidebarOpen: false,
+
+        // Messages
+        message: '',
+        messageType: 'success',
+
+        // Create
+        showCreateModal: false,
+        newUser: { username: '', password: '', role: 'editor' },
+        creating: false,
+
+        // Edit
+        showEditModal: false,
+        editingUser: null,
+        editingRole: 'editor',
+        editingPassword: '',
+        saving: false,
+
+        // Delete
+        showDeleteModal: false,
+        deletingUser: null,
+        deleting: false,
+
+        async init() {
+          await this.checkAuth();
+          await this.loadUsers();
+        },
+
+        async checkAuth() {
+          try {
+            const res = await fetch('/api/auth/check');
+            const data = await res.json();
+
+            if (!data.authenticated) {
+              window.location.href = '/admin/';
+              return;
+            }
+
+            if (data.user.role !== 'admin') {
+              window.location.href = '/admin/dashboard.html';
+              return;
+            }
+
+            this.currentUser = data.user;
+          } catch (err) {
+            window.location.href = '/admin/';
+          }
+        },
+
+        async loadUsers() {
+          this.loading = true;
+          try {
+            const res = await fetch('/api/users');
+            const data = await res.json();
+            this.users = data.users || [];
+          } catch (err) {
+            this.showMessage('Failed to load users', 'error');
+          } finally {
+            this.loading = false;
+          }
+        },
+
+        showMessage(msg, type = 'success') {
+          this.message = msg;
+          this.messageType = type;
+          setTimeout(() => { this.message = ''; }, 5000);
+        },
+
+        formatDate(dateStr) {
+          if (!dateStr) return 'N/A';
+          const date = new Date(dateStr);
+          return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+        },
+
+        resetNewUser() {
+          this.newUser = { username: '', password: '', role: 'editor' };
+        },
+
+        async createUser() {
+          this.creating = true;
+          try {
+            const res = await fetch('/api/users', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(this.newUser)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+              throw new Error(data.message || 'Failed to create user');
+            }
+
+            this.showMessage('User created successfully!');
+            this.showCreateModal = false;
+            this.resetNewUser();
+            await this.loadUsers();
+          } catch (err) {
+            this.showMessage(err.message, 'error');
+          } finally {
+            this.creating = false;
+          }
+        },
+
+        editUser(user) {
+          this.editingUser = user;
+          this.editingRole = user.role;
+          this.editingPassword = '';
+          this.showEditModal = true;
+        },
+
+        async updateUser() {
+          this.saving = true;
+          try {
+            const body = { role: this.editingRole };
+            if (this.editingPassword) {
+              body.newPassword = this.editingPassword;
+            }
+
+            const res = await fetch(`/api/users/${this.editingUser.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+              throw new Error(data.message || 'Failed to update user');
+            }
+
+            let msg = 'User updated successfully!';
+            if (data.passwordReset) {
+              msg += ' Password has been reset.';
+            }
+
+            this.showMessage(msg);
+            this.showEditModal = false;
+            await this.loadUsers();
+          } catch (err) {
+            this.showMessage(err.message, 'error');
+          } finally {
+            this.saving = false;
+          }
+        },
+
+        confirmDelete(user) {
+          this.deletingUser = user;
+          this.showDeleteModal = true;
+        },
+
+        async deleteUser() {
+          this.deleting = true;
+          try {
+            const res = await fetch(`/api/users/${this.deletingUser.id}`, {
+              method: 'DELETE'
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+              throw new Error(data.message || 'Failed to delete user');
+            }
+
+            this.showMessage('User deleted successfully!');
+            this.showDeleteModal = false;
+            await this.loadUsers();
+          } catch (err) {
+            this.showMessage(err.message, 'error');
+          } finally {
+            this.deleting = false;
+          }
+        },
+
+        async logout() {
+          try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/';
+          } catch (err) {
+            console.error('Logout failed:', err);
+          }
+        }
+      };
+    }
+  </script>
+</body>
+</html>

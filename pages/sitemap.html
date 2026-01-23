@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3WCW57RF6Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3WCW57RF6Q');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>Sitemap | Lighthouse Design Build</title>
+    <meta name="description" content="Complete site navigation and page index for Lighthouse Design Build. Find all our pages, services, resources, and information.">
+    <link rel="canonical" href="https://www.designwithlighthouse.com/pages/sitemap">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Sitemap | Lighthouse Design Build">
+    <meta property="og:description" content="Complete site navigation and page index.">
+    <meta property="og:url" content="https://www.designwithlighthouse.com/pages/sitemap">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="/src/assets/icons/site.webmanifest">
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Main Stylesheet (Compiled TailwindCSS) -->
+    <link rel="stylesheet" href="/dist/css/styles.css">
+
+    <!-- Custom Animations CSS -->
+    <link rel="stylesheet" href="/src/css/animations.css">
+
+    <!-- Inline theme detection (prevents flash) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
+
+    <!-- Alpine.js with Collapse Plugin -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-lighthouse-light dark:bg-gray-900 text-lighthouse-navy dark:text-gray-100">
+
+<!-- Header -->
+<div id="header-placeholder"></div>
+
+<!-- Main Content -->
+<main id="main-content">
+    <!-- Hero Section -->
+    <section class="pt-32 pb-16 bg-gradient-to-br from-lighthouse-navy via-lighthouse-teal to-lighthouse-navy">
+        <div class="container-custom">
+            <div class="text-center text-white" data-aos="fade-up">
+                <h1 class="mb-6 text-4xl font-bold md:text-5xl lg:text-6xl font-display">Site Map</h1>
+                <p class="max-w-2xl mx-auto text-lg text-gray-200 md:text-xl">
+                    Navigate through all pages and resources on our website.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sitemap Content -->
+    <section class="py-16 bg-white dark:bg-gray-800">
+        <div class="max-w-6xl px-6 mx-auto">
+
+            <!-- Main Pages Section -->
+            <div class="mb-16" data-aos="fade-up">
+                <h2 class="mb-8 text-3xl font-bold text-lighthouse-navy dark:text-white font-heading">Main Pages</h2>
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <a href="/pages/index" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Home</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Welcome to Lighthouse Design Build</p>
+                    </a>
+                    <a href="/pages/about" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">About Us</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Our story, team, and values</p>
+                    </a>
+                    <a href="/pages/services" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Services</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Design-build services we offer</p>
+                    </a>
+                    <a href="/pages/process" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Our Process</h3>
+                        <p class="text-gray-600 dark:text-gray-300">How we work with you</p>
+                    </a>
+                    <a href="/pages/portfolio" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Portfolio</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Showcase of our projects</p>
+                    </a>
+                    <a href="/pages/gallery" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Gallery</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Photo and video gallery</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div class="mb-16" data-aos="fade-up">
+                <h2 class="mb-8 text-3xl font-bold text-lighthouse-navy dark:text-white font-heading">Our Services</h2>
+                <div class="grid gap-6 md:grid-cols-2">
+                    <a href="/pages/services/kitchen" class="flex items-start p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <svg class="flex-shrink-0 w-12 h-12 mr-4 text-lighthouse-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <div>
+                            <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Kitchen Remodeling</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Transform your kitchen into a functional masterpiece</p>
+                        </div>
+                    </a>
+                    <a href="/pages/services/bathroom" class="flex items-start p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <svg class="flex-shrink-0 w-12 h-12 mr-4 text-lighthouse-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                        </svg>
+                        <div>
+                            <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Bathroom Remodeling</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Create a spa-like retreat in your home</p>
+                        </div>
+                    </a>
+                    <a href="/pages/services/home_additions" class="flex items-start p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <svg class="flex-shrink-0 w-12 h-12 mr-4 text-lighthouse-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                        </svg>
+                        <div>
+                            <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Home Additions</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Expand your living space seamlessly</p>
+                        </div>
+                    </a>
+                    <a href="/pages/services/outdoor" class="flex items-start p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <svg class="flex-shrink-0 w-12 h-12 mr-4 text-lighthouse-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                        <div>
+                            <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Outdoor Living</h3>
+                            <p class="text-gray-600 dark:text-gray-300">Decks, patios, and outdoor entertaining spaces</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Resources Section -->
+            <div class="mb-16" data-aos="fade-up">
+                <h2 class="mb-8 text-3xl font-bold text-lighthouse-navy dark:text-white font-heading">Resources</h2>
+                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <a href="/pages/blog" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Blog</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Design tips, trends, and project stories</p>
+                    </a>
+                    <a href="/pages/consultation" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Schedule Consultation</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Book a meeting with our team</p>
+                    </a>
+                    <a href="/pages/careers" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Careers</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Join our growing team</p>
+                    </a>
+                    <a href="/pages/resources" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Resources</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Helpful guides and information</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Legal Pages Section -->
+            <div class="mb-16" data-aos="fade-up">
+                <h2 class="mb-8 text-3xl font-bold text-lighthouse-navy dark:text-white font-heading">Legal & Information</h2>
+                <div class="grid gap-6 md:grid-cols-3">
+                    <a href="/pages/privacy" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Privacy Policy</h3>
+                        <p class="text-gray-600 dark:text-gray-300">How we protect your data</p>
+                    </a>
+                    <a href="/pages/terms" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">Terms of Service</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Website terms and conditions</p>
+                    </a>
+                    <a href="/sitemap.xml" class="block p-6 transition-all duration-300 border rounded-lg group bg-lighthouse-light/30 dark:bg-gray-700 border-lighthouse-gold/20 hover:border-lighthouse-gold hover:shadow-lg">
+                        <h3 class="mb-2 text-xl font-bold text-lighthouse-navy dark:text-white group-hover:text-lighthouse-gold">XML Sitemap</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Machine-readable sitemap for search engines</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Back to Home Link -->
+            <div class="text-center" data-aos="fade-up">
+                <a href="/pages/index" class="inline-flex items-center gap-2 px-8 py-3 font-semibold text-white transition-all duration-300 rounded-full shadow-lg bg-lighthouse-gold hover:bg-lighthouse-gold/90 hover:shadow-xl">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<div id="footer-placeholder"></div>
+
+<!-- Scripts -->
+<script src="/src/js/main.js"></script>
+<script src="/src/js/navigation.js"></script>
+
+<!-- AOS Animation Library -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true,
+    offset: 100
+  });
+</script>
+
+<!-- Load Header & Footer -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('/src/components/partials/header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-placeholder').innerHTML = data;
+      });
+
+    fetch('/src/components/partials/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('footer-placeholder').innerHTML = data;
+      });
+  });
+</script>
+
+</body>
+</html>

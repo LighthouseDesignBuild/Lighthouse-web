@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3WCW57RF6Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3WCW57RF6Q');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>Blog Post | Lighthouse Design Build</title>
+    <meta name="description" content="Read our latest home renovation and design article from Lighthouse Design Build.">
+    <link rel="canonical" href="https://www.designwithlighthouse.com/pages/blog-post">
+
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/src/assets/icons/site.webmanifest">
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Main Stylesheet (Compiled TailwindCSS) -->
+    <link rel="stylesheet" href="/dist/css/styles.css">
+
+    <!-- Custom Animations CSS -->
+    <link rel="stylesheet" href="/src/css/animations.css">
+
+    <!-- Inline theme detection (prevents flash) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
+
+    <!-- Alpine.js Collapse Plugin & Alpine.js Core -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</head>
+<body class="font-body text-lighthouse-charcoal dark:text-gray-100 bg-white dark:bg-[#0a0a0a] antialiased" data-manual-loader>
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F5F7F8] dark:bg-[#0a0a0a] transition-opacity duration-500">
+        <div class="flex flex-row gap-2">
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.3s]"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.5s]"></div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="pt-20"
+          x-data="blogPostPage()"
+          x-init="init()">
+
+        <!-- Breadcrumb Section -->
+        <section class="py-8 bg-lighthouse-warmgray/10 dark:bg-gray-900/50 border-b border-lighthouse-warmgray/30 dark:border-gray-700">
+            <div class="container-custom">
+                <nav class="flex items-center gap-2 text-sm">
+                    <a href="./index.html" class="text-gray-600 dark:text-gray-400 hover:text-lighthouse-teal transition-colors">Home</a>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    <a href="./blog.html" class="text-gray-600 dark:text-gray-400 hover:text-lighthouse-teal transition-colors">Blog</a>
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    <span class="text-lighthouse-navy dark:text-white font-semibold" x-show="!loading && !error" x-text="post.title.substring(0, 50) + (post.title.length > 50 ? '...' : '')"></span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <section x-show="loading" class="py-24 bg-white dark:bg-gray-900">
+            <div class="container-custom max-w-4xl">
+                <div class="text-center">
+                    <svg class="animate-spin h-12 w-12 text-lighthouse-teal mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-gray-600 dark:text-gray-400 dark:text-gray-300">Loading article...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error State -->
+        <section x-show="error" class="py-24 bg-white dark:bg-gray-900">
+            <div class="container-custom max-w-4xl">
+                <div class="text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <h2 class="text-2xl font-heading font-bold text-lighthouse-navy dark:text-white mb-4">Article Not Found</h2>
+                    <p class="text-red-600 dark:text-red-400 mb-8" x-text="error"></p>
+                    <a href="./blog.html" class="inline-flex items-center gap-2 px-6 py-3 bg-lighthouse-teal hover:bg-lighthouse-teal/90 text-white font-heading font-semibold rounded-lg transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        Back to Blog
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Article Content -->
+        <article x-show="!loading && !error" class="py-16 md:py-24 bg-white dark:bg-gray-900">
+            <div class="container-custom max-w-4xl">
+                <!-- Article Header -->
+                <header class="mb-12" data-aos="fade-up">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
+                        <p class="text-xs font-heading font-semibold uppercase tracking-wider text-lighthouse-teal">
+                            <span x-text="formattedDate"></span>
+                        </p>
+                        <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
+                    </div>
+
+                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-lighthouse-navy dark:text-white leading-tight mb-6"
+                        x-text="post.title"></h1>
+
+                    <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                        <a href="./blog.html" class="inline-flex items-center gap-2 hover:text-lighthouse-teal transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            Back to all posts
+                        </a>
+                    </div>
+                </header>
+
+                <!-- Article Body -->
+                <div class="prose prose-lg max-w-none
+                            prose-headings:font-heading prose-headings:font-bold prose-headings:text-lighthouse-navy dark:prose-headings:text-white
+                            prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
+                            prose-a:text-lighthouse-teal prose-a:no-underline hover:prose-a:underline
+                            prose-strong:text-lighthouse-navy dark:prose-strong:text-white
+                            prose-ul:text-gray-700 dark:prose-ul:text-gray-300
+                            prose-ol:text-gray-700 dark:prose-ol:text-gray-300
+                            prose-li:marker:text-lighthouse-teal
+                            prose-blockquote:border-lighthouse-teal prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
+                            prose-code:text-lighthouse-teal prose-code:bg-lighthouse-warmgray/30 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                            prose-img:rounded-xl prose-img:shadow-lg"
+                     data-aos="fade-up"
+                     data-aos-delay="100">
+                    <div x-html="post.contentHtml"></div>
+                </div>
+
+                <!-- Article Footer -->
+                <footer class="mt-16 pt-8 border-t-2 border-lighthouse-warmgray/30 dark:border-gray-700" data-aos="fade-up">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                        <a href="./blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-lighthouse-teal text-lighthouse-teal hover:bg-lighthouse-teal hover:text-white font-heading font-semibold rounded-lg transition-all duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            Back to Blog
+                        </a>
+
+                        <a href="./consultation.html" class="btn-primary">
+                            Schedule a Consultation
+                        </a>
+                    </div>
+                </footer>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Include Components -->
+    <script>
+        // Navigation Component - Required for header
+        function navigationComponent() {
+            return {
+                open: false,
+                scrolled: false,
+                init() { this.onScroll(); },
+                onScroll() { this.scrolled = window.scrollY > 10; }
+            }
+        }
+
+        // Load header and footer
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Load header
+                const headerResponse = await fetch('/src/components/partials/header.html');
+                const headerData = await headerResponse.text();
+                const headerPlaceholder = document.getElementById('header-placeholder');
+                headerPlaceholder.innerHTML = headerData;
+
+                // Initialize Alpine.js on the injected navigation
+                if (window.Alpine) {
+                    Alpine.initTree(headerPlaceholder);
+                }
+
+                // Load footer
+                const footerResponse = await fetch('/src/components/partials/footer.html');
+                const footerData = await footerResponse.text();
+                const footerPlaceholder = document.getElementById('footer-placeholder');
+                if (footerPlaceholder) {
+                    footerPlaceholder.innerHTML = footerData;
+                }
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        });
+
+        function blogPostPage() {
+            return {
+                post: {
+                    title: "",
+                    contentHtml: "",
+                    pubDate: ""
+                },
+                formattedDate: "",
+                loading: true,
+                error: "",
+
+                init() {
+                    const params = new URLSearchParams(window.location.search);
+                    const idParam = params.get("id");
+
+                    if (!idParam) {
+                        this.error = "Missing article identifier.";
+                        this.loading = false;
+                        return;
+                    }
+
+                    const id = decodeURIComponent(idParam);
+                    this.fetchPost(id);
+                },
+
+                async fetchPost(id) {
+                    this.loading = true;
+                    this.error = "";
+
+                    try {
+                        const res = await fetch(
+                            "/api/hubspot-blog/post?id=" + encodeURIComponent(id)
+                        );
+
+                        if (!res.ok) {
+                            throw new Error("Failed to fetch article");
+                        }
+
+                        const data = await res.json();
+
+                        if (!data || !data.title) {
+                            throw new Error("Article not found");
+                        }
+
+                        this.post = {
+                            title: data.title,
+                            contentHtml: data.contentHtml || data.description || "",
+                            pubDate: data.pubDate || ""
+                        };
+
+                        this.formattedDate = this.formatDate(this.post.pubDate);
+
+                        // Update page title
+                        document.title = data.title + " | Lighthouse Design Build";
+                    } catch (e) {
+                        console.error(e);
+                        this.error = "Could not load this article.";
+                    } finally {
+                        this.loading = false;
+                        // Hide the page loader after content is loaded
+                        if (window.hideLoader) window.hideLoader();
+                    }
+                },
+
+                formatDate(pubDate) {
+                    if (!pubDate) return "";
+                    const date = new Date(pubDate);
+                    if (Number.isNaN(date.getTime())) return "";
+                    return date.toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    });
+                }
+            };
+        }
+    </script>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- Custom JavaScript Modules -->
+    <script src="/src/js/main.js"></script>
+    <script src="/src/js/navigation.js"></script>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100,
+            delay: 0
+        });
+    </script>
+
+</body>
+</html>

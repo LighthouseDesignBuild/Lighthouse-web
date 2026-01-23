@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3WCW57RF6Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3WCW57RF6Q');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>Portfolio | Lighthouse Design Build - Premium Home Renovations</title>
+    <meta name="description" content="Explore our stunning portfolio of home renovations, kitchen remodels, bathroom renovations, and custom homes in Fairfield County, Connecticut.">
+    <link rel="canonical" href="https://www.designwithlighthouse.com/pages/portfolio">
+    <meta name="keywords" content="home renovation portfolio, kitchen remodel, bathroom renovation, home additions, outdoor living, Fairfield County">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Portfolio | Lighthouse Design Build">
+    <meta property="og:description" content="Explore our stunning portfolio of home renovations and design-build projects.">
+    <meta property="og:image" content="/src/assets/images/portfolio-og.jpg">
+    <meta property="og:url" content="https://www.lighthousedesignbuild.com/pages/portfolio">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Portfolio | Lighthouse Design Build">
+    <meta name="twitter:description" content="Explore our stunning portfolio of home renovations and design-build projects.">
+    <meta name="twitter:image" content="/src/assets/images/portfolio-og.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/src/assets/icons/favicon.svg">
+    <link rel="icon" type="image/png" href="/src/assets/icons/favicon.png">
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <!-- Main Stylesheet (Compiled TailwindCSS) -->
+    <link rel="stylesheet" href="/dist/css/styles.css">
+
+    <!-- Custom Animations CSS -->
+    <link rel="stylesheet" href="/src/css/animations.css">
+
+    <!-- Structured Data / Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Portfolio | Lighthouse Design Build",
+      "description": "Explore our stunning portfolio of home renovations and design-build projects",
+      "url": "https://www.lighthousedesignbuild.com/pages/portfolio",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Lighthouse Design Build",
+        "url": "https://www.lighthousedesignbuild.com"
+      }
+    }
+    </script>
+
+    <!-- Inline theme detection (prevents flash) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
+</head>
+<body class="font-body text-charcoal dark:text-gray-100 bg-white dark:bg-[#0a0a0a] antialiased">
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F5F7F8] dark:bg-[#0a0a0a] transition-opacity duration-500">
+        <div class="flex flex-row gap-2">
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.3s]"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.5s]"></div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main id="main-content">
+
+        <!-- HERO SECTION -->
+        <section class="relative py-24 md:py-32 overflow-hidden">
+            <!-- Background Image -->
+            <div class="absolute inset-0">
+                <img src="/src/assets/images/outdoor-living-banner-outdoor living_thumb.jpeg" alt="Stunning outdoor living renovation project in Fairfield County by Lighthouse Design Build" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-navy/80 via-lighthouse-navy/70 to-lighthouse-navy/80"></div>
+            </div>
+
+            <div class="container-custom relative z-10">
+                <div class="text-center" data-aos="fade-up">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white mb-6 leading-tight">
+                        Our Portfolio
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed">
+                        Discover the transformations we've brought to life. From stunning kitchens to beautiful bathrooms,
+                        each project showcases our commitment to excellence and attention to detail.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FILTER BAR SECTION -->
+        <section class="bg-white dark:bg-gray-900 py-8 md:py-12 border-b border-gray-100 dark:border-gray-800" x-data="portfolioFilter()">
+            <div class="container-custom">
+                <div class="flex flex-wrap gap-3 justify-center items-center" role="tablist">
+                    <button @click="filterBy('all')"
+                            :class="activeFilter === 'all' ? 'bg-lighthouse-teal text-white' : 'border border-gray-300 dark:border-gray-600 text-lighthouse-navy dark:text-gray-100 hover:border-lighthouse-teal dark:hover:border-lighthouse-teal'"
+                            class="px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap"
+                            role="tab"
+                            :aria-selected="activeFilter === 'all'">
+                        All Projects
+                    </button>
+                    <button @click="filterBy('kitchen')"
+                            :class="activeFilter === 'kitchen' ? 'bg-lighthouse-teal text-white' : 'border border-gray-300 dark:border-gray-600 text-lighthouse-navy dark:text-gray-100 hover:border-lighthouse-teal dark:hover:border-lighthouse-teal'"
+                            class="px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap"
+                            role="tab"
+                            :aria-selected="activeFilter === 'kitchen'">
+                        Kitchen
+                    </button>
+                    <button @click="filterBy('bathroom')"
+                            :class="activeFilter === 'bathroom' ? 'bg-lighthouse-teal text-white' : 'border border-gray-300 dark:border-gray-600 text-lighthouse-navy dark:text-gray-100 hover:border-lighthouse-teal dark:hover:border-lighthouse-teal'"
+                            class="px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap"
+                            role="tab"
+                            :aria-selected="activeFilter === 'bathroom'">
+                        Bathroom
+                    </button>
+                    <button @click="filterBy('addition')"
+                            :class="activeFilter === 'addition' ? 'bg-lighthouse-teal text-white' : 'border border-gray-300 dark:border-gray-600 text-lighthouse-navy dark:text-gray-100 hover:border-lighthouse-teal dark:hover:border-lighthouse-teal'"
+                            class="px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap"
+                            role="tab"
+                            :aria-selected="activeFilter === 'addition'">
+                        Addition
+                    </button>
+                    <button @click="filterBy('outdoor')"
+                            :class="activeFilter === 'outdoor' ? 'bg-lighthouse-teal text-white' : 'border border-gray-300 dark:border-gray-600 text-lighthouse-navy dark:text-gray-100 hover:border-lighthouse-teal dark:hover:border-lighthouse-teal'"
+                            class="px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap"
+                            role="tab"
+                            :aria-selected="activeFilter === 'outdoor'">
+                        Outdoor
+                    </button>
+                    <button @click="filterBy('custom')"
+                            :class="activeFilter === 'custom' ? 'bg-lighthouse-teal text-white' : 'border border-gray-300 dark:border-gray-600 text-lighthouse-navy dark:text-gray-100 hover:border-lighthouse-teal dark:hover:border-lighthouse-teal'"
+                            class="px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 whitespace-nowrap"
+                            role="tab"
+                            :aria-selected="activeFilter === 'custom'">
+                        Custom Home
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT GRID SECTION -->
+        <section class="py-16 md:py-24 bg-gradient-to-br from-[#5C88A0] to-[#1C3D5A] dark:from-[#1C3D5A] dark:to-[#0a0a0a]" x-data="portfolioFilter()">
+            <div class="container-custom">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 lg:gap-6">
+                    <!-- Project Card 1: Kitchen Renovation - LARGE -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'kitchen'">
+                        <div class="group cursor-pointer lg:col-span-7 lg:row-span-2 h-[450px] lg:h-[600px]" @click="openModal(0)" data-aos="fade-up">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <!-- Full Image -->
+                                <img src="/src/assets/images/portfolio/kitchen-project-1.jpg"
+                                     alt="Greenwich Kitchen Remodel"
+                                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-teal/30 to-lighthouse-navy/40 flex items-center justify-center" >
+                                    <span class="text-white/40 font-heading text-4xl font-bold">Kitchen Project</span>
+                                </div>
+
+                                <!-- Subtle base overlay -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+
+                                <!-- Hover overlay -->
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+
+                                <!-- COMPLETED Badge (only on hover) -->
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+
+                                <!-- Content (only on hover) -->
+                                <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-4 shadow-lg">Kitchen</div>
+                                    <h3 class="font-heading text-2xl lg:text-3xl font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
+                                        Greenwich Kitchen Remodel
+                                    </h3>
+                                    <p class="text-white/90 text-sm lg:text-base leading-relaxed mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">
+                                        Complete kitchen renovation with custom cabinetry, granite countertops, and modern appliances.
+                                    </p>
+                                    <div class="flex items-center gap-2 text-lighthouse-teal font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-200">
+                                        <span class="uppercase tracking-wider">View Project</span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Project Card 2: Master Bath - TALL -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'bathroom'">
+                        <div class="group cursor-pointer lg:col-span-5 lg:row-span-2 h-[450px] lg:h-[600px]" @click="openModal(1)" data-aos="fade-left" data-aos-delay="100">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <img src="/src/assets/images/portfolio/bathroom-project-1.jpg"
+                                     alt="Darien Master Bath Renovation"
+                                     class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-gold/30 to-lighthouse-navy/40 flex items-center justify-center" >
+                                    <span class="text-white/40 font-heading text-4xl font-bold">Bathroom Project</span>
+                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-4 shadow-lg">Bathroom</div>
+                                    <h3 class="font-heading text-2xl lg:text-3xl font-bold text-white mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">Darien Master Bath</h3>
+                                    <p class="text-white/90 text-sm leading-relaxed mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">Luxury master bathroom with marble tiles and spa-like amenities.</p>
+                                    <div class="flex items-center gap-2 text-lighthouse-teal font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-200">
+                                        <span class="uppercase tracking-wider">View Project</span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Card 3: Home Addition - WIDE -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'addition'">
+                        <div class="group cursor-pointer lg:col-span-6 h-[400px]" @click="openModal(2)" data-aos="fade-up" data-aos-delay="200">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <img src="/src/assets/images/portfolio/addition-project-1.jpg" alt="Westport Home Addition" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-teal/30 to-lighthouse-navy/40 flex items-center justify-center" ><span class="text-white/40 font-heading text-4xl font-bold">Addition Project</span></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-3 shadow-lg">Addition</div>
+                                    <h3 class="font-heading text-xl lg:text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">Westport Home Addition</h3>
+                                    <p class="text-white/90 text-sm leading-relaxed mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">2,000 sq ft addition with elegant design integration.</p>
+                                    <div class="flex items-center gap-2 text-lighthouse-teal font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-200"><span class="uppercase tracking-wider">View Project</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Card 4: Outdoor - WIDE -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'outdoor'">
+                        <div class="group cursor-pointer lg:col-span-6 h-[400px]" @click="openModal(3)" data-aos="fade-up" data-aos-delay="300">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <img src="/src/assets/images/portfolio/outdoor-project-1.jpg" alt="Wilton Outdoor Living" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-teal/30 to-lighthouse-navy/40 flex items-center justify-center" ><span class="text-white/40 font-heading text-4xl font-bold">Outdoor Project</span></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-3 shadow-lg">Outdoor</div>
+                                    <h3 class="font-heading text-xl lg:text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">Wilton Outdoor Living</h3>
+                                    <p class="text-white/90 text-sm leading-relaxed mb-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">Custom patio with fireplace and integrated landscaping.</p>
+                                    <div class="flex items-center gap-2 text-lighthouse-teal font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-200"><span class="uppercase tracking-wider">View Project</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Card 5: Kitchen 2 - MEDIUM -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'kitchen'">
+                        <div class="group cursor-pointer lg:col-span-4 h-[350px]" @click="openModal(4)" data-aos="fade-up" data-aos-delay="400">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <img src="/src/assets/images/portfolio/kitchen-project-2.jpg" alt="New Canaan Modern Kitchen" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-teal/30 to-lighthouse-navy/40 flex items-center justify-center" ><span class="text-white/40 font-heading text-3xl font-bold">Kitchen</span></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-2 shadow-lg">Kitchen</div>
+                                    <h3 class="font-heading text-lg lg:text-xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">New Canaan Kitchen</h3>
+                                    <p class="text-white/90 text-xs leading-relaxed transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">Contemporary with smart home integration.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Card 6: Guest Bath - MEDIUM -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'bathroom'">
+                        <div class="group cursor-pointer lg:col-span-4 h-[350px]" @click="openModal(5)" data-aos="fade-up" data-aos-delay="500">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <img src="/src/assets/images/portfolio/bathroom-project-2.jpg" alt="Stamford Guest Bathroom" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-gold/30 to-lighthouse-navy/40 flex items-center justify-center" ><span class="text-white/40 font-heading text-3xl font-bold">Bathroom</span></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-2 shadow-lg">Bathroom</div>
+                                    <h3 class="font-heading text-lg lg:text-xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">Stamford Guest Bath</h3>
+                                    <p class="text-white/90 text-xs leading-relaxed transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">Elegant renovation with designer lighting.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Card 7: Custom Home - MEDIUM -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'custom'">
+                        <div class="group cursor-pointer lg:col-span-4 h-[350px]" @click="openModal(6)" data-aos="fade-up" data-aos-delay="600">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.02] h-full">
+                                <img src="/src/assets/images/portfolio/custom-home-project-1.jpg" alt="Rowayton Custom Estate" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-teal/30 to-lighthouse-navy/40 flex items-center justify-center" ><span class="text-white/40 font-heading text-3xl font-bold">Custom Home</span></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/50 transition-all duration-700"></div>
+                                <span class="absolute top-6 right-6 bg-lighthouse-teal text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold mb-2 shadow-lg">Custom Home</div>
+                                    <h3 class="font-heading text-lg lg:text-xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">Rowayton Estate</h3>
+                                    <p class="text-white/90 text-xs leading-relaxed transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">6,500 sq ft custom home with luxury finishes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- Card 8: Outdoor 2 - EXTRA WIDE SHOWCASE -->
+                    <template x-if="activeFilter === 'all' || activeFilter === 'outdoor'">
+                        <div class="group cursor-pointer lg:col-span-12 h-[400px]" @click="openModal(7)" data-aos="fade-up" data-aos-delay="700">
+                            <div class="relative overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-700 hover:scale-[1.01] h-full">
+                                <img src="/src/assets/images/portfolio/outdoor-project-2.jpg" alt="Fairfield Resort Backyard" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-teal/30 to-lighthouse-navy/40 flex items-center justify-center" ><span class="text-white/40 font-heading text-4xl font-bold">Outdoor Project</span></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+                                <div class="absolute inset-0 bg-lighthouse-navy/0 group-hover:bg-lighthouse-navy/40 transition-all duration-700"></div>
+                                <span class="absolute top-8 right-8 bg-lighthouse-teal text-white px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm border border-white/20">COMPLETED</span>
+                                <div class="absolute bottom-0 left-0 right-0 p-10 lg:p-12 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                                    <div class="max-w-4xl">
+                                        <div class="inline-block bg-lighthouse-teal/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold mb-4 shadow-lg">Outdoor Living</div>
+                                        <h3 class="font-heading text-3xl lg:text-4xl font-bold text-white mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700">Fairfield Resort Backyard</h3>
+                                        <p class="text-white/90 text-base lg:text-lg leading-relaxed mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-100">Luxury backyard transformation with pool, spa, dining area, and ambient lighting systems.</p>
+                                        <div class="flex items-center gap-3 text-lighthouse-teal font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-700 delay-200"><span class="uppercase tracking-wider">View Full Project</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="bg-gradient-to-r from-lighthouse-navy to-lighthouse-navy/90 py-16 md:py-24">
+            <div class="container-custom text-center" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold text-white mb-6">
+                    Ready to Transform Your Home?
+                </h2>
+                <p class="text-lg text-gray-200 mb-8 max-w-2xl mx-auto">
+                    Let's discuss your project and create something beautiful together. Schedule a consultation with our design team today.
+                </p>
+                <a href="./consultation.html" class="btn-primary inline-block text-lg px-8 py-4">
+                    Schedule Your Consultation
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PROJECT DETAIL MODAL -->
+    <div x-data="portfolioFilter()" x-show="selectedProject !== null"
+         class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+         
+         
+         
+         x-transition:leave="transition ease-in duration-200"
+         
+         
+         @click.outside="closeModal()"
+         @keydown.escape="closeModal()"
+         >
+
+        <!-- Modal Container -->
+        <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto w-full"
+             @click.stop
+             
+             x-transition:enter-start="scale-95 opacity-0"
+             x-transition:enter-end="scale-100 opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="scale-100 opacity-100"
+             x-transition:leave-end="scale-95 opacity-0">
+
+            <!-- Close Button -->
+            <button @click="closeModal()"
+                    class="absolute top-6 right-6 z-10 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 dark:bg-gray-800 transition-colors duration-300"
+                    aria-label="Close modal">
+                <svg class="w-6 h-6 text-lighthouse-navy dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div x-show="selectedProject !== null">
+                <!-- Before/After Slider -->
+                <div class="relative h-96 md:h-[500px] bg-gray-200 dark:bg-gray-700 swiper detailSlider">
+                    <div class="swiper-wrapper h-full">
+                        <div class="swiper-slide relative">
+                            <img :src="getProjectImage(selectedProject, 'before')" :alt="'Before - ' + getProjectTitle(selectedProject)" class="w-full h-full object-cover">
+                            <span class="absolute top-6 left-6 bg-lighthouse-navy/80 text-white px-4 py-2 rounded-lg text-sm font-semibold">BEFORE</span>
+                        </div>
+                        <div class="swiper-slide relative">
+                            <img :src="getProjectImage(selectedProject, 'after')" :alt="'After - ' + getProjectTitle(selectedProject)" class="w-full h-full object-cover">
+                            <span class="absolute top-6 left-6 bg-lighthouse-teal text-white px-4 py-2 rounded-lg text-sm font-semibold">AFTER</span>
+                        </div>
+                        <div class="swiper-slide relative">
+                            <img :src="getProjectImage(selectedProject, 'detail1')" :alt="'Detail - ' + getProjectTitle(selectedProject)" class="w-full h-full object-cover">
+                            <span class="absolute top-6 left-6 bg-lighthouse-navy/80 text-white px-4 py-2 rounded-lg text-sm font-semibold">DETAIL</span>
+                        </div>
+                        <div class="swiper-slide relative">
+                            <img :src="getProjectImage(selectedProject, 'detail2')" :alt="'Gallery - ' + getProjectTitle(selectedProject)" class="w-full h-full object-cover">
+                            <span class="absolute top-6 left-6 bg-lighthouse-navy/80 text-white px-4 py-2 rounded-lg text-sm font-semibold">GALLERY</span>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="swiper-button-prev !text-white !w-12 !h-12 !bg-black/50 !rounded-full"></div>
+                    <div class="swiper-button-next !text-white !w-12 !h-12 !bg-black/50 !rounded-full"></div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="p-6 md:p-12">
+                    <!-- Project Title & Category -->
+                    <div class="mb-8">
+                        <span class="inline-block bg-lighthouse-teal/10 text-lighthouse-teal px-4 py-2 rounded-full text-sm font-semibold mb-3" x-text="getCategoryLabel(getProjectCategory(selectedProject))"></span>
+                        <h2 class="text-3xl md:text-4xl font-heading font-bold text-lighthouse-navy dark:text-white mb-2" x-text="getProjectTitle(selectedProject)"></h2>
+                        <p class="text-gray-600 dark:text-gray-400 font-medium" x-text="getProjectLocation(selectedProject)"></p>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-8 prose prose-sm max-w-none">
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg" x-text="getProjectDescription(selectedProject)"></p>
+                    </div>
+
+                    <!-- Project Details Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-gray-200">
+                        <div>
+                            <h3 class="font-semibold text-lighthouse-navy dark:text-white mb-2 text-sm uppercase tracking-wide">Timeline</h3>
+                            <p class="text-gray-700 dark:text-gray-300 font-medium" x-text="getProjectTimeline(selectedProject)"></p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lighthouse-navy dark:text-white mb-2 text-sm uppercase tracking-wide">Budget</h3>
+                            <p class="text-gray-700 dark:text-gray-300 font-medium" x-text="getProjectBudget(selectedProject)"></p>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-lighthouse-navy dark:text-white mb-2 text-sm uppercase tracking-wide">Scope</h3>
+                            <p class="text-gray-700 dark:text-gray-300 font-medium" x-text="getProjectScope(selectedProject)"></p>
+                        </div>
+                    </div>
+
+                    <!-- Highlights -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-heading font-bold text-lighthouse-navy dark:text-white mb-4">Project Highlights</h3>
+                        <ul class="space-y-3">
+                            <template x-for="(highlight, index) in getProjectHighlights(selectedProject)" :key="index">
+                                <li class="flex items-start gap-3">
+                                    <svg class="w-5 h-5 text-lighthouse-teal flex-shrink-0 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="text-gray-700 dark:text-gray-300" x-text="highlight"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between items-center gap-4">
+                        <button @click="previousProject()"
+                                :disabled="selectedProject === 0"
+                                :class="selectedProject === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-lighthouse-teal'"
+                                class="text-lighthouse-navy dark:text-white font-semibold transition-colors duration-300 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Previous Project
+                        </button>
+
+                        <button @click="closeModal()"
+                                class="text-lighthouse-navy dark:text-white font-semibold px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+                            Close
+                        </button>
+
+                        <button @click="nextProject()"
+                                :disabled="selectedProject === projects.length - 1"
+                                :class="selectedProject === projects.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-lighthouse-teal'"
+                                class="text-lighthouse-navy dark:text-white font-semibold transition-colors duration-300 flex items-center gap-2">
+                            Next Project
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <footer class="bg-lighthouse-navy text-white">
+        <div class="container-custom py-12 md:py-16">
+
+            <!-- Top Section - 5 Columns on Desktop -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+
+                <!-- Column 1: Company Info -->
+                <div>
+                    <!-- Logo -->
+                    <div class="flex items-center mb-4">
+                        <svg class="h-10 w-10 text-lighthouse-teal"
+                             viewBox="0 0 100 100"
+                             fill="currentColor"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M50 10 L55 20 L60 35 L55 50 L50 90 L45 50 L40 35 L45 20 Z" fill="currentColor"/>
+                            <circle cx="50" cy="15" r="5" fill="#C9A961"/>
+                            <path d="M30 90 L70 90" stroke="currentColor" stroke-width="3"/>
+                        </svg>
+                        <span class="ml-2 font-heading font-bold text-xl">Lighthouse</span>
+                    </div>
+
+                    <p class="text-gray-300 text-sm mb-4 leading-relaxed">
+                        Premium Home Renovations for Fairfield County. Transforming houses into dream homes since 2010.
+                    </p>
+
+                    <!-- Contact Info -->
+                    <div class="space-y-2 text-sm text-gray-300">
+                        <p>
+                            <strong class="text-white">Address:</strong><br>
+                            66 Robson Place<br>
+                        Fairfield, CT 06824
+                        </p>
+                        <p>
+                            <strong class="text-white">Phone:</strong><br>
+                            <a href="tel:+12035551234" class="hover:text-lighthouse-teal transition-colors">(203) 555-1234</a>
+                        </p>
+                        <p>
+                            <strong class="text-white">Email:</strong><br>
+                            <a href="mailto:hello@lighthousedesignbuild.com" class="hover:text-lighthouse-teal transition-colors">hello@lighthousedesignbuild.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div>
+                    <h3 class="font-heading font-bold text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="./index.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Home</a>
+                        </li>
+                        <li>
+                            <a href="./services.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Services</a>
+                        </li>
+                        <li>
+                            <a href="./gallery.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Gallery</a>
+                        </li>
+                        <li>
+                            <a href="./about.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">About Us</a>
+                        </li>
+                        <li>
+                            <a href="./consultation.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Schedule Consultation</a>
+                        </li>
+                        <li>
+                            <a href="./careers.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Careers</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Services -->
+                <div>
+                    <h3 class="font-heading font-bold text-lg mb-4">Our Services</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="./services.html#kitchen" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Kitchen Remodeling</a>
+                        </li>
+                        <li>
+                            <a href="./services.html#bathroom" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Bathroom Renovation</a>
+                        </li>
+                        <li>
+                            <a href="./services.html#addition" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Home Additions</a>
+                        </li>
+                        <li>
+                            <a href="./services.html#outdoor" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Outdoor Living</a>
+                        </li>
+                        <li>
+                            <a href="./services.html#custom" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">Custom Homes</a>
+                        </li>
+                        <li>
+                            <a href="./gallery.html" class="text-gray-300 hover:text-lighthouse-teal transition-colors text-sm">View Gallery</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Follow Us & Hours -->
+                <div>
+                    <h3 class="font-heading font-bold text-lg mb-4">Follow Us</h3>
+
+                    <!-- Social Media Links -->
+                    <div class="flex gap-4 mb-6">
+                        <a href="https://facebook.com/lighthousedesignbuild"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Facebook"
+                           class="w-10 h-10 bg-white/10 hover:bg-lighthouse-teal rounded-full flex items-center justify-center transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com/lighthousedesignbuild"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="Instagram"
+                           class="w-10 h-10 bg-white/10 hover:bg-lighthouse-teal rounded-full flex items-center justify-center transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com/company/lighthousedesignbuild"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           aria-label="LinkedIn"
+                           class="w-10 h-10 bg-white/10 hover:bg-lighthouse-teal rounded-full flex items-center justify-center transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Business Hours -->
+                    <div class="text-sm text-gray-300">
+                        <h4 class="font-semibold text-white mb-2">Hours of Operation</h4>
+                        <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                        <p>Saturday: 10:00 AM - 2:00 PM</p>
+                        <p>Sunday: Closed</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            <!-- Column 5: Large Blue Logo -->
+            <div class="flex items-start justify-end">
+                <img src="/src/assets/images/logo/LightHouse-Logo-Blue.png"
+                     alt="Lighthouse Design Build"
+                     class="w-auto h-24 transition-transform duration-300 hover:scale-105">
+            </div>
+        </div>
+
+        <!-- Google Maps Section -->
+        <div class="my-12">
+            <h3 class="font-heading font-bold text-2xl mb-6 text-center">Find Us</h3>
+            <div class="relative w-full h-96 md:h-[450px] rounded-2xl overflow-hidden shadow-2xl">
+                <iframe
+                    src="https://maps.google.com/maps?q=66+Robson+Place,+Fairfield,+CT+06824&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Lighthouse Design Build Location">
+                </iframe>
+            </div>
+            <div class="text-center mt-4">
+                <a href="https://www.google.com/maps/dir//66+Robson+Place,+Fairfield,+CT+06824"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 text-lighthouse-teal hover:text-lighthouse-gold transition-colors font-semibold">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                    Get Directions
+                </a>
+            </div>
+        </div>
+
+        <!-- Divider -->
+            <div class="border-t border-lighthouse-gold/30 my-8"></div>
+
+            <!-- Bottom Section - Copyright & Legal Links -->
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+                <div>
+                    <p>&copy; 2024 Lighthouse Design Build. All rights reserved.</p>
+                </div>
+
+                <!-- Legal Links -->
+                <div class="flex flex-wrap gap-6 justify-center md:justify-end">
+                    <a href="./privacy.html" class="hover:text-lighthouse-teal transition-colors">Privacy Policy</a>
+                    <a href="./terms.html" class="hover:text-lighthouse-teal transition-colors">Terms of Service</a>
+                    <a href="./sitemap.html" class="hover:text-lighthouse-teal transition-colors">Sitemap</a>
+                </div>
+            </div>
+
+            <!-- License & Credentials -->
+            <div class="mt-6 text-center text-xs text-gray-500">
+                <p>Licensed General Contractor | CT License #12345 | Fully Insured & Bonded</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Alpine.js Collapse Plugin (must load before Alpine.js) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <!-- Include Header Component -->
+    <script>
+        // Navigation Component - Required for header
+        function navigationComponent() {
+            return {
+                open: false,
+                scrolled: false,
+                init() { this.onScroll(); },
+                onScroll() { this.scrolled = window.scrollY > 10; }
+            }
+        }
+
+        // Load header
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Load header
+                const headerResponse = await fetch('/src/components/partials/header.html');
+                const headerData = await headerResponse.text();
+                const headerPlaceholder = document.getElementById('header-placeholder');
+                headerPlaceholder.innerHTML = headerData;
+
+                // Initialize Alpine.js on the injected navigation
+                if (window.Alpine) {
+                    Alpine.initTree(headerPlaceholder);
+                }
+            } catch (error) {
+                console.error('Error loading header:', error);
+            }
+        });
+    </script>
+
+    <!-- AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Custom JavaScript Modules -->
+    <script src="/src/js/main.js"></script>
+    <script src="/src/js/navigation.js"></script>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100,
+            delay: 0
+        });
+    </script>
+
+    <!-- Portfolio Page Specific Scripts -->
+    <script>
+        // Navigation Component
+        function navigationComponent() {
+            return {
+                open: false,
+                scrolled: false,
+                onScroll() {
+                    this.scrolled = window.scrollY > 10;
+                }
+            }
+        }
+
+        // Portfolio Filter & Modal Component
+        function portfolioFilter() {
+            return {
+                activeFilter: 'all',
+                selectedProject: null,
+                projects: [
+                    {
+                        id: 0,
+                        title: 'Greenwich Kitchen Remodel',
+                        location: 'Greenwich, Connecticut',
+                        category: 'kitchen',
+                        description: 'Complete kitchen renovation featuring custom cabinetry, granite countertops, and premium stainless steel appliances. The design maximizes natural light and flow between the kitchen and dining area, creating the perfect space for family gatherings and entertaining.',
+                        timeline: '4 months',
+                        budget: '$85,000 - $125,000',
+                        scope: 'Full kitchen remodel including structural changes',
+                        highlights: [
+                            'Custom built-in cabinetry with soft-close doors',
+                            'Granite countertops with waterfall island edge',
+                            'Premium stainless steel appliances',
+                            'Under-cabinet LED lighting',
+                            'New hardwood flooring',
+                            'Recessed lighting throughout'
+                        ],
+                        images: {
+                            before: '../src/assets/images/kitchen-before-1.jpg',
+                            after: '../src/assets/images/kitchen-after-1.jpg',
+                            detail1: '../src/assets/images/kitchen-detail-1.jpg',
+                            detail2: '../src/assets/images/kitchen-gallery-1.jpg'
+                        }
+                    },
+                    {
+                        id: 1,
+                        title: 'Darien Master Bath Renovation',
+                        location: 'Darien, Connecticut',
+                        category: 'bathroom',
+                        description: 'Luxury master bathroom renovation with spa-like amenities. Features heated floor tiles, rainfall showerhead, soaking tub, and marble finishes throughout. A serene retreat from the busy world outside.',
+                        timeline: '3 months',
+                        budget: '$55,000 - $85,000',
+                        scope: 'Complete master bathroom renovation',
+                        highlights: [
+                            'Italian marble flooring and walls',
+                            'Heated floor system',
+                            'Frameless glass shower enclosure',
+                            'Soaking tub with integrated jets',
+                            'Dual vanity with vessel sinks',
+                            'Heated towel rails',
+                            'Ambient lighting system'
+                        ],
+                        images: {
+                            before: '../src/assets/images/bathroom-before-1.jpg',
+                            after: '../src/assets/images/bathroom-after-1.jpg',
+                            detail1: '../src/assets/images/bathroom-detail-1.jpg',
+                            detail2: '../src/assets/images/bathroom-gallery-1.jpg'
+                        }
+                    },
+                    {
+                        id: 2,
+                        title: 'Westport Home Addition',
+                        location: 'Westport, Connecticut',
+                        category: 'addition',
+                        description: '2,000 square foot second-floor addition featuring three bedrooms and elegant design integration that complements the existing home. Includes modern amenities while maintaining architectural harmony.',
+                        timeline: '6 months',
+                        budget: '$250,000 - $350,000',
+                        scope: '2,000 sq ft addition with three bedrooms, two bathrooms',
+                        highlights: [
+                            'Structural integration with existing home',
+                            'Three spacious bedrooms',
+                            'Two full bathrooms',
+                            'Walk-in closets',
+                            'Matching architectural details',
+                            'Modern HVAC system',
+                            'Energy-efficient windows'
+                        ],
+                        images: {
+                            before: '../src/assets/images/addition-before-1.jpg',
+                            after: '../src/assets/images/addition-after-1.jpg',
+                            detail1: '../src/assets/images/addition-detail-1.jpg',
+                            detail2: '../src/assets/images/addition-gallery-1.jpg'
+                        }
+                    },
+                    {
+                        id: 3,
+                        title: 'Wilton Outdoor Living Space',
+                        location: 'Wilton, Connecticut',
+                        category: 'outdoor',
+                        description: 'Custom patio with integrated fireplace and pergola, creating the ultimate outdoor entertaining space. Professional landscaping and ambient lighting transform the backyard into an extension of the home.',
+                        timeline: '3 months',
+                        budget: '$45,000 - $75,000',
+                        scope: 'Patio, fireplace, pergola, landscaping, and lighting',
+                        highlights: [
+                            'Custom stone patio',
+                            'Built-in outdoor fireplace',
+                            'Wooden pergola with climbing vines',
+                            'Professional landscape design',
+                            'Ambient outdoor lighting',
+                            'Built-in seating areas',
+                            'Irrigation system'
+                        ],
+                        images: {
+                            before: '../src/assets/images/outdoor-before-1.jpg',
+                            after: '../src/assets/images/outdoor-after-1.jpg',
+                            detail1: '../src/assets/images/outdoor-detail-1.jpg',
+                            detail2: '../src/assets/images/outdoor-gallery-1.jpg'
+                        }
+                    },
+                    {
+                        id: 4,
+                        title: 'New Canaan Modern Kitchen',
+                        location: 'New Canaan, Connecticut',
+                        category: 'kitchen',
+                        description: 'Contemporary kitchen renovation with open concept layout and premium finishes. Smart home integration allows for convenient control of lighting, temperature, and appliances from anywhere.',
+                        timeline: '4 months',
+                        budget: '$95,000 - $145,000',
+                        scope: 'Contemporary kitchen remodel with smart home features',
+                        highlights: [
+                            'Open concept layout',
+                            'Smart home integration',
+                            'Quartz countertops',
+                            'Custom cabinetry with soft lighting',
+                            'Integrated appliances',
+                            'Smart faucet system',
+                            'Wine cooler and beverage center'
+                        ],
+                        images: {
+                            before: '../src/assets/images/kitchen-before-2.jpg',
+                            after: '../src/assets/images/kitchen-after-2.jpg',
+                            detail1: '../src/assets/images/kitchen-detail-2.jpg',
+                            detail2: '../src/assets/images/kitchen-gallery-2.jpg'
+                        }
+                    },
+                    {
+                        id: 5,
+                        title: 'Stamford Guest Bathroom',
+                        location: 'Stamford, Connecticut',
+                        category: 'bathroom',
+                        description: 'Elegant guest bathroom renovation featuring designer finishes and modern amenities. The space combines functionality with luxury, creating a welcoming retreat for visitors.',
+                        timeline: '2 months',
+                        budget: '$35,000 - $55,000',
+                        scope: 'Guest bathroom renovation',
+                        highlights: [
+                            'Vessel sink vanity',
+                            'Frameless glass shower',
+                            'Porcelain tile flooring',
+                            'Designer lighting fixtures',
+                            'Heated mirror',
+                            'Custom shelving',
+                            'Accent wall design'
+                        ],
+                        images: {
+                            before: '../src/assets/images/bathroom-before-2.jpg',
+                            after: '../src/assets/images/bathroom-after-2.jpg',
+                            detail1: '../src/assets/images/bathroom-detail-2.jpg',
+                            detail2: '../src/assets/images/bathroom-gallery-2.jpg'
+                        }
+                    },
+                    {
+                        id: 6,
+                        title: 'Rowayton Custom Estate',
+                        location: 'Rowayton, Connecticut',
+                        category: 'custom',
+                        description: 'Full design-build custom home featuring 6,500 square feet of luxury living space. Built with sustainable materials and modern construction practices, this home represents the pinnacle of contemporary residential design.',
+                        timeline: '12 months',
+                        budget: '$1,200,000 - $1,800,000',
+                        scope: '6,500 sq ft custom home with luxury finishes',
+                        highlights: [
+                            '6,500 square feet of living space',
+                            'Sustainable building practices',
+                            'Luxury finishes throughout',
+                            'Home automation system',
+                            'Geothermal heating/cooling',
+                            'Solar panels',
+                            'Water conservation systems',
+                            'Energy Star certified'
+                        ],
+                        images: {
+                            before: '../src/assets/images/custom-before-1.jpg',
+                            after: '../src/assets/images/custom-after-1.jpg',
+                            detail1: '../src/assets/images/custom-detail-1.jpg',
+                            detail2: '../src/assets/images/custom-gallery-1.jpg'
+                        }
+                    },
+                    {
+                        id: 7,
+                        title: 'Fairfield Resort Backyard',
+                        location: 'Fairfield, Connecticut',
+                        category: 'outdoor',
+                        description: 'Luxury backyard transformation creating a resort-like retreat. Features a swimming pool, spa, dining area, and sophisticated ambient lighting system perfect for entertaining.',
+                        timeline: '5 months',
+                        budget: '$150,000 - $250,000',
+                        scope: 'Pool, spa, patio, dining area, and landscaping',
+                        highlights: [
+                            'Custom saltwater pool',
+                            'Integrated spa jets',
+                            'Pool deck with pavers',
+                            'Outdoor dining area',
+                            'Built-in kitchen',
+                            'LED ambient lighting',
+                            'Landscape design with privacy screening'
+                        ],
+                        images: {
+                            before: '../src/assets/images/outdoor-before-2.jpg',
+                            after: '../src/assets/images/outdoor-after-2.jpg',
+                            detail1: '../src/assets/images/outdoor-detail-2.jpg',
+                            detail2: '../src/assets/images/outdoor-gallery-2.jpg'
+                        }
+                    }
+                ],
+
+                filterBy(category) {
+                    this.activeFilter = category;
+                },
+
+                openModal(projectIndex) {
+                    this.selectedProject = projectIndex;
+                    document.body.style.overflow = 'hidden';
+                    // Initialize detail slider when modal opens
+                    setTimeout(() => {
+                        new Swiper('.detailSlider', {
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev'
+                            },
+                            loop: false,
+                            effect: 'fade',
+                            fadeEffect: {
+                                crossFade: true
+                            }
+                        });
+                    }, 100);
+                },
+
+                closeModal() {
+                    this.selectedProject = null;
+                    document.body.style.overflow = 'auto';
+                },
+
+                previousProject() {
+                    if (this.selectedProject > 0) {
+                        this.selectedProject--;
+                    }
+                },
+
+                nextProject() {
+                    if (this.selectedProject < this.projects.length - 1) {
+                        this.selectedProject++;
+                    }
+                },
+
+                getProjectTitle(index) {
+                    return this.projects[index]?.title || '';
+                },
+
+                getProjectLocation(index) {
+                    return this.projects[index]?.location || '';
+                },
+
+                getProjectCategory(index) {
+                    return this.projects[index]?.category || '';
+                },
+
+                getProjectDescription(index) {
+                    return this.projects[index]?.description || '';
+                },
+
+                getProjectTimeline(index) {
+                    return this.projects[index]?.timeline || '';
+                },
+
+                getProjectBudget(index) {
+                    return this.projects[index]?.budget || '';
+                },
+
+                getProjectScope(index) {
+                    return this.projects[index]?.scope || '';
+                },
+
+                getProjectHighlights(index) {
+                    return this.projects[index]?.highlights || [];
+                },
+
+                getProjectImage(index, type) {
+                    return this.projects[index]?.images[type] || '../src/assets/images/placeholder.jpg';
+                },
+
+                getCategoryLabel(category) {
+                    const labels = {
+                        'kitchen': 'Kitchen',
+                        'bathroom': 'Bathroom',
+                        'addition': 'Addition',
+                        'outdoor': 'Outdoor',
+                        'custom': 'Custom Home'
+                    };
+                    return labels[category] || '';
+                }
+            }
+        }
+
+        // Initialize Swiper for project cards
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize swipers for each project card
+            for (let i = 0; i < 8; i++) {
+                new Swiper(`.projectSwiper-${i}`, {
+                    slidesPerView: 1,
+                    navigation: false,
+                    loop: true,
+                    autoplay: {
+                        delay: 5000,
+                        disableOnInteraction: false
+                    },
+                    effect: 'fade',
+                    fadeEffect: {
+                        crossFade: true
+                    }
+                });
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.querySelector('[x-data="portfolioFilter()"]');
+                if (modal && modal.style.display !== 'none') {
+                    // Find the Alpine component and close it
+                    const buttons = document.querySelectorAll('[x-data="portfolioFilter()"] button');
+                    if (buttons.length > 0) {
+                        // This will be handled by Alpine's @keydown.escape
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- Google Analytics (Replace with your GA ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+
+<!-- Scroll to Top Button -->
+    <button id="scrollToTop"
+            class="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 transition-all duration-300 transform rounded-full shadow-2xl bg-lighthouse-accent-gold hover:bg-lighthouse-accent-gold/90 hover:scale-110 opacity-0 pointer-events-none"
+            aria-label="Scroll to top">
+        <svg class="w-6 h-6 text-lighthouse-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <!-- Scroll to Top Script -->
+    <script>
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        // Show/hide button based on scroll position
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                scrollToTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                scrollToTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        // Smooth scroll to top on click
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3WCW57RF6Q"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-3WCW57RF6Q');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>Gallery | Lighthouse Design Build - Premium Home Renovations</title>
+    <meta name="description" content="Explore our portfolio of stunning home renovations, kitchen remodels, bathroom renovations, and outdoor living spaces. See our quality work in action.">
+    <link rel="canonical" href="https://www.designwithlighthouse.com/pages/gallery">
+    <meta name="keywords" content="home renovation gallery, kitchen remodel photos, bathroom renovation, design build portfolio, Fairfield County">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Gallery | Lighthouse Design Build">
+    <meta property="og:description" content="Explore our portfolio of stunning home renovations and design work.">
+    <meta property="og:image" content="https://www.lighthousedesignbuild.com/src/assets/images/gallery-1.jpg">
+    <meta property="og:url" content="https://www.lighthousedesignbuild.com/pages/gallery">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Gallery | Lighthouse Design Build">
+    <meta name="twitter:description" content="Explore our portfolio of stunning home renovations.">
+    <meta name="twitter:image" content="https://www.lighthousedesignbuild.com/src/assets/images/gallery-1.jpg">
+
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/src/assets/icons/site.webmanifest">
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+    <!-- Main Stylesheet (Compiled TailwindCSS) -->
+    <link rel="stylesheet" href="/dist/css/styles.css">
+
+    <!-- Custom Animations CSS -->
+    <link rel="stylesheet" href="/src/css/animations.css">
+
+    <style>
+        /* Clean 2-column gallery grid - Copper Sky style */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        @media (max-width: 767px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            background: #f5f5f5;
+            aspect-ratio: 16 / 9;
+        }
+
+        .gallery-item img,
+        .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover img,
+        .gallery-item:hover video {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(1, 12, 60, 0.9), transparent);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4rem;
+            height: 4rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .gallery-item.video:hover .play-button {
+            opacity: 1;
+        }
+
+        /* Skeleton loading styles - light background */
+        .gallery-item.skeleton {
+            background: #e5e5e5;
+            overflow: hidden;
+        }
+
+        .skeleton-shimmer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.6) 50%,
+                transparent 100%
+            );
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Real gallery item (when skeleton is replaced) */
+        .gallery-item:not(.skeleton) {
+            background: #f5f5f5;
+        }
+
+        /* Layout stability - prevent collapse during content load */
+        #gallery-grid {
+            contain: layout style;
+            min-height: 600px;
+        }
+
+        @media (min-width: 768px) {
+            #gallery-grid {
+                min-height: 800px;
+            }
+        }
+
+        /* Footer placeholder background to prevent flash */
+        #footer-placeholder {
+            background: #152D45;
+        }
+
+        /* Loading spinner overlay */
+        .gallery-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(28, 61, 90, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: opacity 0.4s ease-out;
+        }
+
+        .gallery-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #D6B86A;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Enhanced fade-in with scale for gallery items */
+        .gallery-item:not(.skeleton) {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            animation: galleryItemFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes galleryItemFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Stagger the fade-in for visual appeal - 2 per row */
+        .gallery-item:nth-child(1) { animation-delay: 0ms; }
+        .gallery-item:nth-child(2) { animation-delay: 50ms; }
+        .gallery-item:nth-child(3) { animation-delay: 100ms; }
+        .gallery-item:nth-child(4) { animation-delay: 150ms; }
+        .gallery-item:nth-child(5) { animation-delay: 200ms; }
+        .gallery-item:nth-child(6) { animation-delay: 250ms; }
+        .gallery-item:nth-child(n+7) { animation-delay: 300ms; }
+
+        /* Blur-up image loading effect */
+        .blur-placeholder {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px);
+            transform: scale(1.1);
+            z-index: 1;
+            transition: opacity 0.4s ease-out;
+        }
+
+        .blur-placeholder.loaded {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .gallery-item .main-image {
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.4s ease-out, transform 0.7s ease-out;
+        }
+
+        .gallery-item .main-image.loaded {
+            opacity: 1;
+        }
+
+        /* Show image immediately if no blur placeholder (legacy items) */
+        .gallery-item:not(:has(.blur-placeholder)) .main-image {
+            opacity: 1;
+        }
+
+        /* Lightbox Styles - New Elegant Design */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .lightbox-wrapper {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-wrapper {
+                padding: 60px 20px;
+            }
+        }
+
+        .lightbox-media {
+            max-width: 90vw;
+            max-height: 85vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 110;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+
+        .lightbox-prev,
+        .lightbox-next {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 110;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-prev,
+            .lightbox-next {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            .lightbox-close {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+            }
+        }
+
+        .lightbox-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 110;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        /* Filter button styles */
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .filter-btn.inactive {
+            background: transparent;
+            color: #010C3C;
+            border-color: #010C3C;
+        }
+
+        .filter-btn.active {
+            background: #00A4BD;
+            color: white;
+            border-color: #00A4BD;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Alpine.js cloak - only for navigation dropdowns, NOT entire sections */
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* Light background to match Copper Sky portfolio style */
+        html, body {
+            background: #f8f8f8 !important;
+        }
+        html.dark, html.dark body, body.dark {
+            background: #1a1a1a !important;
+        }
+    </style>
+
+    <!-- Inline theme detection (prevents flash) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
+
+    <!-- Alpine.js Collapse Plugin (must load before Alpine.js) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="font-body text-lighthouse-charcoal dark:text-gray-100 antialiased" data-manual-loader>
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F5F7F8] dark:bg-[#0a0a0a] transition-opacity duration-500">
+        <div class="flex flex-row gap-2">
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.3s]"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.5s]"></div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main id="main-content">
+
+        <!-- Hero Section with Background Image -->
+        <section class="relative py-24 md:py-32 overflow-hidden" data-aos="fade-in">
+            <!-- Background Image -->
+            <div class="absolute inset-0">
+                <img src="/src/assets/images/gallery_hero.png"
+                     alt="Gallery"
+                     class="w-full h-full object-cover"
+                     onerror="this.style.display='none'">
+                <!-- Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-navy/60 via-lighthouse-navy/50 to-lighthouse-navy/60"></div>
+            </div>
+            <div class="container-custom relative z-10">
+                <div class="max-w-3xl mx-auto text-center">
+                    <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6" data-aos="fade-up">
+                        Our Work Gallery
+                    </h1>
+                    <p class="text-xl md:text-2xl text-lighthouse-light-teal mb-8" data-aos="fade-up" data-aos-delay="100">
+                        Explore our portfolio of stunning renovations and transformations
+                    </p>
+                    <p class="text-lg text-gray-300 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                        From beautiful kitchens and luxurious bathrooms to spectacular outdoor living spaces, see how we bring your dream home to life.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Spinner Overlay -->
+        <div id="gallery-loader" class="gallery-loader">
+            <div class="text-center">
+                <div class="spinner mx-auto mb-4"></div>
+                <p class="text-white text-lg font-medium">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Gallery Grid Section - Clean 2-column layout -->
+        <section class="py-12 md:py-16 min-h-screen bg-[#f8f8f8] dark:bg-[#1a1a1a]">
+            <div class="container-custom max-w-7xl">
+                <!-- Gallery Grid Container - populated by vanilla JS -->
+                <div id="gallery-grid" class="gallery-grid">
+                    <!-- Skeleton placeholders shown initially - 2 per row -->
+                    <div class="gallery-item skeleton"><div class="skeleton-shimmer"></div></div>
+                    <div class="gallery-item skeleton"><div class="skeleton-shimmer"></div></div>
+                    <div class="gallery-item skeleton"><div class="skeleton-shimmer"></div></div>
+                    <div class="gallery-item skeleton"><div class="skeleton-shimmer"></div></div>
+                    <div class="gallery-item skeleton"><div class="skeleton-shimmer"></div></div>
+                    <div class="gallery-item skeleton"><div class="skeleton-shimmer"></div></div>
+                </div>
+
+                <!-- Empty State (hidden by default, shown by JS when no items) -->
+                <div id="gallery-empty" class="hidden text-center py-12">
+                    <svg class="w-16 h-16 text-white/50 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-white mb-2">No gallery items yet</h3>
+                    <p class="text-white/70">Check back soon for our latest work!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox Modal - Alpine.js ONLY for this component -->
+        <div x-data="lightboxComponent()" id="gallery-lightbox" x-cloak>
+            <div x-show="isOpen"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @keydown.escape.window="close()"
+                 @keydown.arrow-left.window="prev()"
+                 @keydown.arrow-right.window="next()"
+                 class="lightbox-overlay"
+                 @click.self="close()">
+
+                <!-- Close Button -->
+                <button @click="close()" class="lightbox-close" aria-label="Close lightbox">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+                <!-- Navigation - Previous -->
+                <button @click="prev()" class="lightbox-prev" aria-label="Previous image" x-show="currentIndex > 0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+
+                <!-- Navigation - Next -->
+                <button @click="next()" class="lightbox-next" aria-label="Next image" x-show="currentIndex < items.length - 1">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+
+                <!-- Content Wrapper -->
+                <div class="lightbox-wrapper" @click.self="close()">
+                    <!-- Image -->
+                    <template x-if="currentItem && currentItem.type === 'image'">
+                        <img :src="currentItem.src || currentItem.thumbnail"
+                             :alt="currentItem.title || 'Gallery image'"
+                             class="lightbox-media"
+                             @click.stop>
+                    </template>
+
+                    <!-- Local Video -->
+                    <template x-if="currentItem && currentItem.type === 'video' && !currentItem.embedUrl">
+                        <video x-ref="videoPlayer"
+                               autoplay
+                               controls
+                               playsinline
+                               class="lightbox-media"
+                               :poster="currentItem.thumbnail"
+                               @click.stop>
+                            <source :src="currentItem.videoUrl" type="video/mp4">
+                        </video>
+                    </template>
+
+                    <!-- YouTube Embed -->
+                    <template x-if="currentItem && currentItem.type === 'video' && currentItem.embedPlatform === 'youtube'">
+                        <iframe class="lightbox-media w-full aspect-video max-w-5xl"
+                                :src="'https://www.youtube.com/embed/' + getYoutubeId(currentItem.embedUrl) + '?autoplay=1'"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                @click.stop>
+                        </iframe>
+                    </template>
+
+                    <!-- Vimeo Embed -->
+                    <template x-if="currentItem && currentItem.type === 'video' && currentItem.embedPlatform === 'vimeo'">
+                        <iframe class="lightbox-media w-full aspect-video max-w-5xl"
+                                :src="'https://player.vimeo.com/video/' + getVimeoId(currentItem.embedUrl) + '?autoplay=1'"
+                                frameborder="0"
+                                allow="autoplay; fullscreen; picture-in-picture"
+                                allowfullscreen
+                                @click.stop>
+                        </iframe>
+                    </template>
+                </div>
+
+                <!-- Counter -->
+                <div class="lightbox-counter">
+                    <span x-text="currentIndex + 1"></span> / <span x-text="items.length"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <section class="py-16 md:py-24 bg-gradient-to-r from-lighthouse-navy to-lighthouse-navy/90 relative overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-lighthouse-teal rounded-full blur-3xl"></div>
+            </div>
+
+            <div class="container-custom relative z-10">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-6">Ready to Transform Your Home?</h2>
+                    <p class="text-lg text-gray-300 mb-8">
+                        Schedule a consultation with our team to discuss your renovation project and see how we can bring your vision to life.
+                    </p>
+                    <a href="./consultation.html" class="btn-primary inline-block">
+                        Schedule Your Free Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Include Components -->
+    <script>
+        function navigationComponent() {
+            return {
+                open: false,
+                scrolled: false,
+                init() {
+                    this.onScroll();
+                },
+                onScroll() {
+                    this.scrolled = window.scrollY > 0;
+                }
+            };
+        }
+
+        // Load header and footer dynamically
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const headerResponse = await fetch('/src/components/partials/header.html');
+                const headerData = await headerResponse.text();
+                const headerPlaceholder = document.getElementById('header-placeholder');
+                headerPlaceholder.innerHTML = headerData;
+
+                if (window.Alpine) {
+                    Alpine.initTree(headerPlaceholder);
+                }
+                const footerResponse = await fetch('/src/components/partials/footer.html');
+                const footerData = await footerResponse.text();
+                const footerPlaceholder = document.getElementById('footer-placeholder');
+                if (footerPlaceholder) {
+                    footerPlaceholder.innerHTML = footerData;
+                }
+            } catch (error) {
+                console.error('Error loading components:', error);
+            }
+        });
+    </script>
+
+    <!-- Scripts -->
+    <!-- AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+    <!-- Swiper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Gallery-Specific JavaScript -->
+    <script>
+        // ============================================
+        // VANILLA JS GALLERY GRID RENDERER
+        // No Alpine.js - direct DOM manipulation
+        // ============================================
+        const GalleryGrid = {
+            container: null,
+            loader: null,
+            items: [],
+
+            async init() {
+                this.container = document.getElementById('gallery-grid');
+                this.loader = document.getElementById('gallery-loader');
+                if (!this.container) return;
+                await this.loadItems();
+            },
+
+            hideLoader() {
+                if (this.loader) {
+                    this.loader.classList.add('hidden');
+                    // Remove from DOM after fade completes
+                    setTimeout(() => {
+                        if (this.loader && this.loader.parentNode) {
+                            this.loader.remove();
+                        }
+                    }, 400);
+                }
+            },
+
+            waitForImages(count = 6) {
+                return new Promise((resolve) => {
+                    const images = this.container.querySelectorAll('img');
+                    if (images.length === 0) {
+                        resolve();
+                        return;
+                    }
+
+                    let loaded = 0;
+                    const target = Math.min(count, images.length);
+                    const checkDone = () => {
+                        loaded++;
+                        if (loaded >= target) resolve();
+                    };
+
+                    // Only wait for first N images (above the fold)
+                    Array.from(images).slice(0, target).forEach(img => {
+                        if (img.complete) {
+                            checkDone();
+                        } else {
+                            img.onload = checkDone;
+                            img.onerror = checkDone; 
+                        }
+                    });
+
+                    // Fallback timeout (3s max wait)
+                    setTimeout(resolve, 3000);
+                });
+            },
+
+            async loadItems() {
+                try {
+                    const response = await fetch('/api/gallery');
+                    const data = await response.json();
+
+                    // Supports both Railway (url_sm/md/lg) and legacy (filepath) formats
+                    this.items = (data.items || []).map(item => {
+                        // Check if this is a Railway storage item with variants
+                        const hasVariants = item.url_sm && item.url_md && item.url_lg;
+                        const hasVideoVariants = item.thumbnail_sm || item.thumbnail_md;
+
+                        return {
+                            id: item.id,
+                            type: item.type === 'embed' ? 'video' : item.type,
+                            title: item.title || '',
+                            // Railway image variants
+                            url_sm: item.url_sm,
+                            url_md: item.url_md,
+                            url_lg: item.url_lg,
+                            // Railway video with thumbnail variants
+                            videoUrl: item.videoUrl || (item.type === 'video' ? item.filepath : null),
+                            thumbnail_sm: item.thumbnail_sm,
+                            thumbnail_md: item.thumbnail_md,
+                            thumbnail_lg: item.thumbnail_lg,
+                            // Legacy/fallback
+                            thumbnail: item.thumbnail || item.filepath,
+                            src: item.url_lg || item.filepath || item.embedUrl,
+                            embedUrl: item.embedUrl,
+                            embedPlatform: item.embedPlatform,
+                            sizeClass: item.sizeClass || 'medium',
+                            // Blur placeholder for instant loading
+                            blurData: item.blurData,
+                            // Flags for rendering
+                            hasVariants,
+                            hasVideoVariants,
+                        };
+                    });
+
+                    this.render();
+
+                    await this.waitForImages(6);
+                    this.hideLoader();
+                    if (window.hideLoader) window.hideLoader();
+                } catch (err) {
+                    console.error('Failed to load gallery:', err);
+                    this.showEmpty();
+                    this.hideLoader();
+                    if (window.hideLoader) window.hideLoader();
+                }
+            },
+
+            // Preload first N images for faster above-the-fold rendering
+            preloadImages(count = 4) {
+                const head = document.head;
+                this.items.slice(0, count).forEach((item, index) => {
+                    let imgUrl;
+                    if (item.type === 'video' && item.hasVideoVariants) {
+                        imgUrl = item.thumbnail_sm || item.thumbnail_md || item.thumbnail;
+                    } else if (item.hasVariants) {
+                        imgUrl = item.url_sm;
+                    } else {
+                        imgUrl = item.thumbnail || item.src;
+                    }
+
+                    if (imgUrl) {
+                        const link = document.createElement('link');
+                        link.rel = 'preload';
+                        link.as = 'image';
+                        link.href = imgUrl;
+                        // First 2 images get high priority
+                        if (index < 2) {
+                            link.fetchPriority = 'high';
+                        }
+                        head.appendChild(link);
+                    }
+                });
+            },
+
+            render() {
+                if (this.items.length === 0) {
+                    this.showEmpty();
+                    return;
+                }
+
+                // Preload first 4 images for faster rendering
+                this.preloadImages(4);
+
+                // Build all items in a document fragment first (no DOM manipulation yet)
+                const fragment = document.createDocumentFragment();
+                this.items.forEach((item, index) => {
+                    const el = this.createItemElement(item, index);
+                    fragment.appendChild(el);
+                });
+
+                // Lock current height to prevent layout collapse during DOM replacement
+                const currentHeight = this.container.offsetHeight;
+                this.container.style.minHeight = `${currentHeight}px`;
+
+                requestAnimationFrame(() => {
+                    this.container.innerHTML = '';
+                    this.container.appendChild(fragment);
+
+                    requestAnimationFrame(() => {
+                        this.container.style.minHeight = '';
+                    });
+                });
+            },
+
+            createItemElement(item, index) {
+                const div = document.createElement('div');
+                div.className = `gallery-item group shadow-lg hover:shadow-2xl transition-all duration-500 ${item.type === 'video' ? 'video' : ''} ${item.sizeClass || 'medium'}`;
+                div.setAttribute('data-index', index);
+                div.onclick = () => window.openGalleryLightbox(index);
+
+                // Determine image source and srcset based on storage type
+                let imgSrc, imgSrcset, imgSizes;
+
+                if (item.type === 'video' && item.hasVideoVariants) {
+                    // Video with Railway thumbnail variants - use sm for grid (faster load)
+                    imgSrc = item.thumbnail_sm || item.thumbnail_md || item.thumbnail;
+                    imgSrcset = [
+                        item.thumbnail_sm ? `${item.thumbnail_sm} 400w` : '',
+                        item.thumbnail_md ? `${item.thumbnail_md} 800w` : '',
+                    ].filter(Boolean).join(', ');
+                    imgSizes = '(max-width: 767px) 100vw, 50vw';
+                } else if (item.hasVariants) {
+                    // Image with Railway variants - use sm for grid (faster load)
+                    imgSrc = item.url_sm;
+                    imgSrcset = `${item.url_sm} 400w, ${item.url_md} 800w`;
+                    imgSizes = '(max-width: 767px) 100vw, 50vw';
+                } else {
+                    // Legacy storage - single image
+                    imgSrc = item.thumbnail || item.src;
+                    imgSrcset = null;
+                    imgSizes = null;
+                }
+
+                // Build blur placeholder if available
+                const blurPlaceholder = item.blurData ? `
+                    <div class="blur-placeholder" style="background-image: url('${item.blurData}')"></div>
+                ` : '';
+
+                // Build image tag with optional srcset and blur-up effect
+                const imgTag = imgSrc ? `
+                    <img src="${imgSrc}"
+                         ${imgSrcset ? `srcset="${imgSrcset}"` : ''}
+                         ${imgSizes ? `sizes="${imgSizes}"` : ''}
+                         alt="${item.title || 'Gallery item'}"
+                         class="main-image w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                         loading="lazy"
+                         decoding="async"
+                         onload="this.classList.add('loaded'); const blur = this.parentElement.querySelector('.blur-placeholder'); if(blur) blur.classList.add('loaded');">
+                ` : `
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br ${item.embedUrl ? 'from-red-900 to-red-600' : 'from-purple-900 to-purple-600'}">
+                        <svg class="w-20 h-20 text-white/60" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                `;
+
+                div.innerHTML = `
+                    <div class="relative overflow-hidden rounded-xl h-full">
+                        ${blurPlaceholder}
+                        ${imgTag}
+                        ${item.type === 'video' ? `
+                            <div class="play-button">
+                                <svg class="w-6 h-6 text-lighthouse-navy" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path>
+                                </svg>
+                            </div>
+                        ` : ''}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                `;
+
+                return div;
+            },
+
+            showEmpty() {
+                this.container.innerHTML = '';
+                const emptyState = document.getElementById('gallery-empty');
+                if (emptyState) {
+                    emptyState.classList.remove('hidden');
+                }
+            }
+        };
+
+        // Initialize gallery grid on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            GalleryGrid.init();
+        });
+
+        // ============================================
+        // ALPINE.JS LIGHTBOX COMPONENT
+        // Only handles modal display, separate from grid
+        // ============================================
+        function lightboxComponent() {
+            return {
+                isOpen: false,
+                currentIndex: 0,
+                items: [],
+
+                get currentItem() {
+                    return this.items[this.currentIndex] || null;
+                },
+
+                open(index) {
+                    // Get items from the vanilla JS grid
+                    this.items = GalleryGrid.items || [];
+                    this.currentIndex = index;
+                    this.isOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                close() {
+                    // Stop any playing video
+                    if (this.$refs.videoPlayer) {
+                        this.$refs.videoPlayer.pause();
+                        this.$refs.videoPlayer.currentTime = 0;
+                    }
+                    this.isOpen = false;
+                    document.body.style.overflow = 'auto';
+                },
+
+                next() {
+                    if (this.currentIndex < this.items.length - 1) {
+                        this.currentIndex++;
+                    }
+                },
+
+                prev() {
+                    if (this.currentIndex > 0) {
+                        this.currentIndex--;
+                    }
+                }
+            };
+        }
+
+        // Global function for grid items to open lightbox
+        window.openGalleryLightbox = function(index) {
+            const lightbox = document.getElementById('gallery-lightbox');
+            if (lightbox && lightbox._x_dataStack) {
+                lightbox._x_dataStack[0].open(index);
+            }
+        };
+
+        // Helper function to extract YouTube video ID
+        function getYoutubeId(url) {
+            if (!url) return '';
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+                /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return '';
+        }
+
+        // Helper function to extract Vimeo video ID
+        function getVimeoId(url) {
+            if (!url) return '';
+            const match = url.match(/vimeo\.com\/(\d+)/);
+            return match ? match[1] : '';
+        }
+    </script>
+
+    <!-- Initialize AOS -->
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 100,
+            delay: 0
+        });
+    </script>
+
+<!-- Scroll to Top Button -->
+    <button id="scrollToTop"
+            class="fixed bottom-8 right-8 z-50 flex items-center justify-center w-14 h-14 transition-all duration-300 transform rounded-full shadow-2xl bg-lighthouse-accent-gold hover:bg-lighthouse-accent-gold/90 hover:scale-110 opacity-0 pointer-events-none"
+            aria-label="Scroll to top">
+        <svg class="w-6 h-6 text-lighthouse-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <!-- Scroll to Top Script -->
+    <script>
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                scrollToTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                scrollToTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <!-- Custom JavaScript -->
+    <script src="/src/js/main.js"></script>
+    <script src="/src/js/navigation.js"></script>
+
+</body>
+</html>

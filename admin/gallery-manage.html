@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery Manager | Lighthouse Admin</title>
+  <link rel="stylesheet" href="/dist/css/styles.css">
+  <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+    .sidebar { width: 260px; }
+    .main-content { margin-left: 260px; }
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+    }
+    .dropzone { border: 2px dashed #D6B86A; }
+    .dropzone.dragover { border-color: #1C3D5A; background: rgba(28, 61, 90, 0.05); }
+
+    /* Uniform gallery grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* All cards same aspect ratio (16:9 cinematic) */
+    .gallery-card .thumb-container { aspect-ratio: 16/9; }
+
+    .type-badge { font-size: 0.7rem; }
+    .action-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.25rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      min-width: 120px;
+      z-index: 20;
+    }
+
+    /* Filter button styles */
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: #1C3D5A;
+      color: white;
+      box-shadow: 0 1px 3px rgba(28, 61, 90, 0.3);
+    }
+    .filter-btn:not(.active) {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    .filter-btn:not(.active):hover {
+      background: #e5e7eb;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen" x-data="galleryManager()">
+
+  <!-- Sidebar -->
+  <aside class="sidebar fixed top-0 left-0 h-full bg-lighthouse-navy text-white transition-transform duration-300"
+         :class="{ 'open': sidebarOpen }">
+    <div class="p-6">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-12">
+    </div>
+
+    <nav class="mt-6">
+      <a href="/admin/dashboard.html"
+         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        Dashboard
+      </a>
+      <a href="/admin/gallery-manage.html"
+         class="flex items-center px-6 py-3 bg-white/10 text-white">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Gallery Manager
+      </a>
+      <a href="/admin/users-manage.html" x-show="user?.role === 'admin'"
+         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        User Management
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium" x-text="user?.username"></p>
+          <p class="text-xs text-white/50 capitalize" x-text="user?.role"></p>
+        </div>
+        <button @click="logout" class="text-white/70 hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <header class="lg:hidden fixed top-0 left-0 right-0 bg-lighthouse-navy text-white p-4 z-40 flex items-center justify-between">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+    <span class="font-semibold">Gallery Manager</span>
+    <button @click="logout" class="p-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Overlay -->
+  <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
+       class="lg:hidden fixed inset-0 bg-black/50 z-40"></div>
+
+  <!-- Main Content -->
+  <main class="main-content min-h-screen pt-16 lg:pt-0">
+    <div class="p-6 lg:p-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <h1 class="text-2xl lg:text-3xl font-bold text-lighthouse-navy">Gallery Manager</h1>
+          <p class="text-gray-600 mt-1">Upload and manage your gallery images and videos</p>
+        </div>
+        <div class="flex gap-2">
+          <button @click="showUploadModal = true"
+                  class="inline-flex items-center px-4 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Upload Files
+          </button>
+          <button @click="showEmbedModal = true"
+                  class="inline-flex items-center px-4 py-2 border border-lighthouse-navy text-lighthouse-navy rounded-lg hover:bg-lighthouse-navy hover:text-white transition">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            Add Video Embed
+          </button>
+        </div>
+      </div>
+
+      <!-- Success/Error/Warning Messages -->
+      <div x-show="message" x-cloak
+           :class="{
+             'bg-green-50 border-green-200 text-green-700': messageType === 'success',
+             'bg-yellow-50 border-yellow-200 text-yellow-700': messageType === 'warning',
+             'bg-red-50 border-red-200 text-red-700': messageType === 'error'
+           }"
+           class="mb-6 p-4 border rounded-lg flex items-center justify-between">
+        <span x-text="message"></span>
+        <button @click="message = ''" class="ml-4">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div x-show="loading" class="text-center py-12">
+        <svg class="animate-spin h-8 w-8 mx-auto text-lighthouse-gold" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <p class="mt-2 text-gray-600">Loading gallery...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div x-show="!loading && items.length === 0" x-cloak class="text-center py-16">
+        <div class="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-700">No gallery items yet</h3>
+        <p class="text-gray-500 mt-1">Upload your first images or videos to get started</p>
+        <button @click="showUploadModal = true"
+                class="mt-4 inline-flex items-center px-4 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Upload Files
+        </button>
+      </div>
+
+      <!-- Search and Filter Bar -->
+      <div x-show="!loading && items.length > 0" class="mb-6 flex flex-col sm:flex-row gap-4">
+        <!-- Search Input -->
+        <div class="relative flex-1 max-w-md">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text"
+                 x-model="searchQuery"
+                 x-ref="searchInput"
+                 @keydown.ctrl.k.window.prevent="$refs.searchInput.focus()"
+                 placeholder="Search files... (Ctrl+K)"
+                 class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent transition">
+          <!-- Clear button -->
+          <button x-show="searchQuery" x-cloak @click="searchQuery = ''"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Type Filter Buttons -->
+        <div class="flex flex-wrap gap-2">
+          <button @click="filterType = 'all'"
+                  :class="filterType === 'all' ? 'active' : ''"
+                  class="filter-btn">
+            All <span class="ml-1 opacity-70" x-text="'(' + items.length + ')'"></span>
+          </button>
+          <button @click="filterType = 'image'"
+                  :class="filterType === 'image' ? 'active' : ''"
+                  class="filter-btn">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Images <span class="ml-1 opacity-70" x-text="'(' + imageCount + ')'"></span>
+          </button>
+          <button @click="filterType = 'video'"
+                  :class="filterType === 'video' ? 'active' : ''"
+                  class="filter-btn">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+            </svg>
+            Videos <span class="ml-1 opacity-70" x-text="'(' + videoCount + ')'"></span>
+          </button>
+          <button @click="filterType = 'embed'"
+                  :class="filterType === 'embed' ? 'active' : ''"
+                  class="filter-btn">
+            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            Embeds <span class="ml-1 opacity-70" x-text="'(' + embedCount + ')'"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- No Results Message -->
+      <div x-show="!loading && items.length > 0 && filteredItems.length === 0" class="text-center py-12 text-gray-500">
+        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <p>No items match your search or filter</p>
+        <button @click="searchQuery = ''; filterType = 'all'" class="mt-2 text-lighthouse-gold hover:underline">Clear filters</button>
+      </div>
+
+      <!-- Gallery Grid - Simplified Cards (no size classes) -->
+      <div x-show="!loading && filteredItems.length > 0" class="gallery-grid">
+        <template x-for="item in filteredItems" :key="item.id">
+          <div class="gallery-card bg-white rounded-xl shadow-sm hover:shadow-lg overflow-hidden group transition-shadow duration-200">
+            <!-- Thumbnail Container -->
+            <div class="thumb-container bg-gray-100 relative overflow-hidden">
+              <!-- Image -->
+              <template x-if="item.type === 'image'">
+                <img :src="item.url_md || item.thumbnail || item.filepath" :alt="item.filename"
+                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+              </template>
+
+              <!-- Video with thumbnail -->
+              <template x-if="item.type === 'video' && item.thumbnail">
+                <div class="w-full h-full relative">
+                  <img :src="item.thumbnail_md || item.thumbnail" :alt="item.filename" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-12 h-12 bg-purple-600/90 rounded-full flex items-center justify-center shadow-lg">
+                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <!-- Video without thumbnail -->
+              <template x-if="item.type === 'video' && !item.thumbnail">
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-700 to-purple-900">
+                  <svg class="w-12 h-12 text-white/80" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </template>
+
+              <!-- Embed -->
+              <template x-if="item.type === 'embed'">
+                <div class="w-full h-full relative">
+                  <template x-if="item.thumbnail">
+                    <img :src="item.thumbnail" :alt="item.embedPlatform" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                  </template>
+                  <template x-if="!item.thumbnail">
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-600 to-red-800"></div>
+                  </template>
+                  <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
+                         :class="item.embedPlatform === 'youtube' ? 'bg-red-600' : 'bg-blue-500'">
+                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <!-- Type Badge (bottom-left) -->
+              <span class="size-badge absolute bottom-2 left-2 px-2 py-1 rounded capitalize shadow-sm"
+                    :class="{
+                      'bg-blue-500 text-white': item.type === 'image',
+                      'bg-purple-500 text-white': item.type === 'video',
+                      'bg-red-500 text-white': item.type === 'embed'
+                    }"
+                    x-text="item.type === 'embed' ? item.embedPlatform : item.type"></span>
+
+              <!-- Hover Overlay (Desktop) - Delete Action - must come BEFORE the delete button -->
+              <div class="absolute inset-0 z-10 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                <button @click.stop="confirmDelete(item)"
+                        class="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition shadow-lg transform hover:scale-105 pointer-events-auto">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Delete Button (top-right) - always clickable, above overlay -->
+              <button @click.stop="confirmDelete(item)"
+                      class="absolute top-2 right-2 z-20 w-8 h-8 bg-red-500/90 hover:bg-red-600 rounded-lg shadow flex items-center justify-center transition text-white">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Card Footer with Metadata -->
+            <div class="p-3 border-t bg-white">
+              <p class="text-sm font-medium text-gray-800 truncate" x-text="item.filename || 'Untitled'"></p>
+              <span class="text-xs text-gray-500" x-text="formatDate(item.createdAt)"></span>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </main>
+
+  <!-- Upload Modal -->
+  <div x-show="showUploadModal" x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       @click.self="showUploadModal = false">
+    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-lighthouse-navy">Upload Files</h2>
+          <button @click="showUploadModal = false" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6">
+        <!-- Dropzone -->
+        <div class="dropzone rounded-xl p-8 text-center transition"
+             :class="{ 'dragover': isDragging }"
+             @dragover.prevent="isDragging = true"
+             @dragleave.prevent="isDragging = false"
+             @drop.prevent="handleDrop($event)">
+          <input type="file" id="fileInput" multiple accept="image/*,video/*" class="hidden"
+                 @change="handleFileSelect($event)">
+
+          <svg class="w-12 h-12 mx-auto text-lighthouse-gold mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+          </svg>
+          <p class="text-gray-600 mb-2">Drag and drop files here, or</p>
+          <label for="fileInput"
+                 class="inline-block px-4 py-2 bg-lighthouse-gold text-white rounded-lg cursor-pointer hover:bg-lighthouse-light-gold transition">
+            Browse Files
+          </label>
+          <p class="text-sm text-gray-500 mt-3">Images: JPG, PNG, WebP, GIF (max 10MB) | Videos: MP4, WebM (max 100MB)</p>
+        </div>
+
+        <!-- Selected Files Preview -->
+        <div x-show="selectedFiles.length > 0" class="mt-6">
+          <h3 class="text-sm font-medium text-gray-700 mb-3">Selected Files (<span x-text="selectedFiles.length"></span>)</h3>
+          <div class="space-y-2 max-h-48 overflow-y-auto">
+            <template x-for="(file, index) in selectedFiles" :key="index">
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                         x-show="file.type.startsWith('image')">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                         x-show="file.type.startsWith('video')">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-700" x-text="file.name.substring(0, 30) + (file.name.length > 30 ? '...' : '')"></p>
+                    <p class="text-xs text-gray-500" x-text="formatFileSize(file.size)"></p>
+                  </div>
+                </div>
+                <button @click="removeFile(index)" class="text-red-500 hover:text-red-700">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Upload Progress -->
+        <div x-show="uploading" class="mt-6">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm text-gray-600">Uploading...</span>
+            <span class="text-sm font-medium text-lighthouse-navy" x-text="uploadProgress + '%'"></span>
+          </div>
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-lighthouse-gold transition-all duration-300"
+                 :style="'width: ' + uploadProgress + '%'"></div>
+          </div>
+        </div>
+
+        <!-- Upload Button -->
+        <div class="mt-6 flex justify-end gap-3">
+          <button @click="showUploadModal = false; selectedFiles = []"
+                  class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg transition">
+            Cancel
+          </button>
+          <button @click="uploadFiles"
+                  :disabled="selectedFiles.length === 0 || uploading"
+                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <span x-show="!uploading">Upload <span x-text="selectedFiles.length"></span> File(s)</span>
+            <span x-show="uploading">Uploading...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Embed Modal -->
+  <div x-show="showEmbedModal" x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       @click.self="showEmbedModal = false">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
+      <div class="p-6 border-b">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold text-lighthouse-navy">Add Video Embed</h2>
+          <button @click="showEmbedModal = false" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Video URL</label>
+          <input type="url" x-model="embedUrl" placeholder="https://youtube.com/watch?v=..."
+                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent">
+          <p class="text-xs text-gray-500 mt-1">Supports YouTube and Vimeo URLs</p>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button @click="showEmbedModal = false; embedUrl = ''"
+                  class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg transition">
+            Cancel
+          </button>
+          <button @click="addEmbed"
+                  :disabled="!embedUrl || addingEmbed"
+                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <span x-show="!addingEmbed">Add Embed</span>
+            <span x-show="addingEmbed">Adding...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div x-show="showDeleteModal" x-cloak
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       @click.self="showDeleteModal = false; deletingItem = null">
+    <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full">
+      <div class="p-6 text-center">
+        <div class="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete Item?</h3>
+        <p class="text-gray-600 text-sm mb-6">This action cannot be undone. The file will be permanently deleted.</p>
+
+        <div class="flex gap-3 justify-center">
+          <button @click="showDeleteModal = false; deletingItem = null"
+                  class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg transition">
+            Cancel
+          </button>
+          <button @click="deleteItem"
+                  :disabled="deleting"
+                  class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50">
+            <span x-show="!deleting">Delete</span>
+            <span x-show="deleting">Deleting...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function galleryManager() {
+      return {
+        user: null,
+        items: [],
+        loading: true,
+        sidebarOpen: false,
+
+        // Search & Filter
+        searchQuery: '',
+        filterType: 'all',
+
+        // Messages
+        message: '',
+        messageType: 'success',
+
+        // Upload
+        showUploadModal: false,
+        selectedFiles: [],
+        uploading: false,
+        uploadProgress: 0,
+        isDragging: false,
+
+        // Embed
+        showEmbedModal: false,
+        embedUrl: '',
+        addingEmbed: false,
+
+        // Delete
+        showDeleteModal: false,
+        deletingItem: null,
+        deleting: false,
+
+        // Computed: item counts by type
+        get imageCount() {
+          return this.items.filter(i => i.type === 'image').length;
+        },
+        get videoCount() {
+          return this.items.filter(i => i.type === 'video').length;
+        },
+        get embedCount() {
+          return this.items.filter(i => i.type === 'embed').length;
+        },
+
+        // Computed: filtered items based on search and filter
+        get filteredItems() {
+          let result = this.items;
+
+          // Filter by type
+          if (this.filterType !== 'all') {
+            result = result.filter(item => item.type === this.filterType);
+          }
+
+          // Filter by search query
+          if (this.searchQuery.trim()) {
+            const query = this.searchQuery.toLowerCase().trim();
+            result = result.filter(item => {
+              const filename = (item.filename || '').toLowerCase();
+              const type = (item.type || '').toLowerCase();
+              return filename.includes(query) || type.includes(query);
+            });
+          }
+
+          return result;
+        },
+
+        async init() {
+          await this.checkAuth();
+          await this.loadItems();
+        },
+
+        async checkAuth() {
+          try {
+            const res = await fetch('/api/auth/check');
+            const data = await res.json();
+
+            if (!data.authenticated) {
+              window.location.href = '/admin/';
+              return;
+            }
+
+            this.user = data.user;
+          } catch (err) {
+            window.location.href = '/admin/';
+          }
+        },
+
+        async loadItems() {
+          this.loading = true;
+          try {
+            const res = await fetch('/api/gallery');
+            const data = await res.json();
+            this.items = data.items || [];
+          } catch (err) {
+            this.showMessage('Failed to load gallery items', 'error');
+          } finally {
+            this.loading = false;
+          }
+        },
+
+        showMessage(msg, type = 'success') {
+          this.message = msg;
+          this.messageType = type;
+          setTimeout(() => { this.message = ''; }, 5000);
+        },
+
+        // File handling
+        handleDrop(event) {
+          this.isDragging = false;
+          const files = Array.from(event.dataTransfer.files);
+          this.addFiles(files);
+        },
+
+        handleFileSelect(event) {
+          const files = Array.from(event.target.files);
+          this.addFiles(files);
+          event.target.value = '';
+        },
+
+        addFiles(files) {
+          const validFiles = files.filter(file => {
+            const isImage = file.type.startsWith('image/');
+            const isVideo = file.type.startsWith('video/');
+            return isImage || isVideo;
+          });
+          this.selectedFiles = [...this.selectedFiles, ...validFiles];
+        },
+
+        removeFile(index) {
+          this.selectedFiles.splice(index, 1);
+        },
+
+        formatFileSize(bytes) {
+          if (bytes < 1024) return bytes + ' B';
+          if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+          return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        },
+
+        formatDate(dateStr) {
+          if (!dateStr) return '';
+          const date = new Date(dateStr);
+          return date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+        },
+
+        // Generate video thumbnail using HTML5 Canvas
+        async generateVideoThumbnail(file) {
+          return new Promise((resolve) => {
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+            video.muted = true;
+            video.playsInline = true;
+
+            video.onloadeddata = () => {
+              // Seek to 1 second (or 0 if video is shorter)
+              video.currentTime = Math.min(1, video.duration * 0.1);
+            };
+
+            video.onseeked = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = 400;
+              canvas.height = 300;
+              const ctx = canvas.getContext('2d');
+
+              // Draw video frame maintaining aspect ratio
+              const scale = Math.max(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
+              const x = (canvas.width - video.videoWidth * scale) / 2;
+              const y = (canvas.height - video.videoHeight * scale) / 2;
+              ctx.drawImage(video, x, y, video.videoWidth * scale, video.videoHeight * scale);
+
+              canvas.toBlob((blob) => {
+                URL.revokeObjectURL(video.src);
+                resolve(blob);
+              }, 'image/jpeg', 0.8);
+            };
+
+            video.onerror = () => {
+              URL.revokeObjectURL(video.src);
+              resolve(null); // Return null if thumbnail generation fails
+            };
+
+            // Set timeout in case video fails to load
+            setTimeout(() => {
+              if (!video.onseeked) {
+                URL.revokeObjectURL(video.src);
+                resolve(null);
+              }
+            }, 10000);
+
+            video.src = URL.createObjectURL(file);
+          });
+        },
+
+        async uploadFiles() {
+          if (this.selectedFiles.length === 0) return;
+
+          this.uploading = true;
+          this.uploadProgress = 0;
+
+          const formData = new FormData();
+
+          // Generate thumbnails for videos before uploading
+          for (let i = 0; i < this.selectedFiles.length; i++) {
+            const file = this.selectedFiles[i];
+            formData.append('files', file);
+
+            // If it's a video, generate thumbnail
+            if (file.type.startsWith('video/')) {
+              const thumbnail = await this.generateVideoThumbnail(file);
+              if (thumbnail) {
+                // Append thumbnail with index to match with video
+                formData.append('thumbnails', thumbnail, `thumb_${i}.jpg`);
+                formData.append('thumbnailIndices', i.toString());
+              }
+            }
+          }
+
+          try {
+            const xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', (e) => {
+              if (e.lengthComputable) {
+                this.uploadProgress = Math.round((e.loaded / e.total) * 100);
+              }
+            });
+
+            const response = await new Promise((resolve, reject) => {
+              xhr.onload = () => {
+                try {
+                  const data = JSON.parse(xhr.responseText);
+                  resolve(data);
+                } catch (e) {
+                  reject(new Error('Invalid server response'));
+                }
+              };
+              xhr.onerror = () => reject(new Error('Network error'));
+
+              xhr.open('POST', '/api/gallery');
+              xhr.send(formData);
+            });
+
+            // Check response for actual success/failure
+            if (!response.success || (response.uploaded && response.uploaded.length === 0)) {
+              // All uploads failed
+              const errorMsg = response.errors?.map(e => `${e.file}: ${e.error}`).join('\n') || response.message || 'Upload failed';
+              this.showMessage(errorMsg, 'error');
+            } else if (response.errors && response.errors.length > 0) {
+              // Partial success
+              this.showMessage(response.message || `${response.uploaded.length} uploaded, ${response.errors.length} failed`, 'warning');
+              this.selectedFiles = [];
+              this.showUploadModal = false;
+              await this.loadItems();
+            } else {
+              // Full success
+              this.showMessage('Files uploaded successfully!');
+              this.selectedFiles = [];
+              this.showUploadModal = false;
+              await this.loadItems();
+            }
+          } catch (err) {
+            this.showMessage(err.message || 'Failed to upload files', 'error');
+          } finally {
+            this.uploading = false;
+            this.uploadProgress = 0;
+          }
+        },
+
+        async addEmbed() {
+          if (!this.embedUrl) return;
+
+          this.addingEmbed = true;
+          try {
+            const res = await fetch('/api/gallery/embed', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url: this.embedUrl })
+            });
+
+            if (!res.ok) {
+              const data = await res.json();
+              throw new Error(data.message || 'Failed to add embed');
+            }
+
+            this.showMessage('Video embed added successfully!');
+            this.embedUrl = '';
+            this.showEmbedModal = false;
+            await this.loadItems();
+          } catch (err) {
+            this.showMessage(err.message, 'error');
+          } finally {
+            this.addingEmbed = false;
+          }
+        },
+
+        confirmDelete(item) {
+          this.deletingItem = item;
+          this.showDeleteModal = true;
+        },
+
+        async deleteItem() {
+          if (!this.deletingItem) return;
+
+          this.deleting = true;
+          try {
+            const res = await fetch(`/api/gallery/${this.deletingItem.id}`, {
+              method: 'DELETE'
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+              throw new Error(data.message || 'Failed to delete');
+            }
+
+            this.showMessage('Item deleted successfully!');
+            this.showDeleteModal = false;
+            this.deletingItem = null;
+            await this.loadItems();
+          } catch (err) {
+            this.showMessage(err.message || 'Failed to delete item', 'error');
+          } finally {
+            this.deleting = false;
+          }
+        },
+
+        async logout() {
+          try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/';
+          } catch (err) {
+            console.error('Logout failed:', err);
+          }
+        }
+      };
+    }
+  </script>
+</body>
+</html>

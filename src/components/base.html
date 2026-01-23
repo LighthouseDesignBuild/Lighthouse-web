@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3WCW57RF6Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3WCW57RF6Q');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO Meta Tags -->
+  <title>{{PAGE_TITLE}} | Lighthouse Design Build - Premium Home Renovations</title>
+  <meta name="description" content="{{PAGE_DESCRIPTION}}">
+  <meta name="keywords" content="home renovation, design build, kitchen remodel, bathroom renovation, Fairfield County">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="{{PAGE_TITLE}} | Lighthouse Design Build">
+  <meta property="og:description" content="{{PAGE_DESCRIPTION}}">
+  <meta property="og:image" content="{{OG_IMAGE}}">
+  <meta property="og:url" content="{{PAGE_URL}}">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{PAGE_TITLE}} | Lighthouse Design Build">
+  <meta name="twitter:description" content="{{PAGE_DESCRIPTION}}">
+  <meta name="twitter:image" content="{{OG_IMAGE}}">
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/src/assets/icons/site.webmanifest">
+
+  <!-- Preconnect to external resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+  <!-- Main Stylesheet (Compiled TailwindCSS) -->
+  <link rel="stylesheet" href="/dist/css/styles.css">
+
+  <!-- Custom Animations CSS -->
+  <link rel="stylesheet" href="/src/css/animations.css">
+
+  <!-- Structured Data / Schema Markup -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HomeAndConstructionBusiness",
+      "name": "Lighthouse Design Build",
+      "description": "Premium home renovation and design-build services in Fairfield County, CT",
+      "url": "https://www.lighthousedesignbuild.com",
+      "logo": "https://www.lighthousedesignbuild.com/src/assets/logo.svg",
+      "image": "https://www.lighthousedesignbuild.com/src/assets/images/hero-image.jpg",
+      "telephone": "+1-203-XXX-XXXX",
+      "email": "hello@lighthousedesignbuild.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Main Street",
+        "addressLocality": "Fairfield",
+        "addressRegion": "CT",
+        "postalCode": "06824",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "41.1412",
+        "longitude": "-73.2637"
+      },
+      "areaServed": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": "41.1412",
+          "longitude": "-73.2637"
+        },
+        "geoRadius": "50000"
+      },
+      "priceRange": "$$$",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "09:00",
+          "closes": "17:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "10:00",
+          "closes": "14:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/lighthousedesignbuild",
+        "https://www.instagram.com/lighthousedesignbuild",
+        "https://www.linkedin.com/company/lighthousedesignbuild"
+      ]
+    }
+    </script>
+</head>
+
+<body class="font-body text-charcoal bg-white antialiased">
+
+  <!-- Skip to main content (Accessibility) -->
+  <a href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-lighthouse-teal focus:text-white focus:rounded-lg">
+    Skip to main content
+  </a>
+
+  <!-- Header / Navigation -->
+  {{HEADER}}
+
+  <!-- Main Content -->
+  <main id="main-content">
+    {{CONTENT}}
+  </main>
+
+  <!-- Footer -->
+  {{FOOTER}}
+
+  <!-- Scripts -->
+  <!-- Alpine.js for interactivity -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+  <!-- AOS (Animate On Scroll) -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- Swiper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Custom JavaScript Modules -->
+  <script src="/src/js/main.js"></script>
+  <script src="/src/js/navigation.js"></script>
+
+  <!-- Initialize AOS -->
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 100,
+      delay: 0
+    });
+  </script>
+
+</body>
+
+</html>

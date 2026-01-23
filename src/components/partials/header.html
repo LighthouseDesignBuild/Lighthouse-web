@@ -1,0 +1,353 @@
+<!-- Skip to content (accessibility) -->
+<a href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-lighthouse-teal focus:text-white focus:rounded-lg">
+    Skip to main content
+</a>
+
+<!-- Header -->
+<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" x-data="navigationComponent()"
+    x-init="init()" @scroll.window="onScroll()"
+    :class="scrolled ? 'bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md shadow-lg' : 'bg-transparent'"
+    id="main-navigation">
+
+    <div class="container-custom">
+        <div class="flex items-center justify-between h-20">
+
+            <!-- Logo -->
+            <div class="flex-shrink-0">
+                <a href="/pages/index" class="flex items-center group"
+                    aria-label="Lighthouse Design Build - Home">
+                <div class="relative flex items-center w-auto h-16">
+                    <img src="/src/assets/images/logo/LightHouse-Logo-Blue.png"
+                         alt="Lighthouse Design Build"
+                         class="w-auto h-16 transition-opacity duration-500 group-hover:scale-105"
+                         :class="scrolled ? 'opacity-0 absolute' : 'opacity-100'">
+
+                    <img src="/src/assets/images/logo/LightHouse-Logo-White.png"
+                         alt="Lighthouse Design Build"
+                         class="absolute w-auto h-16 transition-opacity duration-500 opacity-0 group-hover:scale-105"
+                         :class="scrolled ? 'opacity-100 !relative' : 'opacity-0 absolute'">
+                </div>
+                </a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="items-center justify-center flex-1 hidden space-x-8 lg:flex">
+                <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <a href="/pages/about" class="relative flex items-center text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                            :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                        About
+                        <svg class="w-4 h-4 ml-1 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </a>
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+                         class="absolute left-0 z-50 w-64 mt-2 overflow-hidden bg-white border shadow-2xl top-full rounded-2xl dark:bg-gray-900 border-lighthouse-accent-gold/20">
+                        <div class="p-2">
+                            <a href="/pages/about#our-story" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></span>
+                                Our Story
+                            </a>
+
+                            <a href="/pages/about#our-roots" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>
+                                Our Roots
+                            </a>
+                            <a href="/pages/about#our-values" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></span>
+                                Our Core Values
+                            </a>
+
+                            <a href="/pages/about#our-team" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></span>
+                                Our Team
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <a href="/pages/services#services-intro" class="relative flex items-center text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                            :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                        Services
+                        <svg class="w-4 h-4 ml-1 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </a>
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+                         class="absolute left-0 z-50 w-64 mt-2 overflow-hidden bg-white border shadow-2xl top-full rounded-2xl dark:bg-gray-900 border-lighthouse-accent-gold/20" >
+                        <div class="p-2">
+                            <a href="/pages/services/kitchen" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></span>
+                                Kitchen Remodeling
+                            </a>
+                            <a href="/pages/services/bathroom" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg></span>
+                                Bathroom Remodeling
+                            </a>
+                            <a href="/pages/services/outdoor" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg></span>
+                                Outdoor Living
+                            </a>
+                            <a href="/pages/services/home_additions" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg></span>
+                                Home Additions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="/pages/process"
+                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                    Process
+                </a>
+
+                <a href="/pages/gallery"
+                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                    Gallery
+                </a>
+
+                <a href="/pages/blog"
+                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                    Blog
+                </a>
+                <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <a href="/pages/resources" class="relative flex items-center text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                            :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                        Resources
+                        <svg class="w-4 h-4 ml-1 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </a>
+                    <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2"
+                         class="absolute left-0 z-50 w-64 mt-2 overflow-hidden bg-white border shadow-2xl top-full rounded-2xl dark:bg-gray-900 border-lighthouse-accent-gold/20">
+                        <div class="p-2">
+                            <a href="/pages/resources#service-area" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+                                Service Area
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme Toggle -->
+            <div class="items-center hidden mr-4 lg:flex"
+                x-data="{ isDark: document.documentElement.classList.contains('dark') }"
+                @theme-changed.window="isDark = $event.detail.isDark">
+                <button @click="window.LighthouseUtils.toggleTheme()" aria-label="Toggle dark mode"
+                    class="p-2.5 rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-12"
+                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50' : 'text-white hover:bg-white/10'">
+                    <svg x-show="!isDark" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100"
+                        class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <svg x-show="isDark" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 scale-75" x-transition:enter-end="opacity-100 scale-100"
+                        class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Desktop CTA Button -->
+            <div class="flex-shrink-0 hidden lg:flex">
+                <a href="/pages/consultation"
+                   class="group relative inline-flex items-center gap-2 px-6 py-2.5 overflow-hidden font-heading font-semibold text-white transition-all duration-300 rounded-full bg-gradient-to-r from-lighthouse-gold to-lighthouse-gold/90 hover:from-lighthouse-gold hover:to-lighthouse-light-gold shadow-lg shadow-lighthouse-gold/25 hover:shadow-xl hover:shadow-lighthouse-gold/40 hover:-translate-y-0.5">
+                    <span>Get Started</span>
+                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                    <div class="absolute inset-0 -z-10 bg-gradient-to-r from-white/0 via-white/25 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Menu Button -->
+            <button @click="open = !open" :aria-expanded="open" aria-label="Toggle navigation menu"
+                class="p-2 transition-colors duration-300 rounded-lg lg:hidden hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50"
+                :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                <!-- Hamburger Icon -->
+                <svg class="transition-all duration-300 w-7 h-7" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <!-- Menu Icon (when closed) -->
+                    <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                    <!-- Close Icon (when open) -->
+                    <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Menu (Dropdown) -->
+        <div x-show="open" x-transition:enter="transition ease-out duration-500"
+            x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4"
+            @click.outside="open = false"
+            class="lg:hidden absolute top-full left-0 right-0 bg-white/95 dark:bg-[#0a0a0a]/95 backdrop-blur-md border-t border-lighthouse-teal/10 dark:border-gray-700/50 shadow-lg"
+            >
+
+            <div class="py-6 space-y-2 container-custom">
+                <!-- Mobile Menu Items -->
+                <div x-data="{ aboutOpen: false }">
+                    <button @click="aboutOpen = !aboutOpen"
+                            class="flex items-center justify-between w-full px-4 py-4 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                        <span>About</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" :class="aboutOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="aboutOpen" x-collapse class="mt-1 ml-4 space-y-1 border-l-2 border-lighthouse-accent-gold/30">
+                        <a href="/pages/about" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            About Overview
+                        </a>
+                        <a href="/pages/about#our-story" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            Our Story
+                        </a>
+                        <a href="/pages/about#our-values" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                            Our Core Values
+                        </a>
+                        <a href="/pages/about#our-roots" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Our Roots
+                        </a>
+                        <a href="/pages/about#our-team" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                            Our Team
+                        </a>
+                    </div>
+                </div>
+
+                <div x-data="{ servicesOpen: false }">
+                    <button @click="servicesOpen = !servicesOpen"
+                            class="flex items-center justify-between w-full px-4 py-4 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                        <span>Services</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" :class="servicesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="servicesOpen" x-collapse class="mt-1 ml-4 space-y-1 border-l-2 border-lighthouse-accent-gold/30">
+                        <a href="/pages/services" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            All Services
+                        </a>
+                        <a href="/pages/services/kitchen" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                            Kitchen Remodeling
+                        </a>
+                        <a href="/pages/services/bathroom" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>
+                            Bathroom Remodeling
+                        </a>
+                        <a href="/pages/services/outdoor" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                            Outdoor Living
+                        </a>
+                        <a href="/pages/services/home_additions" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                            Home Additions
+                        </a>
+                    </div>
+                </div>
+
+                <a href="/pages/process" @click="open = false"
+                    class="block px-4 py-4 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                    Process
+                </a>
+
+                <a href="/pages/gallery" @click="open = false"
+                    class="block px-4 py-4 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                    Gallery
+                </a>
+
+                <a href="/pages/blog" @click="open = false"
+                    class="block px-4 py-4 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                    Blog
+                </a>
+                <div x-data="{ resourcesOpen: false }">
+                    <button @click="resourcesOpen = !resourcesOpen"
+                            class="flex items-center justify-between w-full px-4 py-4 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                        <span>Resources</span>
+                        <svg class="w-5 h-5 transition-transform duration-300" :class="resourcesOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div x-show="resourcesOpen" x-collapse class="mt-1 ml-4 space-y-1 border-l-2 border-lighthouse-accent-gold/30">
+                        <a href="/pages/resources" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            All Resources
+                        </a>
+                        <a href="/pages/resources#service-area" @click="open = false"
+                           class="flex items-center px-4 py-3 text-base font-medium transition-colors duration-300 rounded-r-lg text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold">
+                            <svg class="w-4 h-4 mr-3 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Service Area
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Theme Toggle -->
+                <div class="pt-4 mt-4 border-t border-lighthouse-teal/20 dark:border-gray-700/50"
+                    x-data="{ isDark: document.documentElement.classList.contains('dark') }"
+                    @theme-changed.window="isDark = $event.detail.isDark">
+                    <button @click="window.LighthouseUtils.toggleTheme()"
+                        class="flex items-center justify-between w-full px-4 py-3 text-lg font-semibold transition-colors duration-300 rounded-lg text-lighthouse-navy dark:text-gray-100 font-heading hover:bg-lighthouse-teal/10 dark:hover:bg-gray-700/50 hover:text-lighthouse-teal dark:hover:text-lighthouse-light-teal">
+                        <span>Toggle Theme</span>
+                        <div class="flex items-center space-x-2">
+                                    <svg x-show="!isDark" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-75"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                                    <svg x-show="isDark" x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 scale-75"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Mobile CTA Button -->
+                <div class="pt-2">
+                    <a href="/pages/consultation" @click="open = false"
+                       class="relative flex items-center justify-center w-full gap-2 px-6 py-4 overflow-hidden font-semibold text-white transition-all duration-300 shadow-lg group font-heading rounded-xl bg-gradient-to-r from-lighthouse-gold to-lighthouse-gold/90 shadow-lighthouse-gold/25">
+                        <span>Schedule a Consultation</span>
+                        <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                        <div class="absolute inset-0 -z-10 bg-gradient-to-r from-white/0 via-white/25 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

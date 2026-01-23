@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" class="smooth-scroll">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3WCW57RF6Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3WCW57RF6Q');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- SEO Meta Tags -->
+  <title>Blog | Lighthouse Design Build - Home Renovation Ideas & Inspiration</title>
+  <meta name="description" content="Explore design inspiration, renovation tips, and expert advice from Lighthouse Design Build. Stay updated with the latest trends in home remodeling.">
+  <link rel="canonical" href="https://www.designwithlighthouse.com/pages/blog">
+  <meta name="keywords" content="home renovation blog, design inspiration, remodeling tips, kitchen trends, bathroom design, Fairfield County">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Blog | Lighthouse Design Build">
+  <meta property="og:description" content="Design inspiration and renovation tips from the experts.">
+  <meta property="og:image" content="/src/assets/images/blog-og.jpg">
+  <meta property="og:url" content="https://www.lighthousedesignbuild.com/pages/blog">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Blog | Lighthouse Design Build">
+  <meta name="twitter:description" content="Design inspiration and renovation tips from the experts.">
+  <meta name="twitter:image" content="/src/assets/images/blog-og.jpg">
+
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/src/assets/icons/site.webmanifest">
+
+  <!-- Preconnect to external resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet">
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- Main Stylesheet (Compiled TailwindCSS) -->
+  <link rel="stylesheet" href="/dist/css/styles.css">
+
+  <!-- Custom Animations CSS -->
+  <link rel="stylesheet" href="/src/css/animations.css">
+
+  <!-- Inline theme detection (prevents flash) -->
+  <script>
+    (function() {
+      const theme = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    })();
+  </script>
+
+  <!-- Alpine.js Collapse Plugin & Alpine.js Core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!--
+    ==========================================
+    HUBSPOT BLOG EMBED INSTRUCTIONS
+    ==========================================
+
+    1. Find your Hub ID:
+       - Look at your Hubspot URL: app.hubspot.com/contacts/YOUR_HUB_ID/
+       - OR go to Settings > Account Defaults > Account Information
+
+    2. Replace YOUR_HUB_ID below with your actual Hub ID (around line 85)
+
+    3. The blog posts will automatically appear in the #hubspot-blog-container div
+
+    4. You can customize the blog listing appearance in Hubspot's Blog Settings
+
+    ==========================================
+    -->
+
+</head>
+
+<body class="font-body text-lighthouse-charcoal dark:text-gray-100 bg-white dark:bg-[#0a0a0a] antialiased" data-manual-loader>
+
+    <!-- Page Loader -->
+    <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F5F7F8] dark:bg-[#0a0a0a] transition-opacity duration-500">
+        <div class="flex flex-row gap-2">
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.3s]"></div>
+            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.5s]"></div>
+        </div>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+  <main id="main-content">
+
+    <!-- Hero Section -->
+    <section
+      class="pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-br from-lighthouse-navy via-gray-900 to-lighthouse-navy dark:from-gray-900 dark:via-black dark:to-gray-900 text-white relative overflow-hidden">
+      <!-- Background Image -->
+      <div class="absolute inset-0">
+        <img src="/src/assets/images/blog/Blog Landing Page.jpg" alt="Home renovation tips and design inspiration from Lighthouse Design Build" class="w-full h-full object-cover object-center">
+        <div class="absolute inset-0 bg-gradient-to-br from-lighthouse-navy/90 via-gray-900/85 to-lighthouse-navy/90"></div>
+      </div>
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-20 right-20 w-96 h-96 bg-lighthouse-teal rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 left-20 w-80 h-80 bg-lighthouse-gold rounded-full blur-3xl animate-pulse"
+          style="animation-delay: 2s;"></div>
+      </div>
+
+      <div class="container-custom relative z-10">
+        <div class="max-w-4xl mx-auto text-center" data-aos="fade-up" data-aos-duration="800">
+          <div class="inline-block bg-lighthouse-teal/20 border border-lighthouse-teal/50 rounded-full px-6 py-2 mb-6">
+            <span class="text-lighthouse-teal font-heading font-semibold text-sm">Design Inspiration & Expert
+              Tips</span>
+          </div>
+
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
+            Our Blog
+          </h1>
+
+          <p class="text-xl md:text-2xl text-gray-200 mb-8 leading-relaxed max-w-3xl mx-auto">
+            Discover the latest trends, renovation tips, and design inspiration from our team of experts.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog Content Section -->
+    <section id="blog"
+      class="py-16 md:py-24 lg:py-32 bg-gradient-to-br from-[#5C88A0] to-[#1C3D5A] dark:from-[#1C3D5A] dark:to-[#0a0a0a] relative overflow-hidden"
+      x-data="hubspotBlog()" x-init="fetchPosts()">
+      <div class="container-custom">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12" data-aos="fade-up">
+          <div>
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white dark:text-white mb-4">
+              Blog &amp; Insights
+            </h2>
+            <p class="text-white/85 dark:text-gray-300 text-lg max-w-2xl">
+              Latest articles, renovation tips, and design inspiration from our team of experts.
+            </p>
+          </div>
+
+          <template x-if="posts.length">
+            <a href="https://blog.raymonddesignbuilders.com/news-info" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm font-heading font-semibold text-lighthouse-teal hover:text-lighthouse-teal/80 transition-colors duration-300">
+              View full blog
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </template>
+        </div>
+
+        <!-- Loading state -->
+        <div x-show="loading" class="text-gray-600 dark:text-gray-300 text-center py-12" data-aos="fade-up">
+          <div class="inline-flex items-center gap-3">
+            <svg class="animate-spin h-5 w-5 text-lighthouse-teal" xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
+            </svg>
+            Loading blog posts...
+          </div>
+        </div>
+
+        <!-- Error state -->
+        <div x-show="error" class="text-red-600 dark:text-red-400 text-center py-12" data-aos="fade-up">
+          <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span x-text="error"></span>
+        </div>
+
+        <!-- Posts grid -->
+        <div x-show="!loading && !error" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <template x-for="post in paginatedPosts" :key="post.id || post.guid">
+            <article
+              class="group bg-white dark:bg-gray-800 rounded-xl border-2 border-lighthouse-warmgray/30 dark:border-gray-700 overflow-hidden hover:border-lighthouse-teal dark:hover:border-lighthouse-teal transition-all duration-300 hover:shadow-xl flex flex-col"
+              data-aos="fade-up" data-aos-duration="600">
+              <div class="p-6 flex flex-col gap-4 flex-1">
+                <div class="flex items-center gap-2">
+                  <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
+                  <p class="text-xs font-heading font-semibold uppercase tracking-wider text-lighthouse-teal">
+                    <span x-text="formatDate(post.pubDate)"></span>
+                  </p>
+                  <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
+                </div>
+
+                <h3
+                  class="text-xl font-heading font-bold text-lighthouse-navy dark:text-white line-clamp-2 group-hover:text-lighthouse-teal dark:group-hover:text-lighthouse-light-teal transition-colors duration-300"
+                  x-text="post.title"></h3>
+
+                <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 flex-1"
+                  x-html="cleanDescription(post.description)"></p>
+
+                <div class="pt-4 border-t border-lighthouse-warmgray/30 dark:border-gray-700">
+                  <a :href="'./blog-post.html?id=' + encodeURIComponent(post.id || post.guid || post.link)"
+                    class="inline-flex items-center gap-2 text-sm font-heading font-semibold text-lighthouse-teal hover:text-lighthouse-teal/80 dark:text-lighthouse-light-teal dark:hover:text-lighthouse-teal transition-colors duration-300">
+                    Read article
+                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none"
+                      stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </template>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div x-show="!loading && !error && totalPages > 1" class="mt-12 flex items-center justify-center gap-2">
+          <!-- Previous Button -->
+          <button @click="prevPage()" :disabled="currentPage === 1"
+            :class="currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-lighthouse-teal hover:text-white'"
+            class="px-4 py-2 rounded-lg border-2 border-lighthouse-teal text-lighthouse-teal font-heading font-semibold transition-all duration-300 disabled:hover:bg-transparent disabled:hover:text-lighthouse-teal">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <!-- Page Numbers -->
+          <template x-for="page in pageNumbers" :key="page">
+            <button @click="goToPage(page)"
+              :class="currentPage === page ? 'bg-lighthouse-teal text-white' : 'border-2 border-lighthouse-warmgray/30 dark:border-gray-700 text-lighthouse-navy dark:text-white hover:border-lighthouse-teal hover:text-lighthouse-teal'"
+              class="px-4 py-2 rounded-lg font-heading font-semibold transition-all duration-300 min-w-[40px]"
+              x-text="page"></button>
+          </template>
+
+          <!-- Next Button -->
+          <button @click="nextPage()" :disabled="currentPage === totalPages"
+            :class="currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-lighthouse-teal hover:text-white'"
+            class="px-4 py-2 rounded-lg border-2 border-lighthouse-teal text-lighthouse-teal font-heading font-semibold transition-all duration-300 disabled:hover:bg-transparent disabled:hover:text-lighthouse-teal">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Results Info -->
+        <div x-show="!loading && !error && posts.length > 0"
+          class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+          Showing <span x-text="((currentPage - 1) * postsPerPage) + 1"></span> to
+          <span x-text="Math.min(currentPage * postsPerPage, posts.length)"></span> of
+          <span x-text="posts.length"></span> posts
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter CTA Section -->
+    <section
+      class="py-16 md:py-24 bg-gradient-to-r from-lighthouse-navy to-gray-900 dark:from-gray-900 dark:to-black text-white relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-lighthouse-teal/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-80 h-80 bg-lighthouse-gold/5 rounded-full blur-3xl"></div>
+
+      <div class="container-custom relative z-10">
+        <div class="max-w-3xl mx-auto text-center" data-aos="fade-up" data-aos-duration="800">
+          <h2 class="font-display text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            Never Miss an Update
+          </h2>
+
+          <p class="text-xl text-gray-200 mb-8 leading-relaxed">
+            Subscribe to our newsletter for the latest design trends, renovation tips, and exclusive offers.
+          </p>
+
+          <!-- Newsletter Form -->
+          <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+            <input type="email" placeholder="Enter your email address"
+              class="flex-1 px-6 py-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-lighthouse-teal focus:border-transparent"
+              required>
+            <button type="submit"
+              class="px-8 py-4 bg-lighthouse-teal hover:bg-lighthouse-teal/90 text-white font-heading font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 whitespace-nowrap">
+              Subscribe
+            </button>
+          </form>
+
+          <p class="text-sm text-gray-400 mt-4">
+            We respect your privacy. Unsubscribe anytime.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!--
+    ==========================================
+    HUBSPOT EMBED SCRIPT
+    ==========================================
+    REPLACE 'YOUR_HUB_ID' WITH YOUR ACTUAL HUB ID
+    Example: If your Hub ID is 12345678, change to:
+    https://js.hs-scripts.com/12345678.js
+    ==========================================
+    -->
+  <script type="text/javascript" id="hs-script-loader" async defer src="https://js.hs-scripts.com/7636567.js"></script>
+
+  <!-- Include Components -->
+  <script>
+    // Navigation Component - Required for header
+    function navigationComponent() {
+      return {
+        open: false,
+        scrolled: false,
+        init() { this.onScroll(); },
+        onScroll() { this.scrolled = window.scrollY > 10; }
+      }
+    }
+
+    // Load header and footer
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Load header
+        const headerResponse = await fetch('/src/components/partials/header.html');
+        const headerData = await headerResponse.text();
+        const headerPlaceholder = document.getElementById('header-placeholder');
+        headerPlaceholder.innerHTML = headerData;
+
+        // Initialize Alpine.js on the injected navigation
+        if (window.Alpine) {
+          Alpine.initTree(headerPlaceholder);
+        }
+
+        // Load footer
+        const footerResponse = await fetch('/src/components/partials/footer.html');
+        const footerData = await footerResponse.text();
+        const footerPlaceholder = document.getElementById('footer-placeholder');
+        if (footerPlaceholder) {
+          footerPlaceholder.innerHTML = footerData;
+        }
+      } catch (error) {
+        console.error('Error loading components:', error);
+      }
+    });
+  </script>
+
+  <!-- AOS Animation Library -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- Custom JavaScript Modules -->
+  <script src="/src/js/main.js"></script>
+  <script src="/src/js/navigation.js"></script>
+
+  <!-- Initialize AOS -->
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 100,
+      delay: 0
+    });
+  </script>
+
+  <!-- HubSpot Blog Alpine Component -->
+  <script>
+    function hubspotBlog() {
+      return {
+        posts: [],
+        loading: true,
+        error: "",
+        currentPage: 1,
+        postsPerPage: 12,
+
+        async fetchPosts() {
+          this.loading = true;
+          this.error = "";
+
+          try {
+            // Same-origin API endpoint exposed by the Express server:
+            const res = await fetch("/api/hubspot-blog");
+
+            if (!res.ok) {
+              throw new Error("Failed to fetch blog posts");
+            }
+
+            const data = await res.json();
+            this.posts = data.posts || []; // all posts
+          } catch (e) {
+            console.error(e);
+            this.error = "Could not load blog posts right now.";
+          } finally {
+            this.loading = false;
+            // Hide the page loader after posts are loaded
+            if (window.hideLoader) window.hideLoader();
+          }
+        },
+
+        get paginatedPosts() {
+          const start = (this.currentPage - 1) * this.postsPerPage;
+          const end = start + this.postsPerPage;
+          return this.posts.slice(start, end);
+        },
+
+        get totalPages() {
+          return Math.ceil(this.posts.length / this.postsPerPage);
+        },
+
+        get pageNumbers() {
+          const pages = [];
+          const maxVisible = 5;
+          let startPage = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
+          let endPage = Math.min(this.totalPages, startPage + maxVisible - 1);
+
+          if (endPage - startPage < maxVisible - 1) {
+            startPage = Math.max(1, endPage - maxVisible + 1);
+          }
+
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+          return pages;
+        },
+
+        goToPage(page) {
+          if (page >= 1 && page <= this.totalPages) {
+            this.currentPage = page;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        },
+
+        nextPage() {
+          this.goToPage(this.currentPage + 1);
+        },
+
+        prevPage() {
+          this.goToPage(this.currentPage - 1);
+        },
+
+        formatDate(pubDate) {
+          if (!pubDate) return "";
+          const date = new Date(pubDate);
+          if (Number.isNaN(date.getTime())) return "";
+          return date.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          });
+        },
+
+        cleanDescription(desc) {
+          if (!desc) return "";
+
+          // Create a temporary div to parse HTML
+          const temp = document.createElement('div');
+          temp.innerHTML = desc;
+
+          // Remove links but keep the images
+          temp.querySelectorAll('a').forEach(link => {
+            // If the link contains an image, unwrap it but keep the image
+            const img = link.querySelector('img');
+            if (img) {
+              link.parentNode.replaceChild(img, link);
+            } else {
+              // For text links, replace with plain text
+              const text = document.createTextNode(link.textContent);
+              link.parentNode.replaceChild(text, link);
+            }
+          });
+
+          // Remove tracking pixels and hubspot tracking images
+          temp.querySelectorAll('img[src*="track.hubspot.com"]').forEach(img => img.remove());
+
+          // Return cleaned HTML
+          return temp.innerHTML;
+        }
+      };
+    }
+  </script>
+
+</body>
+
+</html>
