@@ -13,6 +13,9 @@ import fs from "fs";
 import authRoutes from "./server/routes/auth.js";
 import userRoutes from "./server/routes/users.js";
 import galleryRoutes from "./server/routes/gallery.js";
+import blogRoutes from "./server/routes/blog.js";
+import adminBlogRoutes from "./server/routes/admin-blog.js";
+import backupRoutes from "./server/routes/backup.js";
 
 // Import sitemap generator
 import { generateXMLSitemap } from "./server/utils/sitemapGenerator.js";
@@ -74,7 +77,9 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   if (req.path.endsWith('.html') && req.path.startsWith('/pages/')) {
     const cleanPath = req.path.slice(0, -5);
-    return res.redirect(301, cleanPath);
+    // Preserve query string in redirect
+    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    return res.redirect(301, cleanPath + queryString);
   }
   next();
 });
@@ -87,6 +92,16 @@ app.use(express.static(STATIC_DIR));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/gallery", galleryRoutes);
+
+// Mount blog routes
+app.use("/api/blog", blogRoutes);
+app.use("/api/admin/blog", adminBlogRoutes);
+
+// Mount backup routes (admin only)
+app.use("/api/admin/backup", backupRoutes);
+
+// Mount admin comment routes (under /api/admin for consistency)
+// Note: These are included in adminBlogRoutes at /api/admin/blog/comments/*
 
 // Serve admin pages
 app.get("/admin", (req, res) => {
@@ -388,9 +403,10 @@ if (!process.env.VERCEL) {
     console.log(`   • Admin Login:  http://localhost:${PORT}/admin`);
     console.log(`   • Default Login: admin /lighthouse@2026!`);
     console.log(`\n🔌 API Endpoints:`);
-    console.log(`   • Blog API:     http://localhost:${PORT}/api/hubspot-blog`);
+    console.log(`   • Blog API:     http://localhost:${PORT}/api/blog`);
     console.log(`   • Gallery API:  http://localhost:${PORT}/api/gallery`);
     console.log(`   • Auth API:     http://localhost:${PORT}/api/auth`);
+    console.log(`   • Admin Blog:   http://localhost:${PORT}/api/admin/blog`);
     console.log(`   • Health:       http://localhost:${PORT}/health`);
     console.log(`\n⌨️  Press Ctrl+C to stop the server\n`);
   });

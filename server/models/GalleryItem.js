@@ -29,6 +29,7 @@ export const GalleryItem = {
     thumbnail = null,
     sizeClass = 'medium',
     uploadedBy = null,
+    category = null, // Gallery category (kitchen, bathroom, outdoor, additions)
     // Railway Buckets variant keys (optional)
     keys = null,
     videoKey = null,
@@ -52,12 +53,12 @@ export const GalleryItem = {
       const result = (await db.prepare(`
         INSERT INTO gallery_items (
           type, filename, filepath, thumbnail, size_class, display_order, uploaded_by,
-          key_sm, key_md, key_lg, video_key, thumb_key_sm, thumb_key_md, thumb_key_lg, content_hash, blur_data
+          key_sm, key_md, key_lg, video_key, thumb_key_sm, thumb_key_md, thumb_key_lg, content_hash, blur_data, category
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `)).run(
         type, filename, filepath, thumbnail, sizeClass, displayOrder, uploadedBy,
-        keySm, keyMd, keyLg, videoKey, thumbKeySm, thumbKeyMd, thumbKeyLg, contentHash, blurData
+        keySm, keyMd, keyLg, videoKey, thumbKeySm, thumbKeyMd, thumbKeyLg, contentHash, blurData, category
       );
 
       console.log('GalleryItem.create result:', { lastInsertRowid: result.lastInsertRowid });
@@ -76,15 +77,15 @@ export const GalleryItem = {
   /**
    * Create embed item (YouTube/Vimeo)
    */
-  async createEmbed({ embedUrl, embedPlatform, thumbnail, sizeClass = 'medium', uploadedBy }) {
+  async createEmbed({ embedUrl, embedPlatform, thumbnail, sizeClass = 'medium', uploadedBy, category = null }) {
     // Get max display_order
     const maxOrder = (await db.prepare('SELECT MAX(display_order) as max FROM gallery_items')).get();
     const displayOrder = (maxOrder.max || 0) + 1;
 
     const result = (await db.prepare(`
-      INSERT INTO gallery_items (type, embed_url, embed_platform, thumbnail, size_class, display_order, uploaded_by)
-      VALUES ('embed', ?, ?, ?, ?, ?, ?)
-    `)).run(embedUrl, embedPlatform, thumbnail, sizeClass, displayOrder, uploadedBy);
+      INSERT INTO gallery_items (type, embed_url, embed_platform, thumbnail, size_class, display_order, uploaded_by, category)
+      VALUES ('embed', ?, ?, ?, ?, ?, ?, ?)
+    `)).run(embedUrl, embedPlatform, thumbnail, sizeClass, displayOrder, uploadedBy, category);
 
     return this.findById(result.lastInsertRowid);
   },
@@ -92,7 +93,7 @@ export const GalleryItem = {
   /**
    * Update gallery item
    */
-  async update(id, { sizeClass, displayOrder }) {
+  async update(id, { sizeClass, displayOrder, category }) {
     const updates = [];
     const values = [];
 
@@ -104,6 +105,11 @@ export const GalleryItem = {
     if (displayOrder !== undefined) {
       updates.push('display_order = ?');
       values.push(displayOrder);
+    }
+
+    if (category !== undefined) {
+      updates.push('category = ?');
+      values.push(category);
     }
 
     if (updates.length === 0) {
@@ -170,19 +176,43 @@ export const GalleryItem = {
   },
 
   /**
+   * Get items by category
+   */
+  async findByCategory(category) {
+    return (await db.prepare(`
+      SELECT * FROM gallery_items
+      WHERE category = ?
+      ORDER BY display_order ASC, created_at DESC
+    `)).all(category);
+  },
+
+  /**
+   * Get all distinct categories with item counts
+   */
+  async getCategories() {
+    return (await db.prepare(`
+      SELECT category, COUNT(*) as count
+      FROM gallery_items
+      WHERE category IS NOT NULL
+      GROUP BY category
+      ORDER BY count DESC
+    `)).all();
+  },
+
+  /**
    * Bulk create (for batch uploads)
    * Supports both legacy (filepath) and Railway (variant keys) storage
    */
-  async createBatch(items, uploadedBy) {
+  async createBatch(items, uploadedBy, category = null) {
     const maxOrder = (await db.prepare('SELECT MAX(display_order) as max FROM gallery_items')).get();
     let displayOrder = (maxOrder.max || 0) + 1;
 
     const stmt = await db.prepare(`
       INSERT INTO gallery_items (
         type, filename, filepath, thumbnail, size_class, display_order, uploaded_by,
-        key_sm, key_md, key_lg, video_key, thumb_key_sm, thumb_key_md, thumb_key_lg, content_hash, blur_data
+        key_sm, key_md, key_lg, video_key, thumb_key_sm, thumb_key_md, thumb_key_lg, content_hash, blur_data, category
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertTransaction = await db.transaction((itemsToInsert) => {
@@ -208,7 +238,8 @@ export const GalleryItem = {
           item.videoKey || null,
           thumbKeySm, thumbKeyMd, thumbKeyLg,
           item.contentHash || null,
-          item.blurData || null
+          item.blurData || null,
+          item.category || category
         );
         insertedIds.push(result.lastInsertRowid);
       }

@@ -5,60 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Management | Lighthouse Admin</title>
   <link rel="stylesheet" href="/dist/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
   <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
   <style>
     [x-cloak] { display: none !important; }
-    .sidebar { width: 260px; }
-    .main-content { margin-left: 260px; }
+
+    /* Typography */
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+    .font-body { font-family: 'DM Sans', system-ui, sans-serif; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #FAFAF9;
+    }
+
+    /* Sidebar */
+    .sidebar { width: 280px; }
+    .main-content { margin-left: 280px; }
+
     @media (max-width: 1024px) {
       .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; }
       .sidebar.open { transform: translateX(0); }
       .main-content { margin-left: 0; }
     }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen" x-data="userManager()">
+<body class="font-body min-h-screen" x-data="userManager()">
 
   <!-- Sidebar -->
-  <aside class="sidebar fixed top-0 left-0 h-full bg-lighthouse-navy text-white transition-transform duration-300"
+  <aside class="sidebar fixed top-0 left-0 h-full text-white transition-transform duration-300"
+         style="background-color: #0f172a;"
          :class="{ 'open': sidebarOpen }">
-    <div class="p-6">
-      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-12">
+    <div class="p-6" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-10">
     </div>
 
-    <nav class="mt-6">
+    <nav class="py-4">
       <a href="/admin/dashboard.html"
-         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
         </svg>
-        Dashboard
+        <span class="font-medium">Dashboard</span>
       </a>
       <a href="/admin/gallery-manage.html"
-         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-        Gallery Manager
+        <span class="font-medium">Gallery</span>
+      </a>
+      <a href="/admin/blog-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+        </svg>
+        <span class="font-medium">Blog</span>
+      </a>
+      <a href="/admin/comments-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+        </svg>
+        <span class="font-medium">Comments</span>
       </a>
       <a href="/admin/users-manage.html"
-         class="flex items-center px-6 py-3 bg-white/10 text-white">
+         class="flex items-center px-6 py-3 text-white"
+         style="background-color: rgba(255,255,255,0.1); border-right: 2px solid #D6B86A;">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
         </svg>
-        User Management
+        <span class="font-medium">Users</span>
       </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
+    <div class="absolute bottom-0 left-0 right-0 p-6" style="border-top: 1px solid rgba(255,255,255,0.1);">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium" x-text="currentUser?.username"></p>
-          <p class="text-xs text-white/50 capitalize" x-text="currentUser?.role"></p>
+          <p class="text-sm font-medium text-white" x-text="currentUser?.username"></p>
+          <p class="text-xs capitalize" style="color: rgba(255,255,255,0.4);" x-text="currentUser?.role"></p>
         </div>
-        <button @click="logout" class="text-white/70 hover:text-white transition">
+        <button @click="logout" class="p-2 rounded-lg transition-all" style="color: rgba(255,255,255,0.4);"
+                onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255,255,255,0.1)';"
+                onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.backgroundColor='transparent';">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>
         </button>
       </div>
@@ -66,35 +117,43 @@
   </aside>
 
   <!-- Mobile Header -->
-  <header class="lg:hidden fixed top-0 left-0 right-0 bg-lighthouse-navy text-white p-4 z-40 flex items-center justify-between">
-    <button @click="sidebarOpen = !sidebarOpen" class="p-2">
+  <header class="lg:hidden fixed top-0 left-0 right-0 text-white p-4 z-40 flex items-center justify-between"
+          style="background-color: #0f172a;">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
-    <span class="font-semibold">User Management</span>
-    <button @click="logout" class="p-2">
+    <span class="font-display font-semibold">Users</span>
+    <button @click="logout" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
       </svg>
     </button>
   </header>
 
   <!-- Overlay -->
   <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
-       class="lg:hidden fixed inset-0 bg-black/50 z-40"></div>
+       class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"></div>
 
   <!-- Main Content -->
   <main class="main-content min-h-screen pt-16 lg:pt-0">
-    <div class="p-6 lg:p-8">
+    <div class="p-6 lg:p-8 max-w-[1600px]">
       <!-- Header -->
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <h1 class="text-2xl lg:text-3xl font-bold text-lighthouse-navy">User Management</h1>
-          <p class="text-gray-600 mt-1">Manage admin and editor accounts</p>
+          <h1 class="font-display text-2xl lg:text-3xl font-bold tracking-tight" style="color: #0f172a;">User Management</h1>
+          <p class="text-slate-500 mt-1">Manage admin and editor accounts</p>
         </div>
         <button @click="showCreateModal = true"
-                class="inline-flex items-center px-4 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition">
+                class="inline-flex items-center px-4 py-2 text-white rounded-lg transition-all"
+                style="background-color: #D6B86A;"
+                onmouseover="this.style.backgroundColor='#c9a85a';"
+                onmouseout="this.style.backgroundColor='#D6B86A';">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
@@ -104,10 +163,23 @@
 
       <!-- Success/Error Messages -->
       <div x-show="message" x-cloak
-           :class="messageType === 'success' ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'"
-           class="mb-6 p-4 border rounded-lg flex items-center justify-between">
-        <span x-text="message"></span>
-        <button @click="message = ''" class="ml-4">
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 -translate-y-2"
+           x-transition:enter-end="opacity-100 translate-y-0"
+           :class="{
+             'bg-emerald-50 border-emerald-200 text-emerald-700': messageType === 'success',
+             'bg-red-50 border-red-200 text-red-700': messageType === 'error'
+           }"
+           class="mb-6 p-4 border rounded-xl flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <template x-if="messageType === 'success'">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </template>
+          <span x-text="message" class="font-medium"></span>
+        </div>
+        <button @click="message = ''" class="p-1 hover:bg-black/5 rounded-lg transition-all">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -118,26 +190,27 @@
       <div class="bg-white rounded-xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full">
-            <thead class="bg-gray-50 border-b">
+            <thead class="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Username</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Role</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Last Login</th>
-                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Created</th>
-                <th class="px-6 py-4 text-right text-sm font-semibold text-gray-700">Actions</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wide">Username</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wide">Role</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wide">Status</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wide">Last Login</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wide">Created</th>
+                <th class="px-6 py-4 text-right text-xs font-medium text-slate-400 uppercase tracking-wide">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100">
+            <tbody class="divide-y divide-slate-100">
               <template x-for="user in users" :key="user.id">
-                <tr class="hover:bg-gray-50 transition">
+                <tr class="hover:bg-slate-50 transition">
                   <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-lighthouse-navy rounded-full flex items-center justify-center text-white font-semibold"
+                      <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
+                           style="background-color: #0f172a;"
                            x-text="user.username.charAt(0).toUpperCase()"></div>
                       <div>
-                        <p class="font-medium text-gray-900" x-text="user.username"></p>
-                        <p class="text-sm text-gray-500" x-show="user.id === currentUser?.id">(You)</p>
+                        <p class="font-medium" style="color: #0f172a;" x-text="user.username"></p>
+                        <p class="text-sm text-slate-400" x-show="user.id === currentUser?.id">(You)</p>
                       </div>
                     </div>
                   </td>
@@ -147,21 +220,21 @@
                           x-text="user.role"></span>
                   </td>
                   <td class="px-6 py-4">
-                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>
+                    <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Active</span>
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-600" x-text="user.lastLogin ? formatDate(user.lastLogin) : 'Never'"></td>
-                  <td class="px-6 py-4 text-sm text-gray-600" x-text="formatDate(user.createdAt)"></td>
+                  <td class="px-6 py-4 text-sm text-slate-500" x-text="user.lastLogin ? formatDate(user.lastLogin) : 'Never'"></td>
+                  <td class="px-6 py-4 text-sm text-slate-500" x-text="formatDate(user.createdAt)"></td>
                   <td class="px-6 py-4 text-right">
                     <div class="flex items-center justify-end gap-2">
                       <button @click="editUser(user)"
-                              class="p-2 text-gray-500 hover:text-lighthouse-navy hover:bg-gray-100 rounded-lg transition"
+                              class="p-2 text-slate-400 hover:text-[#0f172a] hover:bg-slate-100 rounded-lg transition"
                               :disabled="user.id === currentUser?.id">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
                       </button>
                       <button @click="confirmDelete(user)"
-                              class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                              class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                               :disabled="user.id === currentUser?.id">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -177,15 +250,17 @@
 
         <!-- Empty State -->
         <div x-show="!loading && users.length === 0" class="text-center py-12">
-          <p class="text-gray-500">No users found</p>
+          <p class="text-slate-500">No users found</p>
         </div>
 
         <!-- Loading State -->
         <div x-show="loading" class="text-center py-12">
-          <svg class="animate-spin h-8 w-8 mx-auto text-lighthouse-gold" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full mb-4" style="background-color: rgba(214, 184, 106, 0.1);">
+            <svg class="animate-spin h-6 w-6" style="color: #D6B86A;" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -193,14 +268,23 @@
 
   <!-- Create User Modal -->
   <div x-show="showCreateModal" x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-150"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        @click.self="showCreateModal = false">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
-      <div class="p-6 border-b">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100">
+      <div class="p-6 border-b border-slate-100">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-lighthouse-navy">Create User</h2>
-          <button @click="showCreateModal = false" class="text-gray-400 hover:text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h2 class="font-display text-xl font-semibold" style="color: #0f172a;">Create User</h2>
+          <button @click="showCreateModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
@@ -210,39 +294,42 @@
       <form @submit.prevent="createUser" class="p-6">
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Username</label>
             <input type="text" x-model="newUser.username" required minlength="3"
                    pattern="[a-zA-Z0-9_]+"
-                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent"
+                   class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm"
                    placeholder="Letters, numbers, underscores only">
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Password</label>
             <input type="password" x-model="newUser.password" required minlength="8"
-                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent"
+                   class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm"
                    placeholder="At least 8 characters">
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Role</label>
             <select x-model="newUser.role"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent">
+                    class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
               <option value="editor">Editor</option>
               <option value="admin">Admin</option>
             </select>
-            <p class="text-xs text-gray-500 mt-1">Editors can manage gallery. Admins can also manage users.</p>
+            <p class="text-xs text-slate-400 mt-1">Editors can manage gallery. Admins can also manage users.</p>
           </div>
         </div>
 
         <div class="mt-6 flex justify-end gap-3">
           <button type="button" @click="showCreateModal = false; resetNewUser()"
-                  class="px-4 py-2 text-gray-600 hover:text-gray-800 transition">
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
             Cancel
           </button>
           <button type="submit"
                   :disabled="creating"
-                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50">
+                  class="px-6 py-2.5 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style="background-color: #D6B86A;"
+                  onmouseover="if(!this.disabled) this.style.backgroundColor='#c9a85a';"
+                  onmouseout="this.style.backgroundColor='#D6B86A';">
             <span x-show="!creating">Create User</span>
             <span x-show="creating">Creating...</span>
           </button>
@@ -253,14 +340,23 @@
 
   <!-- Edit User Modal -->
   <div x-show="showEditModal" x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-150"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        @click.self="showEditModal = false">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
-      <div class="p-6 border-b">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100">
+      <div class="p-6 border-b border-slate-100">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-lighthouse-navy">Edit User</h2>
-          <button @click="showEditModal = false" class="text-gray-400 hover:text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h2 class="font-display text-xl font-semibold" style="color: #0f172a;">Edit User</h2>
+          <button @click="showEditModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
@@ -270,37 +366,40 @@
       <form @submit.prevent="updateUser" class="p-6">
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Username</label>
             <input type="text" :value="editingUser?.username" disabled
-                   class="w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-500">
+                   class="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-500 text-sm">
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+            <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Role</label>
             <select x-model="editingRole"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent">
+                    class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
               <option value="editor">Editor</option>
               <option value="admin">Admin</option>
             </select>
           </div>
 
-          <div class="pt-4 border-t">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Reset Password (optional)</label>
+          <div class="pt-4 border-t border-slate-100">
+            <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Reset Password (optional)</label>
             <input type="password" x-model="editingPassword" minlength="8"
-                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent"
+                   class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm"
                    placeholder="Leave empty to keep current password">
-            <p class="text-xs text-gray-500 mt-1">User will be required to change password on next login</p>
+            <p class="text-xs text-slate-400 mt-1">User will be required to change password on next login</p>
           </div>
         </div>
 
         <div class="mt-6 flex justify-end gap-3">
           <button type="button" @click="showEditModal = false"
-                  class="px-4 py-2 text-gray-600 hover:text-gray-800 transition">
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
             Cancel
           </button>
           <button type="submit"
                   :disabled="saving"
-                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50">
+                  class="px-6 py-2.5 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style="background-color: #D6B86A;"
+                  onmouseover="if(!this.disabled) this.style.backgroundColor='#c9a85a';"
+                  onmouseout="this.style.backgroundColor='#D6B86A';">
             <span x-show="!saving">Save Changes</span>
             <span x-show="saving">Saving...</span>
           </button>
@@ -311,27 +410,36 @@
 
   <!-- Delete Confirmation Modal -->
   <div x-show="showDeleteModal" x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-150"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        @click.self="showDeleteModal = false">
-    <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100">
       <div class="p-6 text-center">
-        <div class="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        <div class="w-14 h-14 mx-auto bg-red-50 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete User?</h3>
-        <p class="text-gray-600 text-sm mb-2">Are you sure you want to delete user:</p>
-        <p class="font-medium text-lighthouse-navy mb-6" x-text="deletingUser?.username"></p>
+        <h3 class="font-display text-lg font-semibold mb-2" style="color: #0f172a;">Delete User?</h3>
+        <p class="text-slate-500 text-sm mb-2">Are you sure you want to delete user:</p>
+        <p class="font-medium mb-6" style="color: #0f172a;" x-text="deletingUser?.username"></p>
 
         <div class="flex gap-3 justify-center">
           <button @click="showDeleteModal = false"
-                  class="px-4 py-2 text-gray-600 hover:text-gray-800 transition">
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
             Cancel
           </button>
           <button @click="deleteUser"
                   :disabled="deleting"
-                  class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50">
+                  class="px-6 py-2.5 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-all disabled:opacity-50">
             <span x-show="!deleting">Delete</span>
             <span x-show="deleting">Deleting...</span>
           </button>

@@ -14,17 +14,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- SEO Meta Tags -->
+    <!-- SEO Meta Tags (dynamically updated) -->
     <title>Blog Post | Lighthouse Design Build</title>
     <meta name="description" content="Read our latest home renovation and design article from Lighthouse Design Build.">
     <link rel="canonical" href="https://www.designwithlighthouse.com/pages/blog-post">
 
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Blog Post | Lighthouse Design Build">
+    <meta property="og:description" content="Read our latest home renovation and design article.">
+    <meta property="og:image" content="/src/assets/images/blog-og.jpg">
+    <meta property="og:url" content="https://www.designwithlighthouse.com/pages/blog-post">
+    <meta property="og:type" content="article">
 
-  <!-- Favicon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
-  <link rel="manifest" href="/src/assets/icons/site.webmanifest">
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog Post | Lighthouse Design Build">
+    <meta name="twitter:description" content="Read our latest home renovation and design article.">
+    <meta name="twitter:image" content="/src/assets/images/blog-og.jpg">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/src/assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/src/assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="/src/assets/icons/site.webmanifest">
 
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,6 +67,154 @@
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+    <style>
+      /* Category badge colors */
+      .category-badge {
+        font-size: 0.7rem;
+        letter-spacing: 0.05em;
+      }
+      .category-kitchen { background: #f59e0b20; color: #d97706; }
+      .category-bathroom { background: #3b82f620; color: #2563eb; }
+      .category-additions { background: #10b98120; color: #059669; }
+      .category-outdoor { background: #8b5cf620; color: #7c3aed; }
+      .category-design-tips { background: #ec489920; color: #db2777; }
+      .category-company-news { background: #6366f120; color: #4f46e5; }
+
+      /* Block styles */
+      .block-image { margin: 2rem 0; }
+      .block-image img { border-radius: 0.75rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+      .block-image figcaption { text-align: center; color: #6b7280; font-size: 0.875rem; margin-top: 0.75rem; font-style: italic; }
+
+      .block-quote {
+        border-left: 4px solid #5C88A0;
+        padding: 1.5rem 2rem;
+        margin: 2rem 0;
+        background: linear-gradient(to right, rgba(92, 136, 160, 0.1), transparent);
+        border-radius: 0 0.5rem 0.5rem 0;
+      }
+      .block-quote blockquote { font-size: 1.25rem; font-style: italic; color: #374151; margin-bottom: 0.75rem; }
+      .dark .block-quote blockquote { color: #e5e7eb; }
+      .block-quote cite { color: #6b7280; font-size: 0.875rem; }
+
+      .block-gallery {
+        display: grid;
+        gap: 1rem;
+        margin: 2rem 0;
+      }
+      .block-gallery.cols-2 { grid-template-columns: repeat(2, 1fr); }
+      .block-gallery.cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .block-gallery img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; }
+
+      .block-cta {
+        background: linear-gradient(135deg, #1C3D5A, #5C88A0);
+        padding: 2.5rem;
+        border-radius: 1rem;
+        text-align: center;
+        margin: 2rem 0;
+      }
+      .block-cta p { color: white; font-size: 1.25rem; margin-bottom: 1.5rem; }
+      .block-cta a { display: inline-block; background: #D6B86A; color: white; padding: 0.75rem 2rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.3s; }
+      .block-cta a:hover { background: #c4a85a; transform: scale(1.05); }
+
+      .block-video {
+        margin: 2rem 0;
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 0.75rem;
+      }
+      .block-video iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .block-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 3rem 0;
+      }
+      .block-divider::before,
+      .block-divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #d1d5db, transparent);
+      }
+      .dark .block-divider::before,
+      .dark .block-divider::after {
+        background: linear-gradient(to right, transparent, #4b5563, transparent);
+      }
+
+      /* Comment form styles */
+      .comment-form input:focus,
+      .comment-form textarea:focus {
+        outline: none;
+        border-color: #5C88A0;
+        box-shadow: 0 0 0 3px rgba(92, 136, 160, 0.2);
+      }
+
+      /* Blog post page navigation overrides - force visible text since no dark hero */
+      /* Light mode: dark text for nav links */
+      #main-navigation .nav-link {
+        color: #1C3D5A !important; /* lighthouse-navy */
+      }
+      #main-navigation .nav-link:hover {
+        color: #5C88A0 !important; /* lighthouse-teal */
+      }
+      /* Dark mode: light text for nav links */
+      .dark #main-navigation .nav-link {
+        color: #f3f4f6 !important; /* gray-100 */
+      }
+      .dark #main-navigation .nav-link:hover {
+        color: #5C88A0 !important; /* lighthouse-teal */
+      }
+      /* Theme toggle button - force visible in light mode */
+      #main-navigation button[aria-label="Toggle dark mode"] {
+        color: #1C3D5A !important;
+      }
+      .dark #main-navigation button[aria-label="Toggle dark mode"] {
+        color: #f3f4f6 !important;
+      }
+      /* Mobile hamburger menu - force visible in light mode */
+      #main-navigation button[aria-label="Toggle navigation menu"] {
+        color: #1C3D5A !important;
+      }
+      .dark #main-navigation button[aria-label="Toggle navigation menu"] {
+        color: #f3f4f6 !important;
+      }
+      /* Force nav background to be visible (white in light mode) */
+      #main-navigation {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(12px);
+      }
+      .dark #main-navigation {
+        background: rgba(10, 10, 10, 0.95) !important;
+      }
+      /* Logo override - show blue logo in light mode (visible on white bg) */
+      #main-navigation img[src*="Logo-Blue"] {
+        opacity: 1 !important;
+        position: relative !important;
+      }
+      #main-navigation img[src*="Logo-White"] {
+        opacity: 0 !important;
+        position: absolute !important;
+      }
+      /* Dark mode: show white logo */
+      .dark #main-navigation img[src*="Logo-Blue"] {
+        opacity: 0 !important;
+        position: absolute !important;
+      }
+      .dark #main-navigation img[src*="Logo-White"] {
+        opacity: 1 !important;
+        position: relative !important;
+      }
+    </style>
 </head>
 <body class="font-body text-lighthouse-charcoal dark:text-gray-100 bg-white dark:bg-[#0a0a0a] antialiased" data-manual-loader>
 
@@ -78,11 +238,11 @@
         <section class="py-8 bg-lighthouse-warmgray/10 dark:bg-gray-900/50 border-b border-lighthouse-warmgray/30 dark:border-gray-700">
             <div class="container-custom">
                 <nav class="flex items-center gap-2 text-sm">
-                    <a href="./index.html" class="text-gray-600 dark:text-gray-400 hover:text-lighthouse-teal transition-colors">Home</a>
+                    <a href="/pages/index.html" class="text-gray-600 dark:text-gray-400 hover:text-lighthouse-teal transition-colors">Home</a>
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
-                    <a href="./blog.html" class="text-gray-600 dark:text-gray-400 hover:text-lighthouse-teal transition-colors">Blog</a>
+                    <a href="/pages/blog.html" class="text-gray-600 dark:text-gray-400 hover:text-lighthouse-teal transition-colors">Blog</a>
                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
@@ -99,7 +259,7 @@
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <p class="text-gray-600 dark:text-gray-400 dark:text-gray-300">Loading article...</p>
+                    <p class="text-gray-600 dark:text-gray-400">Loading article...</p>
                 </div>
             </div>
         </section>
@@ -113,7 +273,7 @@
                     </svg>
                     <h2 class="text-2xl font-heading font-bold text-lighthouse-navy dark:text-white mb-4">Article Not Found</h2>
                     <p class="text-red-600 dark:text-red-400 mb-8" x-text="error"></p>
-                    <a href="./blog.html" class="inline-flex items-center gap-2 px-6 py-3 bg-lighthouse-teal hover:bg-lighthouse-teal/90 text-white font-heading font-semibold rounded-lg transition-all duration-300">
+                    <a href="/pages/blog.html" class="inline-flex items-center gap-2 px-6 py-3 bg-lighthouse-teal hover:bg-lighthouse-teal/90 text-white font-heading font-semibold rounded-lg transition-all duration-300">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                         </svg>
@@ -124,65 +284,295 @@
         </section>
 
         <!-- Article Content -->
-        <article x-show="!loading && !error" class="py-16 md:py-24 bg-white dark:bg-gray-900">
-            <div class="container-custom max-w-4xl">
+        <article x-show="!loading && !error" class="bg-white dark:bg-gray-900">
+
+            <!-- Hero Section with Featured Image - Full Viewport Width -->
+            <div class="relative" x-show="post.featuredImageUrl">
+                <div class="w-full max-h-[550px] overflow-hidden">
+                    <img :src="post.featuredImageUrl" :alt="post.featured_image_alt || post.title"
+                         class="w-full h-auto max-h-[550px] object-cover object-center">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+            </div>
+
+            <div class="container-custom max-w-4xl py-12 md:py-16">
                 <!-- Article Header -->
                 <header class="mb-12" data-aos="fade-up">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
-                        <p class="text-xs font-heading font-semibold uppercase tracking-wider text-lighthouse-teal">
-                            <span x-text="formattedDate"></span>
-                        </p>
-                        <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
+                    <!-- Category and Date -->
+                    <div class="flex flex-wrap items-center gap-3 mb-6">
+                        <span class="category-badge px-3 py-1 rounded-full font-heading font-semibold uppercase"
+                              :class="'category-' + post.category"
+                              x-text="post.categoryName"></span>
+                        <span class="text-gray-500 dark:text-gray-400 text-sm" x-text="formatDate(post.published_at)"></span>
                     </div>
 
                     <h1 class="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-lighthouse-navy dark:text-white leading-tight mb-6"
                         x-text="post.title"></h1>
 
-                    <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                        <a href="./blog.html" class="inline-flex items-center gap-2 hover:text-lighthouse-teal transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                            </svg>
-                            Back to all posts
-                        </a>
+                    <!-- Author Info -->
+                    <div class="flex items-center gap-4 pb-6 border-b border-lighthouse-warmgray/30 dark:border-gray-700">
+                        <div class="w-12 h-12 rounded-full bg-lighthouse-navy flex items-center justify-center text-white font-heading font-bold text-lg"
+                             x-text="post.author_name ? post.author_name.charAt(0).toUpperCase() : 'L'"></div>
+                        <div>
+                            <p class="font-heading font-semibold text-lighthouse-navy dark:text-white" x-text="post.author_name || 'Lighthouse Team'"></p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Author</p>
+                        </div>
                     </div>
                 </header>
 
-                <!-- Article Body -->
-                <div class="prose prose-lg max-w-none
-                            prose-headings:font-heading prose-headings:font-bold prose-headings:text-lighthouse-navy dark:prose-headings:text-white
-                            prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
-                            prose-a:text-lighthouse-teal prose-a:no-underline hover:prose-a:underline
-                            prose-strong:text-lighthouse-navy dark:prose-strong:text-white
-                            prose-ul:text-gray-700 dark:prose-ul:text-gray-300
-                            prose-ol:text-gray-700 dark:prose-ol:text-gray-300
-                            prose-li:marker:text-lighthouse-teal
-                            prose-blockquote:border-lighthouse-teal prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300
-                            prose-code:text-lighthouse-teal prose-code:bg-lighthouse-warmgray/30 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                            prose-img:rounded-xl prose-img:shadow-lg"
-                     data-aos="fade-up"
-                     data-aos-delay="100">
-                    <div x-html="post.contentHtml"></div>
+                <!-- Article Body - Block Renderer -->
+                <div class="article-content" data-aos="fade-up" data-aos-delay="100">
+                    <template x-for="(block, index) in post.content" :key="index">
+                        <div>
+                            <!-- Paragraph Block -->
+                            <template x-if="block.type === 'paragraph'">
+                                <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6" x-text="block.text"></p>
+                            </template>
+
+                            <!-- Heading Block -->
+                            <template x-if="block.type === 'heading' && block.level === 2">
+                                <h2 class="text-2xl md:text-3xl font-heading font-bold text-lighthouse-navy dark:text-white mt-10 mb-4" x-text="block.text"></h2>
+                            </template>
+                            <template x-if="block.type === 'heading' && block.level === 3">
+                                <h3 class="text-xl md:text-2xl font-heading font-bold text-lighthouse-navy dark:text-white mt-8 mb-3" x-text="block.text"></h3>
+                            </template>
+                            <template x-if="block.type === 'heading' && block.level === 4">
+                                <h4 class="text-lg md:text-xl font-heading font-bold text-lighthouse-navy dark:text-white mt-6 mb-2" x-text="block.text"></h4>
+                            </template>
+
+                            <!-- Image Block -->
+                            <template x-if="block.type === 'image'">
+                                <figure class="block-image">
+                                    <img :src="block.url" :alt="block.alt || 'Blog image'" class="w-full">
+                                    <figcaption x-show="block.caption" x-text="block.caption"></figcaption>
+                                </figure>
+                            </template>
+
+                            <!-- Quote Block -->
+                            <template x-if="block.type === 'quote'">
+                                <div class="block-quote">
+                                    <blockquote x-text="block.text"></blockquote>
+                                    <cite x-show="block.attribution" x-text="'— ' + block.attribution"></cite>
+                                </div>
+                            </template>
+
+                            <!-- Image Gallery Block -->
+                            <template x-if="block.type === 'image-gallery'">
+                                <div class="block-gallery" :class="block.images?.length === 2 ? 'cols-2' : 'cols-3'">
+                                    <template x-for="(img, imgIndex) in block.images" :key="imgIndex">
+                                        <img :src="img.url" :alt="img.alt || 'Gallery image'">
+                                    </template>
+                                </div>
+                            </template>
+
+                            <!-- CTA Block -->
+                            <template x-if="block.type === 'cta'">
+                                <div class="block-cta">
+                                    <a :href="block.url" x-text="block.text"></a>
+                                </div>
+                            </template>
+
+                            <!-- Video Embed Block -->
+                            <template x-if="block.type === 'video-embed'">
+                                <div class="block-video">
+                                    <iframe :src="getEmbedUrl(block.embedUrl)" allowfullscreen></iframe>
+                                </div>
+                            </template>
+
+                            <!-- List Block -->
+                            <template x-if="block.type === 'list' && !block.ordered">
+                                <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2 ml-4">
+                                    <template x-for="(item, itemIndex) in block.items" :key="itemIndex">
+                                        <li x-text="item"></li>
+                                    </template>
+                                </ul>
+                            </template>
+                            <template x-if="block.type === 'list' && block.ordered">
+                                <ol class="list-decimal list-inside text-gray-700 dark:text-gray-300 mb-6 space-y-2 ml-4">
+                                    <template x-for="(item, itemIndex) in block.items" :key="itemIndex">
+                                        <li x-text="item"></li>
+                                    </template>
+                                </ol>
+                            </template>
+
+                            <!-- Divider Block -->
+                            <template x-if="block.type === 'divider'">
+                                <div class="block-divider">
+                                    <svg class="w-6 h-6 text-lighthouse-teal" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                    </svg>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
                 </div>
 
                 <!-- Article Footer -->
                 <footer class="mt-16 pt-8 border-t-2 border-lighthouse-warmgray/30 dark:border-gray-700" data-aos="fade-up">
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-                        <a href="./blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-lighthouse-teal text-lighthouse-teal hover:bg-lighthouse-teal hover:text-white font-heading font-semibold rounded-lg transition-all duration-300">
+                        <a href="/pages/blog.html" class="inline-flex items-center gap-2 px-6 py-3 border-2 border-lighthouse-teal text-lighthouse-teal hover:bg-lighthouse-teal hover:text-white font-heading font-semibold rounded-lg transition-all duration-300">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                             </svg>
                             Back to Blog
                         </a>
 
-                        <a href="./consultation.html" class="btn-primary">
+                        <a href="/pages/consultation.html" class="inline-flex items-center gap-2 px-6 py-3 bg-lighthouse-gold hover:bg-lighthouse-light-gold text-white font-heading font-semibold rounded-lg transition-all duration-300">
                             Schedule a Consultation
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
                         </a>
                     </div>
                 </footer>
             </div>
         </article>
+
+        <!-- Comments Section -->
+        <section x-show="!loading && !error" class="py-16 bg-lighthouse-warmgray/10 dark:bg-gray-900/50">
+            <div class="container-custom max-w-4xl">
+                <!-- Comments Header -->
+                <div class="mb-10" data-aos="fade-up">
+                    <h2 class="text-2xl md:text-3xl font-display font-bold text-lighthouse-navy dark:text-white mb-2">
+                        Comments
+                        <span class="text-lg font-normal text-gray-500 dark:text-gray-400" x-show="comments.length > 0">
+                            (<span x-text="comments.length"></span>)
+                        </span>
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400">Share your thoughts on this article</p>
+                </div>
+
+                <!-- Existing Comments -->
+                <div class="space-y-6 mb-12" x-show="comments.length > 0" data-aos="fade-up">
+                    <template x-for="comment in comments" :key="comment.id">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-full bg-lighthouse-teal/20 flex items-center justify-center text-lighthouse-teal font-heading font-bold flex-shrink-0"
+                                     x-text="comment.first_name.charAt(0).toUpperCase()"></div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                                        <span class="font-heading font-semibold text-lighthouse-navy dark:text-white"
+                                              x-text="comment.first_name + (comment.last_name ? ' ' + comment.last_name : '')"></span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400" x-text="formatDate(comment.created_at)"></span>
+                                    </div>
+                                    <p class="text-gray-700 dark:text-gray-300" x-text="comment.comment"></p>
+                                    <a x-show="comment.website" :href="comment.website" target="_blank" rel="noopener noreferrer"
+                                       class="text-sm text-lighthouse-teal hover:underline mt-2 inline-block"
+                                       x-text="comment.website.replace(/^https?:\/\//, '')"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- No Comments Message -->
+                <div x-show="comments.length === 0" class="text-center py-8 mb-12" data-aos="fade-up">
+                    <svg class="w-12 h-12 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400">No comments yet. Be the first to share your thoughts!</p>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg" data-aos="fade-up">
+                    <h3 class="text-xl font-heading font-bold text-lighthouse-navy dark:text-white mb-6">Leave a Comment</h3>
+
+                    <!-- Success Message -->
+                    <div x-show="commentSuccess" class="mb-6 p-4 bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 rounded-lg">
+                        <div class="flex items-center gap-3 text-green-700 dark:text-green-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <p>Thank you for your comment! It will appear after moderation.</p>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div x-show="commentError" class="mb-6 p-4 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg">
+                        <div class="flex items-center gap-3 text-red-700 dark:text-red-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <p x-text="commentError"></p>
+                        </div>
+                    </div>
+
+                    <form @submit.prevent="submitComment" class="comment-form space-y-6">
+                        <!-- Honeypot field (hidden from users) -->
+                        <input type="text" name="website_url" x-model="commentForm.honeypot" style="display: none;" tabindex="-1" autocomplete="off">
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- First Name -->
+                            <div>
+                                <label class="block text-sm font-heading font-semibold text-lighthouse-navy dark:text-white mb-2">
+                                    First Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" x-model="commentForm.firstName" required
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+                                       placeholder="John">
+                            </div>
+
+                            <!-- Last Name -->
+                            <div>
+                                <label class="block text-sm font-heading font-semibold text-lighthouse-navy dark:text-white mb-2">
+                                    Last Name
+                                </label>
+                                <input type="text" x-model="commentForm.lastName"
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+                                       placeholder="Doe">
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Email -->
+                            <div>
+                                <label class="block text-sm font-heading font-semibold text-lighthouse-navy dark:text-white mb-2">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
+                                <input type="email" x-model="commentForm.email" required
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+                                       placeholder="john@example.com">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your email will not be published</p>
+                            </div>
+
+                            <!-- Website -->
+                            <div>
+                                <label class="block text-sm font-heading font-semibold text-lighthouse-navy dark:text-white mb-2">
+                                    Website
+                                </label>
+                                <input type="url" x-model="commentForm.website"
+                                       class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200"
+                                       placeholder="https://yourwebsite.com">
+                            </div>
+                        </div>
+
+                        <!-- Comment -->
+                        <div>
+                            <label class="block text-sm font-heading font-semibold text-lighthouse-navy dark:text-white mb-2">
+                                Comment <span class="text-red-500">*</span>
+                            </label>
+                            <textarea x-model="commentForm.comment" required rows="5"
+                                      class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-all duration-200 resize-none"
+                                      placeholder="Share your thoughts..."></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-end">
+                            <button type="submit" :disabled="submittingComment"
+                                    class="inline-flex items-center gap-2 px-8 py-3 bg-lighthouse-teal hover:bg-lighthouse-teal/90 text-white font-heading font-semibold rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <template x-if="submittingComment">
+                                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </template>
+                                <span x-text="submittingComment ? 'Submitting...' : 'Post Comment'"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
 
     </main>
 
@@ -192,12 +582,13 @@
     <!-- Include Components -->
     <script>
         // Navigation Component - Required for header
+        // Note: scrolled is always true on blog-post page since there's no dark hero at the top
         function navigationComponent() {
             return {
                 open: false,
-                scrolled: false,
-                init() { this.onScroll(); },
-                onScroll() { this.scrolled = window.scrollY > 10; }
+                scrolled: true,
+                init() { /* scrolled stays true for this page */ },
+                onScroll() { /* scrolled stays true for this page */ }
             }
         }
 
@@ -231,75 +622,222 @@
             return {
                 post: {
                     title: "",
-                    contentHtml: "",
-                    pubDate: ""
+                    slug: "",
+                    category: "",
+                    categoryName: "",
+                    content: [],
+                    featuredImageUrl: "",
+                    featured_image_alt: "",
+                    author_name: "",
+                    published_at: "",
+                    meta_title: "",
+                    meta_description: ""
                 },
-                formattedDate: "",
+                comments: [],
                 loading: true,
                 error: "",
 
+                // Comment form state
+                commentForm: {
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    website: "",
+                    comment: "",
+                    honeypot: ""
+                },
+                submittingComment: false,
+                commentSuccess: false,
+                commentError: "",
+
                 init() {
                     const params = new URLSearchParams(window.location.search);
-                    const idParam = params.get("id");
+                    const slug = params.get("slug");
 
-                    if (!idParam) {
+                    if (!slug) {
                         this.error = "Missing article identifier.";
                         this.loading = false;
+                        if (window.hideLoader) window.hideLoader();
                         return;
                     }
 
-                    const id = decodeURIComponent(idParam);
-                    this.fetchPost(id);
+                    this.fetchPost(slug);
                 },
 
-                async fetchPost(id) {
+                async fetchPost(slug) {
                     this.loading = true;
                     this.error = "";
 
                     try {
-                        const res = await fetch(
-                            "/api/hubspot-blog/post?id=" + encodeURIComponent(id)
-                        );
+                        const res = await fetch("/api/blog/" + encodeURIComponent(slug));
 
                         if (!res.ok) {
+                            if (res.status === 404) {
+                                throw new Error("Article not found");
+                            }
                             throw new Error("Failed to fetch article");
                         }
 
                         const data = await res.json();
 
-                        if (!data || !data.title) {
+                        if (!data || !data.post) {
                             throw new Error("Article not found");
                         }
 
-                        this.post = {
-                            title: data.title,
-                            contentHtml: data.contentHtml || data.description || "",
-                            pubDate: data.pubDate || ""
-                        };
+                        this.post = data.post;
 
-                        this.formattedDate = this.formatDate(this.post.pubDate);
+                        // Update page meta tags
+                        this.updateMetaTags();
 
-                        // Update page title
-                        document.title = data.title + " | Lighthouse Design Build";
+                        // Fetch comments
+                        await this.fetchComments(slug);
+
                     } catch (e) {
                         console.error(e);
-                        this.error = "Could not load this article.";
+                        this.error = e.message || "Could not load this article.";
                     } finally {
                         this.loading = false;
-                        // Hide the page loader after content is loaded
                         if (window.hideLoader) window.hideLoader();
                     }
                 },
 
-                formatDate(pubDate) {
-                    if (!pubDate) return "";
-                    const date = new Date(pubDate);
+                async fetchComments(slug) {
+                    try {
+                        const res = await fetch("/api/blog/" + encodeURIComponent(slug) + "/comments");
+                        if (res.ok) {
+                            const data = await res.json();
+                            this.comments = data.comments || [];
+                        }
+                    } catch (e) {
+                        console.error("Failed to fetch comments:", e);
+                    }
+                },
+
+                async submitComment() {
+                    this.submittingComment = true;
+                    this.commentSuccess = false;
+                    this.commentError = "";
+
+                    // Check honeypot
+                    if (this.commentForm.honeypot) {
+                        this.submittingComment = false;
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch("/api/blog/" + encodeURIComponent(this.post.slug) + "/comments", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                firstName: this.commentForm.firstName,
+                                lastName: this.commentForm.lastName,
+                                email: this.commentForm.email,
+                                website: this.commentForm.website,
+                                comment: this.commentForm.comment
+                            })
+                        });
+
+                        const data = await res.json();
+
+                        if (!res.ok) {
+                            throw new Error(data.message || "Failed to submit comment");
+                        }
+
+                        // Success - clear form and show message
+                        this.commentSuccess = true;
+                        this.commentForm = {
+                            firstName: "",
+                            lastName: "",
+                            email: "",
+                            website: "",
+                            comment: "",
+                            honeypot: ""
+                        };
+
+                        // Scroll to success message
+                        setTimeout(() => {
+                            document.querySelector('.comment-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+
+                    } catch (e) {
+                        console.error(e);
+                        this.commentError = e.message || "Failed to submit comment. Please try again.";
+                    } finally {
+                        this.submittingComment = false;
+                    }
+                },
+
+                updateMetaTags() {
+                    // Update title
+                    const title = this.post.meta_title || this.post.title;
+                    document.title = title + " | Lighthouse Design Build";
+
+                    // Update meta description
+                    const description = this.post.meta_description || this.post.excerpt || "";
+                    const metaDesc = document.querySelector('meta[name="description"]');
+                    if (metaDesc) metaDesc.setAttribute("content", description);
+
+                    // Update canonical URL
+                    const canonicalUrl = this.post.canonical_url || "https://www.designwithlighthouse.com/pages/blog-post?slug=" + this.post.slug;
+                    const canonical = document.querySelector('link[rel="canonical"]');
+                    if (canonical) canonical.setAttribute("href", canonicalUrl);
+
+                    // Update OG tags
+                    const ogTitle = document.querySelector('meta[property="og:title"]');
+                    if (ogTitle) ogTitle.setAttribute("content", title);
+
+                    const ogDesc = document.querySelector('meta[property="og:description"]');
+                    if (ogDesc) ogDesc.setAttribute("content", description);
+
+                    const ogUrl = document.querySelector('meta[property="og:url"]');
+                    if (ogUrl) ogUrl.setAttribute("content", canonicalUrl);
+
+                    if (this.post.featuredImageUrl) {
+                        const ogImage = document.querySelector('meta[property="og:image"]');
+                        if (ogImage) ogImage.setAttribute("content", this.post.featuredImageUrl);
+
+                        const twitterImage = document.querySelector('meta[name="twitter:image"]');
+                        if (twitterImage) twitterImage.setAttribute("content", this.post.featuredImageUrl);
+                    }
+
+                    // Update Twitter tags
+                    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+                    if (twitterTitle) twitterTitle.setAttribute("content", title);
+
+                    const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+                    if (twitterDesc) twitterDesc.setAttribute("content", description);
+                },
+
+                formatDate(dateStr) {
+                    if (!dateStr) return "";
+                    const date = new Date(dateStr);
                     if (Number.isNaN(date.getTime())) return "";
-                    return date.toLocaleDateString(undefined, {
+                    return date.toLocaleDateString('en-US', {
                         year: "numeric",
                         month: "long",
                         day: "numeric"
                     });
+                },
+
+                getEmbedUrl(url) {
+                    if (!url) return "";
+
+                    // YouTube
+                    const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&?\s]+)/);
+                    if (ytMatch) {
+                        return "https://www.youtube.com/embed/" + ytMatch[1];
+                    }
+
+                    // Vimeo
+                    const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+                    if (vimeoMatch) {
+                        return "https://player.vimeo.com/video/" + vimeoMatch[1];
+                    }
+
+                    // Return as-is if already an embed URL
+                    return url;
                 }
             };
         }

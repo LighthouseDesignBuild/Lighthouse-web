@@ -109,6 +109,65 @@ function initializeTables() {
     CREATE INDEX IF NOT EXISTS idx_gallery_order ON gallery_items(display_order)
   `);
 
+  // NOTE: Category index is created in migrateRailwayColumns() after the column is added
+
+  // Blog posts table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS blog_posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      slug TEXT UNIQUE NOT NULL,
+      category TEXT NOT NULL,
+      content TEXT NOT NULL,
+      featured_image_key TEXT,
+      featured_image_alt TEXT,
+      meta_title TEXT,
+      meta_description TEXT,
+      canonical_url TEXT,
+      status TEXT DEFAULT 'draft',
+      author_id INTEGER,
+      author_name TEXT,
+      published_at DATETIME,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Create indexes for blog posts
+  db.run(`
+    CREATE INDEX IF NOT EXISTS idx_blog_posts_slug ON blog_posts(slug)
+  `);
+  db.run(`
+    CREATE INDEX IF NOT EXISTS idx_blog_posts_status ON blog_posts(status)
+  `);
+  db.run(`
+    CREATE INDEX IF NOT EXISTS idx_blog_posts_published ON blog_posts(published_at)
+  `);
+
+  // Blog comments table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS blog_comments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      post_id INTEGER NOT NULL,
+      first_name TEXT NOT NULL,
+      last_name TEXT,
+      email TEXT NOT NULL,
+      website TEXT,
+      comment TEXT NOT NULL,
+      status TEXT DEFAULT 'pending',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE
+    )
+  `);
+
+  // Create indexes for blog comments
+  db.run(`
+    CREATE INDEX IF NOT EXISTS idx_blog_comments_post ON blog_comments(post_id)
+  `);
+  db.run(`
+    CREATE INDEX IF NOT EXISTS idx_blog_comments_status ON blog_comments(status)
+  `);
+
   // Migration: Add Railway Buckets variant columns if they don't exist
   migrateRailwayColumns();
 }
@@ -137,6 +196,7 @@ function migrateRailwayColumns() {
     { name: 'thumb_key_lg', type: 'TEXT' },
     { name: 'content_hash', type: 'TEXT' },
     { name: 'blur_data', type: 'TEXT' },  // Base64 blur placeholder for instant loading
+    { name: 'category', type: 'TEXT' },   // Gallery category (kitchen, bathroom, outdoor, additions)
   ];
 
   for (const column of columnsToAdd) {
@@ -152,6 +212,16 @@ function migrateRailwayColumns() {
     } else {
       console.log(`Column ${column.name} already exists`);
     }
+  }
+
+  // Create category index after column is added
+  try {
+    db.run(`
+      CREATE INDEX IF NOT EXISTS idx_gallery_category ON gallery_items(category)
+    `);
+    console.log('✓ Category index ready');
+  } catch (err) {
+    console.warn('Category index creation warning:', err.message);
   }
 }
 

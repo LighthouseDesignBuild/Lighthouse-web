@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comments | Lighthouse Admin</title>
+  <link rel="stylesheet" href="/dist/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+  <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+
+    /* Typography */
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+    .font-body { font-family: 'DM Sans', system-ui, sans-serif; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #FAFAF9;
+    }
+
+    /* Sidebar */
+    .sidebar { width: 280px; }
+    .main-content { margin-left: 280px; }
+
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body class="font-body min-h-screen" x-data="commentsManager()">
+
+  <!-- Sidebar -->
+  <aside class="sidebar fixed top-0 left-0 h-full text-white transition-transform duration-300"
+         style="background-color: #0f172a;"
+         :class="{ 'open': sidebarOpen }">
+    <div class="p-6" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-10">
+    </div>
+
+    <nav class="py-4">
+      <a href="/admin/dashboard.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="font-medium">Dashboard</span>
+      </a>
+      <a href="/admin/gallery-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span class="font-medium">Gallery</span>
+      </a>
+      <a href="/admin/blog-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+        </svg>
+        <span class="font-medium">Blog</span>
+      </a>
+      <a href="/admin/comments-manage.html"
+         class="flex items-center px-6 py-3 text-white"
+         style="background-color: rgba(255,255,255,0.1); border-right: 2px solid #D6B86A;">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+        </svg>
+        <span class="font-medium">Comments</span>
+        <span x-show="counts.pending > 0" x-text="counts.pending"
+              class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full"></span>
+      </a>
+      <a href="/admin/users-manage.html" x-show="user?.role === 'admin'"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <span class="font-medium">Users</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6" style="border-top: 1px solid rgba(255,255,255,0.1);">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-white" x-text="user?.username"></p>
+          <p class="text-xs capitalize" style="color: rgba(255,255,255,0.4);" x-text="user?.role"></p>
+        </div>
+        <button @click="logout" class="p-2 rounded-lg transition-all" style="color: rgba(255,255,255,0.4);"
+                onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255,255,255,0.1)';"
+                onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.backgroundColor='transparent';">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <header class="lg:hidden fixed top-0 left-0 right-0 text-white p-4 z-40 flex items-center justify-between"
+          style="background-color: #0f172a;">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+    <span class="font-display font-semibold">Comments</span>
+    <button @click="logout" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Overlay -->
+  <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
+       class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"></div>
+
+  <!-- Main Content -->
+  <main class="main-content min-h-screen pt-16 lg:pt-0">
+    <div class="p-6 lg:p-8">
+      <!-- Header -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <div>
+          <h1 class="font-display text-2xl lg:text-3xl font-bold tracking-tight" style="color: #0f172a;">Comment Moderation</h1>
+          <p class="text-slate-500 mt-1">
+            <span x-text="counts.total"></span> total comments
+            (<span x-text="counts.pending" class="text-orange-600 font-medium"></span> pending)
+          </p>
+        </div>
+        <div class="flex items-center gap-2" x-show="selectedIds.length > 0">
+          <span class="text-sm text-slate-500" x-text="selectedIds.length + ' selected'"></span>
+          <button @click="bulkAction('approve')"
+                  class="px-3 py-1.5 bg-green-500 text-white text-sm rounded-lg hover:bg-green-600 transition">
+            Approve
+          </button>
+          <button @click="bulkAction('reject')"
+                  class="px-3 py-1.5 bg-orange-500 text-white text-sm rounded-lg hover:bg-orange-600 transition">
+            Reject
+          </button>
+          <button @click="bulkAction('delete')"
+                  class="px-3 py-1.5 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex gap-2 mb-6">
+        <button @click="filter = null; loadComments()"
+                :class="filter === null ? 'bg-lighthouse-navy text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                class="px-4 py-2 rounded-lg font-medium transition">
+          All
+          <span class="ml-1 text-xs opacity-70" x-text="'(' + counts.total + ')'"></span>
+        </button>
+        <button @click="filter = 'pending'; loadComments()"
+                :class="filter === 'pending' ? 'bg-orange-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                class="px-4 py-2 rounded-lg font-medium transition">
+          Pending
+          <span class="ml-1 text-xs opacity-70" x-text="'(' + counts.pending + ')'"></span>
+        </button>
+        <button @click="filter = 'approved'; loadComments()"
+                :class="filter === 'approved' ? 'bg-green-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                class="px-4 py-2 rounded-lg font-medium transition">
+          Approved
+          <span class="ml-1 text-xs opacity-70" x-text="'(' + counts.approved + ')'"></span>
+        </button>
+        <button @click="filter = 'rejected'; loadComments()"
+                :class="filter === 'rejected' ? 'bg-gray-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                class="px-4 py-2 rounded-lg font-medium transition">
+          Rejected
+          <span class="ml-1 text-xs opacity-70" x-text="'(' + counts.rejected + ')'"></span>
+        </button>
+      </div>
+
+      <!-- Comments List -->
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b">
+              <tr>
+                <th class="w-10 px-4 py-4">
+                  <input type="checkbox"
+                         @change="toggleSelectAll($event.target.checked)"
+                         :checked="selectedIds.length === comments.length && comments.length > 0"
+                         class="rounded border-gray-300 text-lighthouse-gold focus:ring-lighthouse-gold">
+                </th>
+                <th class="text-left px-4 py-4 text-sm font-semibold text-gray-600">Comment</th>
+                <th class="text-left px-4 py-4 text-sm font-semibold text-gray-600">Post</th>
+                <th class="text-left px-4 py-4 text-sm font-semibold text-gray-600">Status</th>
+                <th class="text-left px-4 py-4 text-sm font-semibold text-gray-600">Date</th>
+                <th class="text-right px-4 py-4 text-sm font-semibold text-gray-600">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <template x-for="comment in comments" :key="comment.id">
+                <tr class="hover:bg-gray-50" :class="{ 'bg-orange-50': comment.status === 'pending' }">
+                  <td class="px-4 py-4">
+                    <input type="checkbox"
+                           :value="comment.id"
+                           :checked="selectedIds.includes(comment.id)"
+                           @change="toggleSelect(comment.id)"
+                           class="rounded border-gray-300 text-lighthouse-gold focus:ring-lighthouse-gold">
+                  </td>
+                  <td class="px-4 py-4">
+                    <div class="max-w-md">
+                      <p class="font-medium" style="color: #0f172a;">
+                        <span x-text="comment.first_name"></span>
+                        <span x-text="comment.last_name" class="text-slate-500"></span>
+                      </p>
+                      <p class="text-sm text-slate-400" x-text="comment.email"></p>
+                      <p class="text-sm text-slate-600 mt-2 line-clamp-2"
+                         :class="{ 'line-clamp-none': expandedId === comment.id }"
+                         x-text="comment.comment"></p>
+                      <button x-show="comment.comment.length > 100"
+                              @click="expandedId = expandedId === comment.id ? null : comment.id"
+                              class="text-xs hover:underline mt-1"
+                              style="color: #D6B86A;"
+                              x-text="expandedId === comment.id ? 'Show less' : 'Show more'"></button>
+                    </div>
+                  </td>
+                  <td class="px-4 py-4">
+                    <a :href="'/pages/blog-post.html?slug=' + comment.post_slug" target="_blank"
+                       class="text-sm hover:underline"
+                       style="color: #D6B86A;"
+                       x-text="comment.post_title || 'View Post'"></a>
+                  </td>
+                  <td class="px-4 py-4">
+                    <span :class="{
+                            'bg-orange-100 text-orange-800': comment.status === 'pending',
+                            'bg-green-100 text-green-800': comment.status === 'approved',
+                            'bg-gray-100 text-gray-800': comment.status === 'rejected'
+                          }"
+                          class="px-2 py-1 text-xs font-medium rounded-full capitalize"
+                          x-text="comment.status"></span>
+                  </td>
+                  <td class="px-4 py-4 text-sm text-slate-400" x-text="formatDate(comment.created_at)"></td>
+                  <td class="px-4 py-4">
+                    <div class="flex items-center justify-end gap-1">
+                      <button x-show="comment.status !== 'approved'"
+                              @click="approveComment(comment.id)"
+                              class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition"
+                              title="Approve">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                      </button>
+                      <button x-show="comment.status !== 'rejected'"
+                              @click="rejectComment(comment.id)"
+                              class="p-2 text-orange-600 hover:bg-orange-100 rounded-lg transition"
+                              title="Reject">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                      </button>
+                      <button @click="deleteComment(comment.id)"
+                              class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition"
+                              title="Delete">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </template>
+              <template x-if="comments.length === 0">
+                <tr>
+                  <td colspan="6" class="px-4 py-12 text-center text-slate-400">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                    </svg>
+                    <p x-text="filter ? 'No ' + filter + ' comments' : 'No comments yet'"></p>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification -->
+  <div x-show="toast.show" x-cloak
+       x-transition:enter="transition ease-out duration-300"
+       x-transition:enter-start="opacity-0 translate-y-2"
+       x-transition:enter-end="opacity-100 translate-y-0"
+       x-transition:leave="transition ease-in duration-200"
+       x-transition:leave-start="opacity-100 translate-y-0"
+       x-transition:leave-end="opacity-0 translate-y-2"
+       :class="toast.type === 'error' ? 'bg-red-500' : 'bg-green-500'"
+       class="fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white shadow-lg z-50">
+    <span x-text="toast.message"></span>
+  </div>
+
+  <script>
+    function commentsManager() {
+      return {
+        user: null,
+        sidebarOpen: false,
+        comments: [],
+        counts: { total: 0, pending: 0, approved: 0, rejected: 0 },
+        filter: null,
+        selectedIds: [],
+        expandedId: null,
+        toast: { show: false, message: '', type: 'success' },
+
+        async init() {
+          await this.checkAuth();
+          await this.loadComments();
+        },
+
+        async checkAuth() {
+          try {
+            const res = await fetch('/api/auth/check');
+            const data = await res.json();
+            if (!data.authenticated) {
+              window.location.href = '/admin/';
+              return;
+            }
+            this.user = data.user;
+          } catch (err) {
+            console.error('Auth check failed:', err);
+            window.location.href = '/admin/';
+          }
+        },
+
+        async loadComments() {
+          try {
+            const url = this.filter
+              ? `/api/admin/blog/comments?status=${this.filter}`
+              : '/api/admin/blog/comments';
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data.success) {
+              this.comments = data.comments;
+              this.counts = data.counts;
+              this.selectedIds = [];
+            }
+          } catch (err) {
+            console.error('Failed to load comments:', err);
+          }
+        },
+
+        toggleSelect(id) {
+          const index = this.selectedIds.indexOf(id);
+          if (index === -1) {
+            this.selectedIds.push(id);
+          } else {
+            this.selectedIds.splice(index, 1);
+          }
+        },
+
+        toggleSelectAll(checked) {
+          if (checked) {
+            this.selectedIds = this.comments.map(c => c.id);
+          } else {
+            this.selectedIds = [];
+          }
+        },
+
+        async approveComment(id) {
+          try {
+            const res = await fetch(`/api/admin/blog/comments/${id}/approve`, { method: 'PUT' });
+            const data = await res.json();
+            if (data.success) {
+              this.showToast('Comment approved', 'success');
+              await this.loadComments();
+            }
+          } catch (err) {
+            console.error('Approve failed:', err);
+            this.showToast('Failed to approve comment', 'error');
+          }
+        },
+
+        async rejectComment(id) {
+          try {
+            const res = await fetch(`/api/admin/blog/comments/${id}/reject`, { method: 'PUT' });
+            const data = await res.json();
+            if (data.success) {
+              this.showToast('Comment rejected', 'success');
+              await this.loadComments();
+            }
+          } catch (err) {
+            console.error('Reject failed:', err);
+            this.showToast('Failed to reject comment', 'error');
+          }
+        },
+
+        async deleteComment(id) {
+          if (!confirm('Are you sure you want to delete this comment?')) return;
+
+          try {
+            const res = await fetch(`/api/admin/blog/comments/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+              this.showToast('Comment deleted', 'success');
+              await this.loadComments();
+            }
+          } catch (err) {
+            console.error('Delete failed:', err);
+            this.showToast('Failed to delete comment', 'error');
+          }
+        },
+
+        async bulkAction(action) {
+          if (this.selectedIds.length === 0) return;
+
+          const confirmMessage = {
+            approve: 'Approve selected comments?',
+            reject: 'Reject selected comments?',
+            delete: 'Delete selected comments? This cannot be undone.',
+          };
+
+          if (!confirm(confirmMessage[action])) return;
+
+          try {
+            const res = await fetch('/api/admin/blog/comments/bulk', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action, ids: this.selectedIds }),
+            });
+            const data = await res.json();
+            if (data.success) {
+              this.showToast(data.message, 'success');
+              await this.loadComments();
+            }
+          } catch (err) {
+            console.error('Bulk action failed:', err);
+            this.showToast('Bulk action failed', 'error');
+          }
+        },
+
+        formatDate(dateStr) {
+          if (!dateStr) return '';
+          return new Date(dateStr).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+        },
+
+        showToast(message, type = 'success') {
+          this.toast = { show: true, message, type };
+          setTimeout(() => {
+            this.toast.show = false;
+          }, 3000);
+        },
+
+        async logout() {
+          try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/';
+          } catch (err) {
+            console.error('Logout failed:', err);
+          }
+        },
+      };
+    }
+  </script>
+</body>
+</html>

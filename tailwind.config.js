@@ -7,6 +7,7 @@ export default {
   content: [
     "./pages/**/*.html",
     "./src/**/*.{html,js}",
+    "./admin/**/*.html",
   ],
   darkMode: 'class', // Enable class-based dark mode
   theme: {

@@ -5,106 +5,349 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery Manager | Lighthouse Admin</title>
   <link rel="stylesheet" href="/dist/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
   <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
   <style>
     [x-cloak] { display: none !important; }
-    .sidebar { width: 260px; }
-    .main-content { margin-left: 260px; }
+
+    /* Typography */
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+    .font-body { font-family: 'DM Sans', system-ui, sans-serif; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #FAFAF9;
+    }
+
+    /* Sidebar */
+    .sidebar { width: 280px; }
+    .main-content { margin-left: 280px; }
+
     @media (max-width: 1024px) {
       .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; }
       .sidebar.open { transform: translateX(0); }
       .main-content { margin-left: 0; }
     }
-    .dropzone { border: 2px dashed #D6B86A; }
-    .dropzone.dragover { border-color: #1C3D5A; background: rgba(28, 61, 90, 0.05); }
 
-    /* Uniform gallery grid */
+    /* Category Colors */
+    .cat-kitchen { --cat-color: #2563eb; --cat-bg: #dbeafe; }
+    .cat-bathroom { --cat-color: #7c3aed; --cat-bg: #ede9fe; }
+    .cat-outdoor { --cat-color: #059669; --cat-bg: #d1fae5; }
+    .cat-additions { --cat-color: #dc2626; --cat-bg: #fee2e2; }
+
+    /* Category Badge */
+    .category-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      background: var(--cat-bg);
+      color: var(--cat-color);
+    }
+
+    /* Gallery Grid - Editorial Layout */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
     }
 
-    /* All cards same aspect ratio (16:9 cinematic) */
-    .gallery-card .thumb-container { aspect-ratio: 16/9; }
+    @media (max-width: 640px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
 
-    .type-badge { font-size: 0.7rem; }
-    .action-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      margin-top: 0.25rem;
+    /* Gallery Card */
+    .gallery-card {
+      position: relative;
       background: white;
-      border-radius: 0.5rem;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      min-width: 120px;
-      z-index: 20;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Filter button styles */
-    .filter-btn {
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
+    .gallery-card:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06);
+      transform: translateY(-4px);
+    }
+
+    .gallery-card .thumb-container {
+      aspect-ratio: 16/10;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    }
+
+    .gallery-card .thumb-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gallery-card:hover .thumb-container img {
+      transform: scale(1.05);
+    }
+
+    /* Card Overlay */
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    /* Action Buttons */
+    .card-actions {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: all 0.3s ease;
+    }
+
+    .gallery-card:hover .card-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    .action-btn-edit {
+      background: rgba(255,255,255,0.95);
+      color: #1C3D5A;
+    }
+    .action-btn-edit:hover {
+      background: white;
+      transform: scale(1.1);
+    }
+
+    .action-btn-delete {
+      background: rgba(239,68,68,0.9);
+      color: white;
+    }
+    .action-btn-delete:hover {
+      background: #dc2626;
+      transform: scale(1.1);
+    }
+
+    /* Type Indicator */
+    .type-indicator {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.625rem;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 0.375rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: white;
+    }
+
+    /* Play Button for Videos */
+    .play-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .gallery-card:hover .play-indicator {
+      opacity: 1;
+    }
+
+    /* Filter Pills */
+    .filter-pill {
+      padding: 0.625rem 1.25rem;
+      border-radius: 9999px;
       font-size: 0.875rem;
       font-weight: 500;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      border: 1.5px solid transparent;
+      white-space: nowrap;
     }
-    .filter-btn.active {
-      background: #1C3D5A;
-      color: white;
-      box-shadow: 0 1px 3px rgba(28, 61, 90, 0.3);
+
+    .filter-pill.inactive {
+      background: white;
+      color: #64748b;
+      border-color: #e2e8f0;
     }
-    .filter-btn:not(.active) {
-      background: #f3f4f6;
-      color: #374151;
+
+    .filter-pill.inactive:hover {
+      border-color: #cbd5e1;
+      color: #334155;
     }
-    .filter-btn:not(.active):hover {
-      background: #e5e7eb;
+
+    .filter-pill.active {
+      background-color: #1C3D5A !important;
+      color: white !important;
+      border-color: #1C3D5A !important;
     }
+
+    /* Stat Card */
+    .stat-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    /* Upload Modal Dropzone */
+    .dropzone {
+      border: 2px dashed #e2e8f0;
+      border-radius: 1rem;
+      background: #fafafa;
+      transition: all 0.2s ease;
+    }
+
+    .dropzone:hover,
+    .dropzone.dragover {
+      border-color: #D6B86A;
+      background: #fffbeb;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.4s ease-out forwards;
+    }
+
+    /* Stagger children */
+    .stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+    .stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+    .stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+    .stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+    .stagger-children > *:nth-child(n+5) { animation-delay: 200ms; }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen" x-data="galleryManager()">
+<body class="font-body min-h-screen" x-data="galleryManager()">
 
   <!-- Sidebar -->
-  <aside class="sidebar fixed top-0 left-0 h-full bg-lighthouse-navy text-white transition-transform duration-300"
+  <aside class="sidebar fixed top-0 left-0 h-full text-white transition-transform duration-300"
+         style="background-color: #0f172a;"
          :class="{ 'open': sidebarOpen }">
-    <div class="p-6">
-      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-12">
+    <div class="p-6" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-10">
     </div>
 
-    <nav class="mt-6">
+    <nav class="py-4">
       <a href="/admin/dashboard.html"
-         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
         </svg>
-        Dashboard
+        <span class="font-medium">Dashboard</span>
       </a>
       <a href="/admin/gallery-manage.html"
-         class="flex items-center px-6 py-3 bg-white/10 text-white">
+         class="flex items-center px-6 py-3 text-white"
+         style="background-color: rgba(255,255,255,0.1); border-right: 2px solid #D6B86A;">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
         </svg>
-        Gallery Manager
+        <span class="font-medium">Gallery</span>
+      </a>
+      <a href="/admin/blog-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+        </svg>
+        <span class="font-medium">Blog</span>
+      </a>
+      <a href="/admin/comments-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+        </svg>
+        <span class="font-medium">Comments</span>
       </a>
       <a href="/admin/users-manage.html" x-show="user?.role === 'admin'"
-         class="flex items-center px-6 py-3 text-white/70 hover:bg-white/10 hover:text-white transition">
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
         </svg>
-        User Management
+        <span class="font-medium">Users</span>
       </a>
     </nav>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
+    <div class="absolute bottom-0 left-0 right-0 p-6" style="border-top: 1px solid rgba(255,255,255,0.1);">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-sm font-medium" x-text="user?.username"></p>
-          <p class="text-xs text-white/50 capitalize" x-text="user?.role"></p>
+          <p class="text-sm font-medium text-white" x-text="user?.username"></p>
+          <p class="text-xs capitalize" style="color: rgba(255,255,255,0.4);" x-text="user?.role"></p>
         </div>
-        <button @click="logout" class="text-white/70 hover:text-white transition">
+        <button @click="logout" class="p-2 rounded-lg transition-all" style="color: rgba(255,255,255,0.4);"
+                onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255,255,255,0.1)';"
+                onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.backgroundColor='transparent';">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
           </svg>
         </button>
       </div>
@@ -112,87 +355,257 @@
   </aside>
 
   <!-- Mobile Header -->
-  <header class="lg:hidden fixed top-0 left-0 right-0 bg-lighthouse-navy text-white p-4 z-40 flex items-center justify-between">
-    <button @click="sidebarOpen = !sidebarOpen" class="p-2">
+  <header class="lg:hidden fixed top-0 left-0 right-0 text-white p-4 z-40 flex items-center justify-between"
+          style="background-color: #0f172a;">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
-    <span class="font-semibold">Gallery Manager</span>
-    <button @click="logout" class="p-2">
+    <span class="font-display font-semibold">Gallery</span>
+    <button @click="logout" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
       </svg>
     </button>
   </header>
 
   <!-- Overlay -->
   <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
-       class="lg:hidden fixed inset-0 bg-black/50 z-40"></div>
+       class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"></div>
 
   <!-- Main Content -->
   <main class="main-content min-h-screen pt-16 lg:pt-0">
-    <div class="p-6 lg:p-8">
+    <div class="p-6 lg:p-8 max-w-[1600px]">
+
       <!-- Header -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
         <div>
-          <h1 class="text-2xl lg:text-3xl font-bold text-lighthouse-navy">Gallery Manager</h1>
-          <p class="text-gray-600 mt-1">Upload and manage your gallery images and videos</p>
+          <h1 class="font-display text-3xl lg:text-4xl font-bold text-[#0f172a] tracking-tight">Gallery</h1>
+          <p class="text-slate-500 mt-1">Manage your portfolio images and videos</p>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-3">
           <button @click="showUploadModal = true"
-                  class="inline-flex items-center px-4 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition">
+                  class="inline-flex items-center px-5 py-2.5 text-white rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
+                  style="background-color: #D6B86A;"
+                  onmouseover="this.style.backgroundColor='#c9a85a';"
+                  onmouseout="this.style.backgroundColor='#D6B86A';">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
             </svg>
             Upload Files
           </button>
           <button @click="showEmbedModal = true"
-                  class="inline-flex items-center px-4 py-2 border border-lighthouse-navy text-lighthouse-navy rounded-lg hover:bg-lighthouse-navy hover:text-white transition">
+                  class="inline-flex items-center px-5 py-2.5 bg-white border border-slate-200 rounded-xl font-medium hover:bg-slate-50 hover:border-slate-300 transition-all"
+                  style="color: #0f172a;">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
             </svg>
-            Add Video Embed
+            Add Embed
           </button>
         </div>
       </div>
 
-      <!-- Success/Error/Warning Messages -->
+      <!-- Messages -->
       <div x-show="message" x-cloak
+           x-transition:enter="transition ease-out duration-200"
+           x-transition:enter-start="opacity-0 -translate-y-2"
+           x-transition:enter-end="opacity-100 translate-y-0"
            :class="{
-             'bg-green-50 border-green-200 text-green-700': messageType === 'success',
-             'bg-yellow-50 border-yellow-200 text-yellow-700': messageType === 'warning',
+             'bg-emerald-50 border-emerald-200 text-emerald-700': messageType === 'success',
+             'bg-amber-50 border-amber-200 text-amber-700': messageType === 'warning',
              'bg-red-50 border-red-200 text-red-700': messageType === 'error'
            }"
-           class="mb-6 p-4 border rounded-lg flex items-center justify-between">
-        <span x-text="message"></span>
-        <button @click="message = ''" class="ml-4">
+           class="mb-6 p-4 border rounded-xl flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <template x-if="messageType === 'success'">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </template>
+          <span x-text="message" class="font-medium"></span>
+        </div>
+        <button @click="message = ''" class="p-1 hover:bg-black/5 rounded-lg transition-all">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
       </div>
 
+      <!-- Stats Bar -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 stagger-children">
+        <div class="stat-card animate-fade-in-up">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Total</p>
+              <p class="text-2xl font-bold text-[#0f172a] mt-1" x-text="items.length">0</p>
+            </div>
+            <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card animate-fade-in-up">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Images</p>
+              <p class="text-2xl font-bold text-blue-600 mt-1" x-text="imageCount">0</p>
+            </div>
+            <div class="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card animate-fade-in-up">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Videos</p>
+              <p class="text-2xl font-bold text-purple-600 mt-1" x-text="videoCount">0</p>
+            </div>
+            <div class="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="stat-card animate-fade-in-up">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs font-medium text-slate-400 uppercase tracking-wide">Embeds</p>
+              <p class="text-2xl font-bold text-red-600 mt-1" x-text="embedCount">0</p>
+            </div>
+            <div class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters & Search -->
+      <div x-show="!loading && items.length > 0" class="mb-8">
+        <!-- Search -->
+        <div class="flex flex-col lg:flex-row gap-4 mb-4">
+          <div class="relative flex-1 max-w-md">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text"
+                   x-model="searchQuery"
+                   x-ref="searchInput"
+                   @keydown.ctrl.k.window.prevent="$refs.searchInput.focus()"
+                   placeholder="Search files... (Ctrl+K)"
+                   class="w-full pl-12 pr-10 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+            <button x-show="searchQuery" x-cloak @click="searchQuery = ''"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="mb-4">
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">Category</p>
+          <div class="flex flex-wrap gap-2">
+            <button @click="filterCategory = 'all'"
+                    :class="filterCategory === 'all' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              All <span class="ml-1 opacity-60" x-text="'(' + items.length + ')'"></span>
+            </button>
+            <button @click="filterCategory = 'kitchen'"
+                    :class="filterCategory === 'kitchen' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Kitchen <span class="ml-1 opacity-60" x-text="'(' + kitchenCount + ')'"></span>
+            </button>
+            <button @click="filterCategory = 'bathroom'"
+                    :class="filterCategory === 'bathroom' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Bathroom <span class="ml-1 opacity-60" x-text="'(' + bathroomCount + ')'"></span>
+            </button>
+            <button @click="filterCategory = 'outdoor'"
+                    :class="filterCategory === 'outdoor' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Outdoor <span class="ml-1 opacity-60" x-text="'(' + outdoorCount + ')'"></span>
+            </button>
+            <button @click="filterCategory = 'additions'"
+                    :class="filterCategory === 'additions' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Additions <span class="ml-1 opacity-60" x-text="'(' + additionsCount + ')'"></span>
+            </button>
+            <button @click="filterCategory = 'uncategorized'"
+                    :class="filterCategory === 'uncategorized' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Uncategorized <span class="ml-1 opacity-60" x-text="'(' + uncategorizedCount + ')'"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Type Filter Pills -->
+        <div>
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">Type</p>
+          <div class="flex flex-wrap gap-2">
+            <button @click="filterType = 'all'"
+                    :class="filterType === 'all' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              All Types
+            </button>
+            <button @click="filterType = 'image'"
+                    :class="filterType === 'image' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Images
+            </button>
+            <button @click="filterType = 'video'"
+                    :class="filterType === 'video' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Videos
+            </button>
+            <button @click="filterType = 'embed'"
+                    :class="filterType === 'embed' ? 'active' : 'inactive'"
+                    class="filter-pill">
+              Embeds
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Loading State -->
-      <div x-show="loading" class="text-center py-12">
-        <svg class="animate-spin h-8 w-8 mx-auto text-lighthouse-gold" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <p class="mt-2 text-gray-600">Loading gallery...</p>
+      <div x-show="loading" class="text-center py-20">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full mb-4" style="background-color: rgba(214, 184, 106, 0.1);">
+          <svg class="animate-spin h-6 w-6" style="color: #D6B86A;" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <p class="text-slate-500 font-medium">Loading gallery...</p>
       </div>
 
       <!-- Empty State -->
-      <div x-show="!loading && items.length === 0" x-cloak class="text-center py-16">
-        <div class="w-16 h-16 mx-auto bg-gray-200 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      <div x-show="!loading && items.length === 0" x-cloak class="text-center py-20">
+        <div class="w-20 h-20 mx-auto bg-slate-100 rounded-2xl flex items-center justify-center mb-6">
+          <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-700">No gallery items yet</h3>
-        <p class="text-gray-500 mt-1">Upload your first images or videos to get started</p>
+        <h3 class="font-display text-xl font-semibold mb-2" style="color: #0f172a;">No gallery items yet</h3>
+        <p class="text-slate-500 mb-6">Upload your first images or videos to get started</p>
         <button @click="showUploadModal = true"
-                class="mt-4 inline-flex items-center px-4 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition">
+                class="inline-flex items-center px-5 py-2.5 text-white rounded-xl font-medium transition-all"
+                style="background-color: #D6B86A;"
+                onmouseover="this.style.backgroundColor='#c9a85a';"
+                onmouseout="this.style.backgroundColor='#D6B86A';">
           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
           </svg>
@@ -200,101 +613,41 @@
         </button>
       </div>
 
-      <!-- Search and Filter Bar -->
-      <div x-show="!loading && items.length > 0" class="mb-6 flex flex-col sm:flex-row gap-4">
-        <!-- Search Input -->
-        <div class="relative flex-1 max-w-md">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-          <input type="text"
-                 x-model="searchQuery"
-                 x-ref="searchInput"
-                 @keydown.ctrl.k.window.prevent="$refs.searchInput.focus()"
-                 placeholder="Search files... (Ctrl+K)"
-                 class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent transition">
-          <!-- Clear button -->
-          <button x-show="searchQuery" x-cloak @click="searchQuery = ''"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Type Filter Buttons -->
-        <div class="flex flex-wrap gap-2">
-          <button @click="filterType = 'all'"
-                  :class="filterType === 'all' ? 'active' : ''"
-                  class="filter-btn">
-            All <span class="ml-1 opacity-70" x-text="'(' + items.length + ')'"></span>
-          </button>
-          <button @click="filterType = 'image'"
-                  :class="filterType === 'image' ? 'active' : ''"
-                  class="filter-btn">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            Images <span class="ml-1 opacity-70" x-text="'(' + imageCount + ')'"></span>
-          </button>
-          <button @click="filterType = 'video'"
-                  :class="filterType === 'video' ? 'active' : ''"
-                  class="filter-btn">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-            </svg>
-            Videos <span class="ml-1 opacity-70" x-text="'(' + videoCount + ')'"></span>
-          </button>
-          <button @click="filterType = 'embed'"
-                  :class="filterType === 'embed' ? 'active' : ''"
-                  class="filter-btn">
-            <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-            </svg>
-            Embeds <span class="ml-1 opacity-70" x-text="'(' + embedCount + ')'"></span>
-          </button>
-        </div>
-      </div>
-
-      <!-- No Results Message -->
-      <div x-show="!loading && items.length > 0 && filteredItems.length === 0" class="text-center py-12 text-gray-500">
-        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      <!-- No Results -->
+      <div x-show="!loading && items.length > 0 && filteredItems.length === 0" class="text-center py-16">
+        <svg class="w-12 h-12 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
         </svg>
-        <p>No items match your search or filter</p>
-        <button @click="searchQuery = ''; filterType = 'all'" class="mt-2 text-lighthouse-gold hover:underline">Clear filters</button>
+        <p class="text-slate-500 mb-2">No items match your filters</p>
+        <button @click="searchQuery = ''; filterType = 'all'; filterCategory = 'all'" class="text-[#D6B86A] hover:underline font-medium">Clear all filters</button>
       </div>
 
-      <!-- Gallery Grid - Simplified Cards (no size classes) -->
-      <div x-show="!loading && filteredItems.length > 0" class="gallery-grid">
+      <!-- Gallery Grid -->
+      <div x-show="!loading && filteredItems.length > 0" class="gallery-grid stagger-children">
         <template x-for="item in filteredItems" :key="item.id">
-          <div class="gallery-card bg-white rounded-xl shadow-sm hover:shadow-lg overflow-hidden group transition-shadow duration-200">
+          <div class="gallery-card animate-fade-in-up"
+               :class="{
+                 'cat-kitchen': item.category === 'kitchen',
+                 'cat-bathroom': item.category === 'bathroom',
+                 'cat-outdoor': item.category === 'outdoor',
+                 'cat-additions': item.category === 'additions'
+               }">
             <!-- Thumbnail Container -->
-            <div class="thumb-container bg-gray-100 relative overflow-hidden">
+            <div class="thumb-container">
               <!-- Image -->
               <template x-if="item.type === 'image'">
-                <img :src="item.url_md || item.thumbnail || item.filepath" :alt="item.filename"
-                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                <img :src="item.url_md || item.thumbnail || item.filepath" :alt="item.filename" loading="lazy">
               </template>
 
               <!-- Video with thumbnail -->
-              <template x-if="item.type === 'video' && item.thumbnail">
-                <div class="w-full h-full relative">
-                  <img :src="item.thumbnail_md || item.thumbnail" :alt="item.filename" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="w-12 h-12 bg-purple-600/90 rounded-full flex items-center justify-center shadow-lg">
-                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
+              <template x-if="item.type === 'video' && (item.thumbnail || item.thumbnail_md)">
+                <img :src="item.thumbnail_md || item.thumbnail" :alt="item.filename" loading="lazy">
               </template>
 
               <!-- Video without thumbnail -->
-              <template x-if="item.type === 'video' && !item.thumbnail">
-                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-700 to-purple-900">
-                  <svg class="w-12 h-12 text-white/80" fill="currentColor" viewBox="0 0 24 24">
+              <template x-if="item.type === 'video' && !item.thumbnail && !item.thumbnail_md">
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-600 to-purple-800">
+                  <svg class="w-16 h-16 text-white/60" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M8 5v14l11-7z"/>
                   </svg>
                 </div>
@@ -304,54 +657,72 @@
               <template x-if="item.type === 'embed'">
                 <div class="w-full h-full relative">
                   <template x-if="item.thumbnail">
-                    <img :src="item.thumbnail" :alt="item.embedPlatform" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                    <img :src="item.thumbnail" :alt="item.embedPlatform" loading="lazy">
                   </template>
                   <template x-if="!item.thumbnail">
-                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-600 to-red-800"></div>
-                  </template>
-                  <div class="absolute inset-0 flex items-center justify-center">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-                         :class="item.embedPlatform === 'youtube' ? 'bg-red-600' : 'bg-blue-500'">
-                      <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
+                    <div class="w-full h-full flex items-center justify-center"
+                         :class="item.embedPlatform === 'youtube' ? 'bg-gradient-to-br from-red-600 to-red-800' : 'bg-gradient-to-br from-blue-600 to-blue-800'">
                     </div>
-                  </div>
+                  </template>
                 </div>
               </template>
 
-              <!-- Type Badge (bottom-left) -->
-              <span class="size-badge absolute bottom-2 left-2 px-2 py-1 rounded capitalize shadow-sm"
-                    :class="{
-                      'bg-blue-500 text-white': item.type === 'image',
-                      'bg-purple-500 text-white': item.type === 'video',
-                      'bg-red-500 text-white': item.type === 'embed'
-                    }"
-                    x-text="item.type === 'embed' ? item.embedPlatform : item.type"></span>
+              <!-- Play indicator for videos/embeds -->
+              <template x-if="item.type === 'video' || item.type === 'embed'">
+                <div class="play-indicator">
+                  <svg class="w-6 h-6 text-[#0f172a] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </template>
 
-              <!-- Hover Overlay (Desktop) - Delete Action - must come BEFORE the delete button -->
-              <div class="absolute inset-0 z-10 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
-                <button @click.stop="confirmDelete(item)"
-                        class="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition shadow-lg transform hover:scale-105 pointer-events-auto">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <!-- Overlay -->
+              <div class="card-overlay"></div>
+
+              <!-- Action Buttons -->
+              <div class="card-actions">
+                <button @click.stop="openEditModal(item)" class="action-btn action-btn-edit" title="Edit">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                  </svg>
+                </button>
+                <button @click.stop="confirmDelete(item)" class="action-btn action-btn-delete" title="Delete">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                   </svg>
                 </button>
               </div>
 
-              <!-- Delete Button (top-right) - always clickable, above overlay -->
-              <button @click.stop="confirmDelete(item)"
-                      class="absolute top-2 right-2 z-20 w-8 h-8 bg-red-500/90 hover:bg-red-600 rounded-lg shadow flex items-center justify-center transition text-white">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                </svg>
-              </button>
+              <!-- Category Badge (top-left) -->
+              <div class="absolute top-3 left-3" x-show="item.category">
+                <span class="category-badge" x-text="getCategoryLabel(item.category)"></span>
+              </div>
+
+              <!-- Type Indicator (bottom-left) -->
+              <div class="type-indicator">
+                <template x-if="item.type === 'image'">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </template>
+                <template x-if="item.type === 'video'">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                  </svg>
+                </template>
+                <template x-if="item.type === 'embed'">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                  </svg>
+                </template>
+                <span x-text="item.type === 'embed' ? item.embedPlatform : item.type"></span>
+              </div>
             </div>
 
-            <!-- Card Footer with Metadata -->
-            <div class="p-3 border-t bg-white">
-              <p class="text-sm font-medium text-gray-800 truncate" x-text="item.filename || 'Untitled'"></p>
-              <span class="text-xs text-gray-500" x-text="formatDate(item.createdAt)"></span>
+            <!-- Card Footer -->
+            <div class="p-4">
+              <p class="text-sm font-medium text-[#0f172a] truncate" x-text="item.filename || 'Untitled'"></p>
+              <p class="text-xs text-slate-400 mt-1" x-text="formatDate(item.createdAt)"></p>
             </div>
           </div>
         </template>
@@ -361,14 +732,23 @@
 
   <!-- Upload Modal -->
   <div x-show="showUploadModal" x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       x-transition:leave="transition ease-in duration-150"
+       x-transition:leave-start="opacity-100"
+       x-transition:leave-end="opacity-0"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        @click.self="showUploadModal = false">
-    <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-      <div class="p-6 border-b">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100">
+      <div class="p-6 border-b border-slate-100">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-lighthouse-navy">Upload Files</h2>
-          <button @click="showUploadModal = false" class="text-gray-400 hover:text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h2 class="font-display text-xl font-semibold text-[#0f172a]">Upload Files</h2>
+          <button @click="showUploadModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
@@ -376,8 +756,24 @@
       </div>
 
       <div class="p-6">
+        <!-- Category Selection (Required) -->
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-[#0f172a] mb-2">
+            Category <span class="text-red-500">*</span>
+          </label>
+          <select x-model="uploadCategory"
+                  class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+            <option value="">Select a category...</option>
+            <option value="kitchen">Kitchen Remodeling</option>
+            <option value="bathroom">Bathroom Remodeling</option>
+            <option value="outdoor">Outdoor Living</option>
+            <option value="additions">Home Additions</option>
+          </select>
+          <p x-show="!uploadCategory && selectedFiles.length > 0" class="text-red-500 text-xs mt-1">Please select a category before uploading</p>
+        </div>
+
         <!-- Dropzone -->
-        <div class="dropzone rounded-xl p-8 text-center transition"
+        <div class="dropzone p-8 text-center transition-all"
              :class="{ 'dragover': isDragging }"
              @dragover.prevent="isDragging = true"
              @dragleave.prevent="isDragging = false"
@@ -385,41 +781,46 @@
           <input type="file" id="fileInput" multiple accept="image/*,video/*" class="hidden"
                  @change="handleFileSelect($event)">
 
-          <svg class="w-12 h-12 mx-auto text-lighthouse-gold mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-          </svg>
-          <p class="text-gray-600 mb-2">Drag and drop files here, or</p>
+          <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-4" style="background-color: rgba(214, 184, 106, 0.1);">
+            <svg class="w-8 h-8" style="color: #D6B86A;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            </svg>
+          </div>
+          <p class="text-slate-600 mb-2">Drag and drop files here, or</p>
           <label for="fileInput"
-                 class="inline-block px-4 py-2 bg-lighthouse-gold text-white rounded-lg cursor-pointer hover:bg-lighthouse-light-gold transition">
+                 class="inline-block px-5 py-2.5 text-white rounded-xl cursor-pointer transition-all font-medium"
+                 style="background-color: #D6B86A;"
+                 onmouseover="this.style.backgroundColor='#c9a85a';"
+                 onmouseout="this.style.backgroundColor='#D6B86A';">
             Browse Files
           </label>
-          <p class="text-sm text-gray-500 mt-3">Images: JPG, PNG, WebP, GIF (max 10MB) | Videos: MP4, WebM (max 100MB)</p>
+          <p class="text-xs text-slate-400 mt-4">Images: JPG, PNG, WebP, GIF (max 10MB) | Videos: MP4, WebM (max 100MB)</p>
         </div>
 
         <!-- Selected Files Preview -->
         <div x-show="selectedFiles.length > 0" class="mt-6">
-          <h3 class="text-sm font-medium text-gray-700 mb-3">Selected Files (<span x-text="selectedFiles.length"></span>)</h3>
+          <h3 class="text-sm font-medium text-[#0f172a] mb-3">Selected Files (<span x-text="selectedFiles.length"></span>)</h3>
           <div class="space-y-2 max-h-48 overflow-y-auto">
             <template x-for="(file, index) in selectedFiles" :key="index">
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                  <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                          x-show="file.type.startsWith('image')">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                          x-show="file.type.startsWith('video')">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                     </svg>
                   </div>
                   <div>
-                    <p class="text-sm font-medium text-gray-700" x-text="file.name.substring(0, 30) + (file.name.length > 30 ? '...' : '')"></p>
-                    <p class="text-xs text-gray-500" x-text="formatFileSize(file.size)"></p>
+                    <p class="text-sm font-medium text-[#0f172a]" x-text="file.name.substring(0, 35) + (file.name.length > 35 ? '...' : '')"></p>
+                    <p class="text-xs text-slate-400" x-text="formatFileSize(file.size)"></p>
                   </div>
                 </div>
-                <button @click="removeFile(index)" class="text-red-500 hover:text-red-700">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="removeFile(index)" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                   </svg>
                 </button>
@@ -431,24 +832,28 @@
         <!-- Upload Progress -->
         <div x-show="uploading" class="mt-6">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-sm text-gray-600">Uploading...</span>
-            <span class="text-sm font-medium text-lighthouse-navy" x-text="uploadProgress + '%'"></span>
+            <span class="text-sm text-slate-600">Uploading...</span>
+            <span class="text-sm font-medium" style="color: #0f172a;" x-text="uploadProgress + '%'"></span>
           </div>
-          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-lighthouse-gold transition-all duration-300"
+          <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full transition-all duration-300 rounded-full"
+                 style="background-color: #D6B86A;"
                  :style="'width: ' + uploadProgress + '%'"></div>
           </div>
         </div>
 
-        <!-- Upload Button -->
+        <!-- Actions -->
         <div class="mt-6 flex justify-end gap-3">
-          <button @click="showUploadModal = false; selectedFiles = []"
-                  class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg transition">
+          <button @click="showUploadModal = false; selectedFiles = []; uploadCategory = ''"
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
             Cancel
           </button>
           <button @click="uploadFiles"
-                  :disabled="selectedFiles.length === 0 || uploading"
-                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                  :disabled="selectedFiles.length === 0 || uploading || !uploadCategory"
+                  class="px-6 py-2.5 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style="background-color: #D6B86A;"
+                  onmouseover="if(!this.disabled) this.style.backgroundColor='#c9a85a';"
+                  onmouseout="this.style.backgroundColor='#D6B86A';">
             <span x-show="!uploading">Upload <span x-text="selectedFiles.length"></span> File(s)</span>
             <span x-show="uploading">Uploading...</span>
           </button>
@@ -459,14 +864,17 @@
 
   <!-- Embed Modal -->
   <div x-show="showEmbedModal" x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        @click.self="showEmbedModal = false">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full">
-      <div class="p-6 border-b">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+      <div class="p-6 border-b border-slate-100">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-lighthouse-navy">Add Video Embed</h2>
-          <button @click="showEmbedModal = false" class="text-gray-400 hover:text-gray-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <h2 class="font-display text-xl font-semibold text-[#0f172a]">Add Video Embed</h2>
+          <button @click="showEmbedModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
@@ -474,21 +882,39 @@
       </div>
 
       <div class="p-6">
+        <!-- Category Selection (Required) -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-[#0f172a] mb-2">
+            Category <span class="text-red-500">*</span>
+          </label>
+          <select x-model="embedCategory"
+                  class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+            <option value="">Select a category...</option>
+            <option value="kitchen">Kitchen Remodeling</option>
+            <option value="bathroom">Bathroom Remodeling</option>
+            <option value="outdoor">Outdoor Living</option>
+            <option value="additions">Home Additions</option>
+          </select>
+        </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Video URL</label>
+          <label class="block text-sm font-medium text-[#0f172a] mb-2">Video URL</label>
           <input type="url" x-model="embedUrl" placeholder="https://youtube.com/watch?v=..."
-                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lighthouse-gold focus:border-transparent">
-          <p class="text-xs text-gray-500 mt-1">Supports YouTube and Vimeo URLs</p>
+                 class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+          <p class="text-xs text-slate-400 mt-2">Supports YouTube and Vimeo URLs</p>
         </div>
 
         <div class="mt-6 flex justify-end gap-3">
-          <button @click="showEmbedModal = false; embedUrl = ''"
-                  class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg transition">
+          <button @click="showEmbedModal = false; embedUrl = ''; embedCategory = ''"
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
             Cancel
           </button>
           <button @click="addEmbed"
-                  :disabled="!embedUrl || addingEmbed"
-                  class="px-6 py-2 bg-lighthouse-gold text-white rounded-lg hover:bg-lighthouse-light-gold transition disabled:opacity-50 disabled:cursor-not-allowed">
+                  :disabled="!embedUrl || addingEmbed || !embedCategory"
+                  class="px-6 py-2.5 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style="background-color: #D6B86A;"
+                  onmouseover="if(!this.disabled) this.style.backgroundColor='#c9a85a';"
+                  onmouseout="this.style.backgroundColor='#D6B86A';">
             <span x-show="!addingEmbed">Add Embed</span>
             <span x-show="addingEmbed">Adding...</span>
           </button>
@@ -497,28 +923,82 @@
     </div>
   </div>
 
+  <!-- Edit Modal -->
+  <div x-show="showEditModal" x-cloak
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+       @click.self="showEditModal = false">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+      <div class="p-6 border-b border-slate-100">
+        <div class="flex items-center justify-between">
+          <h2 class="font-display text-xl font-semibold text-[#0f172a]">Edit Item</h2>
+          <button @click="showEditModal = false" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-6">
+        <div>
+          <label class="block text-sm font-medium text-[#0f172a] mb-2">Category</label>
+          <select x-model="editCategory"
+                  class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+            <option value="">No Category</option>
+            <option value="kitchen">Kitchen Remodeling</option>
+            <option value="bathroom">Bathroom Remodeling</option>
+            <option value="outdoor">Outdoor Living</option>
+            <option value="additions">Home Additions</option>
+          </select>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3">
+          <button @click="showEditModal = false"
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
+            Cancel
+          </button>
+          <button @click="saveEdit"
+                  :disabled="saving"
+                  class="px-6 py-2.5 text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style="background-color: #D6B86A;"
+                  onmouseover="if(!this.disabled) this.style.backgroundColor='#c9a85a';"
+                  onmouseout="this.style.backgroundColor='#D6B86A';">
+            <span x-show="!saving">Save Changes</span>
+            <span x-show="saving">Saving...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Delete Confirmation Modal -->
   <div x-show="showDeleteModal" x-cloak
-       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+       x-transition:enter="transition ease-out duration-200"
+       x-transition:enter-start="opacity-0"
+       x-transition:enter-end="opacity-100"
+       class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        @click.self="showDeleteModal = false; deletingItem = null">
-    <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full">
       <div class="p-6 text-center">
-        <div class="w-12 h-12 mx-auto bg-red-100 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        <div class="w-14 h-14 mx-auto bg-red-50 rounded-2xl flex items-center justify-center mb-4">
+          <svg class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
           </svg>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete Item?</h3>
-        <p class="text-gray-600 text-sm mb-6">This action cannot be undone. The file will be permanently deleted.</p>
+        <h3 class="font-display text-lg font-semibold text-[#0f172a] mb-2">Delete Item?</h3>
+        <p class="text-slate-500 text-sm mb-6">This action cannot be undone. The file will be permanently deleted.</p>
 
         <div class="flex gap-3 justify-center">
           <button @click="showDeleteModal = false; deletingItem = null"
-                  class="px-4 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800 rounded-lg transition">
+                  class="px-5 py-2.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition-all font-medium">
             Cancel
           </button>
           <button @click="deleteItem"
                   :disabled="deleting"
-                  class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50">
+                  class="px-6 py-2.5 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-all disabled:opacity-50">
             <span x-show="!deleting">Delete</span>
             <span x-show="deleting">Deleting...</span>
           </button>
@@ -538,6 +1018,7 @@
         // Search & Filter
         searchQuery: '',
         filterType: 'all',
+        filterCategory: 'all',
 
         // Messages
         message: '',
@@ -549,11 +1030,19 @@
         uploading: false,
         uploadProgress: 0,
         isDragging: false,
+        uploadCategory: '',
 
         // Embed
         showEmbedModal: false,
         embedUrl: '',
+        embedCategory: '',
         addingEmbed: false,
+
+        // Edit
+        showEditModal: false,
+        editingItem: null,
+        editCategory: '',
+        saving: false,
 
         // Delete
         showDeleteModal: false,
@@ -571,9 +1060,35 @@
           return this.items.filter(i => i.type === 'embed').length;
         },
 
-        // Computed: filtered items based on search and filter
+        // Computed: item counts by category
+        get kitchenCount() {
+          return this.items.filter(i => i.category === 'kitchen').length;
+        },
+        get bathroomCount() {
+          return this.items.filter(i => i.category === 'bathroom').length;
+        },
+        get outdoorCount() {
+          return this.items.filter(i => i.category === 'outdoor').length;
+        },
+        get additionsCount() {
+          return this.items.filter(i => i.category === 'additions').length;
+        },
+        get uncategorizedCount() {
+          return this.items.filter(i => !i.category).length;
+        },
+
+        // Computed: filtered items
         get filteredItems() {
           let result = this.items;
+
+          // Filter by category
+          if (this.filterCategory !== 'all') {
+            if (this.filterCategory === 'uncategorized') {
+              result = result.filter(item => !item.category);
+            } else {
+              result = result.filter(item => item.category === this.filterCategory);
+            }
+          }
 
           // Filter by type
           if (this.filterType !== 'all') {
@@ -586,7 +1101,8 @@
             result = result.filter(item => {
               const filename = (item.filename || '').toLowerCase();
               const type = (item.type || '').toLowerCase();
-              return filename.includes(query) || type.includes(query);
+              const category = (item.category || '').toLowerCase();
+              return filename.includes(query) || type.includes(query) || category.includes(query);
             });
           }
 
@@ -633,6 +1149,16 @@
           setTimeout(() => { this.message = ''; }, 5000);
         },
 
+        getCategoryLabel(category) {
+          const labels = {
+            kitchen: 'Kitchen',
+            bathroom: 'Bathroom',
+            outdoor: 'Outdoor',
+            additions: 'Additions'
+          };
+          return labels[category] || category;
+        },
+
         // File handling
         handleDrop(event) {
           this.isDragging = false;
@@ -675,7 +1201,7 @@
           });
         },
 
-        // Generate video thumbnail using HTML5 Canvas
+        // Generate video thumbnail
         async generateVideoThumbnail(file) {
           return new Promise((resolve) => {
             const video = document.createElement('video');
@@ -684,7 +1210,6 @@
             video.playsInline = true;
 
             video.onloadeddata = () => {
-              // Seek to 1 second (or 0 if video is shorter)
               video.currentTime = Math.min(1, video.duration * 0.1);
             };
 
@@ -694,7 +1219,6 @@
               canvas.height = 300;
               const ctx = canvas.getContext('2d');
 
-              // Draw video frame maintaining aspect ratio
               const scale = Math.max(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
               const x = (canvas.width - video.videoWidth * scale) / 2;
               const y = (canvas.height - video.videoHeight * scale) / 2;
@@ -708,10 +1232,9 @@
 
             video.onerror = () => {
               URL.revokeObjectURL(video.src);
-              resolve(null); // Return null if thumbnail generation fails
+              resolve(null);
             };
 
-            // Set timeout in case video fails to load
             setTimeout(() => {
               if (!video.onseeked) {
                 URL.revokeObjectURL(video.src);
@@ -724,23 +1247,21 @@
         },
 
         async uploadFiles() {
-          if (this.selectedFiles.length === 0) return;
+          if (this.selectedFiles.length === 0 || !this.uploadCategory) return;
 
           this.uploading = true;
           this.uploadProgress = 0;
 
           const formData = new FormData();
+          formData.append('category', this.uploadCategory);
 
-          // Generate thumbnails for videos before uploading
           for (let i = 0; i < this.selectedFiles.length; i++) {
             const file = this.selectedFiles[i];
             formData.append('files', file);
 
-            // If it's a video, generate thumbnail
             if (file.type.startsWith('video/')) {
               const thumbnail = await this.generateVideoThumbnail(file);
               if (thumbnail) {
-                // Append thumbnail with index to match with video
                 formData.append('thumbnails', thumbnail, `thumb_${i}.jpg`);
                 formData.append('thumbnailIndices', i.toString());
               }
@@ -771,21 +1292,19 @@
               xhr.send(formData);
             });
 
-            // Check response for actual success/failure
             if (!response.success || (response.uploaded && response.uploaded.length === 0)) {
-              // All uploads failed
               const errorMsg = response.errors?.map(e => `${e.file}: ${e.error}`).join('\n') || response.message || 'Upload failed';
               this.showMessage(errorMsg, 'error');
             } else if (response.errors && response.errors.length > 0) {
-              // Partial success
               this.showMessage(response.message || `${response.uploaded.length} uploaded, ${response.errors.length} failed`, 'warning');
               this.selectedFiles = [];
+              this.uploadCategory = '';
               this.showUploadModal = false;
               await this.loadItems();
             } else {
-              // Full success
               this.showMessage('Files uploaded successfully!');
               this.selectedFiles = [];
+              this.uploadCategory = '';
               this.showUploadModal = false;
               await this.loadItems();
             }
@@ -798,14 +1317,17 @@
         },
 
         async addEmbed() {
-          if (!this.embedUrl) return;
+          if (!this.embedUrl || !this.embedCategory) return;
 
           this.addingEmbed = true;
           try {
             const res = await fetch('/api/gallery/embed', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ url: this.embedUrl })
+              body: JSON.stringify({
+                url: this.embedUrl,
+                category: this.embedCategory
+              })
             });
 
             if (!res.ok) {
@@ -815,12 +1337,48 @@
 
             this.showMessage('Video embed added successfully!');
             this.embedUrl = '';
+            this.embedCategory = '';
             this.showEmbedModal = false;
             await this.loadItems();
           } catch (err) {
             this.showMessage(err.message, 'error');
           } finally {
             this.addingEmbed = false;
+          }
+        },
+
+        openEditModal(item) {
+          this.editingItem = item;
+          this.editCategory = item.category || '';
+          this.showEditModal = true;
+        },
+
+        async saveEdit() {
+          if (!this.editingItem) return;
+
+          this.saving = true;
+          try {
+            const res = await fetch(`/api/gallery/${this.editingItem.id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                category: this.editCategory || null
+              })
+            });
+
+            if (!res.ok) {
+              const data = await res.json();
+              throw new Error(data.message || 'Failed to update');
+            }
+
+            this.showMessage('Item updated successfully!');
+            this.showEditModal = false;
+            this.editingItem = null;
+            await this.loadItems();
+          } catch (err) {
+            this.showMessage(err.message || 'Failed to update item', 'error');
+          } finally {
+            this.saving = false;
           }
         },
 

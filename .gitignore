@@ -7,9 +7,8 @@ RAILWAY-2.png
 RAILWAY-3.png
 RAILWAY.png
 RAILWAY-ENV.txt
-*nul
 
-*.md 
+*.md
 
 # Database
 data/*.db

@@ -25,7 +25,7 @@
   <meta property="og:title" content="Blog | Lighthouse Design Build">
   <meta property="og:description" content="Design inspiration and renovation tips from the experts.">
   <meta property="og:image" content="/src/assets/images/blog-og.jpg">
-  <meta property="og:url" content="https://www.lighthousedesignbuild.com/pages/blog">
+  <meta property="og:url" content="https://www.designwithlighthouse.com/pages/blog">
   <meta property="og:type" content="website">
 
   <!-- Twitter Card Meta Tags -->
@@ -33,7 +33,6 @@
   <meta name="twitter:title" content="Blog | Lighthouse Design Build">
   <meta name="twitter:description" content="Design inspiration and renovation tips from the experts.">
   <meta name="twitter:image" content="/src/assets/images/blog-og.jpg">
-
 
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="/src/assets/icons/apple-touch-icon.png">
@@ -72,40 +71,35 @@
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <!--
-    ==========================================
-    HUBSPOT BLOG EMBED INSTRUCTIONS
-    ==========================================
-
-    1. Find your Hub ID:
-       - Look at your Hubspot URL: app.hubspot.com/contacts/YOUR_HUB_ID/
-       - OR go to Settings > Account Defaults > Account Information
-
-    2. Replace YOUR_HUB_ID below with your actual Hub ID (around line 85)
-
-    3. The blog posts will automatically appear in the #hubspot-blog-container div
-
-    4. You can customize the blog listing appearance in Hubspot's Blog Settings
-
-    ==========================================
-    -->
-
+  <style>
+    /* Category badge colors */
+    .category-badge {
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+    }
+    .category-kitchen { background: #f59e0b20; color: #d97706; }
+    .category-bathroom { background: #3b82f620; color: #2563eb; }
+    .category-additions { background: #10b98120; color: #059669; }
+    .category-outdoor { background: #8b5cf620; color: #7c3aed; }
+    .category-design-tips { background: #ec489920; color: #db2777; }
+    .category-company-news { background: #6366f120; color: #4f46e5; }
+  </style>
 </head>
 
 <body class="font-body text-lighthouse-charcoal dark:text-gray-100 bg-white dark:bg-[#0a0a0a] antialiased" data-manual-loader>
 
-    <!-- Page Loader -->
-    <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F5F7F8] dark:bg-[#0a0a0a] transition-opacity duration-500">
-        <div class="flex flex-row gap-2">
-            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce"></div>
-            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.3s]"></div>
-            <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.5s]"></div>
-        </div>
+  <!-- Page Loader -->
+  <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F5F7F8] dark:bg-[#0a0a0a] transition-opacity duration-500">
+    <div class="flex flex-row gap-2">
+      <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce"></div>
+      <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.3s]"></div>
+      <div class="w-4 h-4 rounded-full bg-[#1C3D5A] dark:bg-[#D6B86A] animate-bounce [animation-delay:-.5s]"></div>
     </div>
+  </div>
 
-    <div id="header-placeholder"></div>
+  <div id="header-placeholder"></div>
 
-    <!-- Main Content -->
+  <!-- Main Content -->
   <main id="main-content">
 
     <!-- Hero Section -->
@@ -125,8 +119,7 @@
       <div class="container-custom relative z-10">
         <div class="max-w-4xl mx-auto text-center" data-aos="fade-up" data-aos-duration="800">
           <div class="inline-block bg-lighthouse-teal/20 border border-lighthouse-teal/50 rounded-full px-6 py-2 mb-6">
-            <span class="text-lighthouse-teal font-heading font-semibold text-sm">Design Inspiration & Expert
-              Tips</span>
+            <span class="text-lighthouse-teal font-heading font-semibold text-sm">Design Inspiration & Expert Tips</span>
           </div>
 
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
@@ -143,7 +136,7 @@
     <!-- Blog Content Section -->
     <section id="blog"
       class="py-16 md:py-24 lg:py-32 bg-gradient-to-br from-[#5C88A0] to-[#1C3D5A] dark:from-[#1C3D5A] dark:to-[#0a0a0a] relative overflow-hidden"
-      x-data="hubspotBlog()" x-init="fetchPosts()">
+      x-data="blogListing()" x-init="fetchPosts()">
       <div class="container-custom">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12" data-aos="fade-up">
           <div>
@@ -154,17 +147,6 @@
               Latest articles, renovation tips, and design inspiration from our team of experts.
             </p>
           </div>
-
-          <template x-if="posts.length">
-            <a href="https://blog.raymonddesignbuilders.com/news-info" target="_blank" rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-sm font-heading font-semibold text-lighthouse-teal hover:text-lighthouse-teal/80 transition-colors duration-300">
-              View full blog
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
-          </template>
         </div>
 
         <!-- Loading state -->
@@ -190,78 +172,145 @@
           <span x-text="error"></span>
         </div>
 
-        <!-- Posts grid -->
-        <div x-show="!loading && !error" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <template x-for="post in paginatedPosts" :key="post.id || post.guid">
-            <article
-              class="group bg-white dark:bg-gray-800 rounded-xl border-2 border-lighthouse-warmgray/30 dark:border-gray-700 overflow-hidden hover:border-lighthouse-teal dark:hover:border-lighthouse-teal transition-all duration-300 hover:shadow-xl flex flex-col"
-              data-aos="fade-up" data-aos-duration="600">
-              <div class="p-6 flex flex-col gap-4 flex-1">
-                <div class="flex items-center gap-2">
-                  <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
-                  <p class="text-xs font-heading font-semibold uppercase tracking-wider text-lighthouse-teal">
-                    <span x-text="formatDate(post.pubDate)"></span>
-                  </p>
-                  <div class="h-px flex-1 bg-lighthouse-teal/30"></div>
+        <!-- Empty state -->
+        <div x-show="!loading && !error && posts.length === 0" class="text-center py-16">
+          <svg class="w-16 h-16 mx-auto mb-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+          </svg>
+          <p class="text-white/70 text-lg">No blog posts yet. Check back soon!</p>
+        </div>
+
+        <!-- Featured Post (first post, shown larger) -->
+        <template x-if="!loading && !error && featuredPost">
+          <a :href="'/pages/blog-post.html?slug=' + featuredPost.slug"
+             class="block mb-12 group" data-aos="fade-up" data-aos-duration="600">
+            <article class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300">
+              <div class="md:flex">
+                <!-- Featured Image -->
+                <div class="md:w-1/2 relative aspect-[16/10] md:aspect-auto">
+                  <template x-if="featuredPost.featuredImageUrl">
+                    <img :src="featuredPost.featuredImageUrl" :alt="featuredPost.featured_image_alt || featuredPost.title"
+                         class="w-full h-full object-cover">
+                  </template>
+                  <template x-if="!featuredPost.featuredImageUrl">
+                    <div class="w-full h-full min-h-[300px] bg-gradient-to-br from-lighthouse-navy to-lighthouse-teal flex items-center justify-center">
+                      <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                      </svg>
+                    </div>
+                  </template>
+            
                 </div>
 
-                <h3
-                  class="text-xl font-heading font-bold text-lighthouse-navy dark:text-white line-clamp-2 group-hover:text-lighthouse-teal dark:group-hover:text-lighthouse-light-teal transition-colors duration-300"
-                  x-text="post.title"></h3>
+                <!-- Content -->
+                <div class="md:w-1/2 p-8 md:p-10 flex flex-col justify-center">
+                  <div class="flex items-center gap-3 mb-4">
+                    <span class="category-badge px-3 py-1 rounded-full font-heading font-semibold uppercase"
+                          :class="'category-' + featuredPost.category"
+                          x-text="featuredPost.categoryName"></span>
+                    <span class="text-gray-500 dark:text-gray-400 text-sm" x-text="formatDate(featuredPost.published_at)"></span>
+                  </div>
 
-                <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 flex-1"
-                  x-html="cleanDescription(post.description)"></p>
+                  <h3 class="text-2xl md:text-3xl font-display font-bold text-lighthouse-navy dark:text-white mb-4 group-hover:text-lighthouse-teal transition-colors duration-300"
+                      x-text="featuredPost.title"></h3>
 
-                <div class="pt-4 border-t border-lighthouse-warmgray/30 dark:border-gray-700">
-                  <a :href="'./blog-post.html?id=' + encodeURIComponent(post.id || post.guid || post.link)"
-                    class="inline-flex items-center gap-2 text-sm font-heading font-semibold text-lighthouse-teal hover:text-lighthouse-teal/80 dark:text-lighthouse-light-teal dark:hover:text-lighthouse-teal transition-colors duration-300">
-                    Read article
-                    <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none"
-                      stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </a>
+                  <p class="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3" x-text="featuredPost.excerpt"></p>
+
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">
+                      By <span x-text="featuredPost.author_name" class="font-medium"></span>
+                    </span>
+                    <span class="inline-flex items-center gap-2 text-sm font-heading font-semibold text-lighthouse-teal group-hover:text-lighthouse-teal/80 transition-colors duration-300">
+                      Read article
+                      <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
               </div>
             </article>
+          </a>
+        </template>
+
+        <!-- Posts grid (remaining posts) -->
+        <div x-show="!loading && !error" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <template x-for="post in visiblePosts" :key="post.id">
+            <a :href="'/pages/blog-post.html?slug=' + post.slug" class="block group">
+              <article
+                class="bg-white dark:bg-gray-800 rounded-xl border-2 border-lighthouse-warmgray/30 dark:border-gray-700 overflow-hidden hover:border-lighthouse-teal dark:hover:border-lighthouse-teal transition-all duration-300 hover:shadow-xl flex flex-col h-full"
+                data-aos="fade-up" data-aos-duration="600">
+
+                <!-- Featured Image -->
+                <div class="relative aspect-[16/10] overflow-hidden">
+                  <template x-if="post.featuredImageUrl">
+                    <img :src="post.featuredImageUrl" :alt="post.featured_image_alt || post.title"
+                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                  </template>
+                  <template x-if="!post.featuredImageUrl">
+                    <div class="w-full h-full bg-gradient-to-br from-lighthouse-navy to-lighthouse-teal flex items-center justify-center">
+                      <svg class="w-12 h-12 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                      </svg>
+                    </div>
+                  </template>
+                  <!-- Category badge -->
+                  <div class="absolute top-3 left-3">
+                    <span class="category-badge px-2 py-1 rounded-full font-heading font-semibold uppercase bg-white/90 dark:bg-gray-800/90"
+                          :class="'category-' + post.category"
+                          x-text="post.categoryName"></span>
+                  </div>
+                </div>
+
+                <div class="p-6 flex flex-col gap-3 flex-1">
+                  <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <span x-text="formatDate(post.published_at)"></span>
+                    <span class="w-1 h-1 rounded-full bg-gray-400"></span>
+                    <span x-text="post.author_name"></span>
+                  </div>
+
+                  <h3
+                    class="text-xl font-heading font-bold text-lighthouse-navy dark:text-white line-clamp-2 group-hover:text-lighthouse-teal dark:group-hover:text-lighthouse-light-teal transition-colors duration-300"
+                    x-text="post.title"></h3>
+
+                  <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 flex-1"
+                    x-text="post.excerpt"></p>
+
+                  <div class="pt-4 border-t border-lighthouse-warmgray/30 dark:border-gray-700">
+                    <span class="inline-flex items-center gap-2 text-sm font-heading font-semibold text-lighthouse-teal hover:text-lighthouse-teal/80 dark:text-lighthouse-light-teal dark:hover:text-lighthouse-teal transition-colors duration-300">
+                      Read article
+                      <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </a>
           </template>
         </div>
 
-        <!-- Pagination Controls -->
-        <div x-show="!loading && !error && totalPages > 1" class="mt-12 flex items-center justify-center gap-2">
-          <!-- Previous Button -->
-          <button @click="prevPage()" :disabled="currentPage === 1"
-            :class="currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-lighthouse-teal hover:text-white'"
-            class="px-4 py-2 rounded-lg border-2 border-lighthouse-teal text-lighthouse-teal font-heading font-semibold transition-all duration-300 disabled:hover:bg-transparent disabled:hover:text-lighthouse-teal">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          <!-- Page Numbers -->
-          <template x-for="page in pageNumbers" :key="page">
-            <button @click="goToPage(page)"
-              :class="currentPage === page ? 'bg-lighthouse-teal text-white' : 'border-2 border-lighthouse-warmgray/30 dark:border-gray-700 text-lighthouse-navy dark:text-white hover:border-lighthouse-teal hover:text-lighthouse-teal'"
-              class="px-4 py-2 rounded-lg font-heading font-semibold transition-all duration-300 min-w-[40px]"
-              x-text="page"></button>
-          </template>
-
-          <!-- Next Button -->
-          <button @click="nextPage()" :disabled="currentPage === totalPages"
-            :class="currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:bg-lighthouse-teal hover:text-white'"
-            class="px-4 py-2 rounded-lg border-2 border-lighthouse-teal text-lighthouse-teal font-heading font-semibold transition-all duration-300 disabled:hover:bg-transparent disabled:hover:text-lighthouse-teal">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
+        <!-- Load More Button -->
+        <div x-show="!loading && !error && hasMore" class="mt-12 text-center">
+          <button @click="loadMore()"
+                  :disabled="loadingMore"
+                  class="inline-flex items-center gap-2 px-8 py-4 bg-lighthouse-gold hover:bg-lighthouse-light-gold text-white font-heading font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+            <template x-if="loadingMore">
+              <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </template>
+            <span x-text="loadingMore ? 'Loading...' : 'Load More Posts'"></span>
           </button>
         </div>
 
         <!-- Results Info -->
         <div x-show="!loading && !error && posts.length > 0"
-          class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          Showing <span x-text="((currentPage - 1) * postsPerPage) + 1"></span> to
-          <span x-text="Math.min(currentPage * postsPerPage, posts.length)"></span> of
+          class="mt-6 text-center text-sm text-white/70 dark:text-gray-400">
+          Showing <span x-text="Math.min(displayCount, posts.length)"></span> of
           <span x-text="posts.length"></span> posts
         </div>
       </div>
@@ -305,17 +354,6 @@
 
   <!-- Footer -->
   <div id="footer-placeholder"></div>
-
-  <!--
-    ==========================================
-    HUBSPOT EMBED SCRIPT
-    ==========================================
-    REPLACE 'YOUR_HUB_ID' WITH YOUR ACTUAL HUB ID
-    Example: If your Hub ID is 12345678, change to:
-    https://js.hs-scripts.com/12345678.js
-    ==========================================
-    -->
-  <script type="text/javascript" id="hs-script-loader" async defer src="https://js.hs-scripts.com/7636567.js"></script>
 
   <!-- Include Components -->
   <script>
@@ -374,30 +412,31 @@
     });
   </script>
 
-  <!-- HubSpot Blog Alpine Component -->
+  <!-- Blog Listing Alpine Component -->
   <script>
-    function hubspotBlog() {
+    function blogListing() {
       return {
         posts: [],
         loading: true,
+        loadingMore: false,
         error: "",
-        currentPage: 1,
-        postsPerPage: 12,
+        displayCount: 7, // 1 featured + 6 in grid
+        postsPerLoad: 6,
 
         async fetchPosts() {
           this.loading = true;
           this.error = "";
 
           try {
-            // Same-origin API endpoint exposed by the Express server:
-            const res = await fetch("/api/hubspot-blog");
+            // Fetch all published posts from our new API
+            const res = await fetch("/api/blog?limit=100");
 
             if (!res.ok) {
               throw new Error("Failed to fetch blog posts");
             }
 
             const data = await res.json();
-            this.posts = data.posts || []; // all posts
+            this.posts = data.posts || [];
           } catch (e) {
             console.error(e);
             this.error = "Could not load blog posts right now.";
@@ -408,83 +447,41 @@
           }
         },
 
-        get paginatedPosts() {
-          const start = (this.currentPage - 1) * this.postsPerPage;
-          const end = start + this.postsPerPage;
-          return this.posts.slice(start, end);
+        get featuredPost() {
+          return this.posts.length > 0 ? this.posts[0] : null;
         },
 
-        get totalPages() {
-          return Math.ceil(this.posts.length / this.postsPerPage);
+        get remainingPosts() {
+          return this.posts.slice(1);
         },
 
-        get pageNumbers() {
-          const pages = [];
-          const maxVisible = 5;
-          let startPage = Math.max(1, this.currentPage - Math.floor(maxVisible / 2));
-          let endPage = Math.min(this.totalPages, startPage + maxVisible - 1);
-
-          if (endPage - startPage < maxVisible - 1) {
-            startPage = Math.max(1, endPage - maxVisible + 1);
-          }
-
-          for (let i = startPage; i <= endPage; i++) {
-            pages.push(i);
-          }
-          return pages;
+        get visiblePosts() {
+          // Show posts after the featured one, up to displayCount - 1
+          return this.remainingPosts.slice(0, this.displayCount - 1);
         },
 
-        goToPage(page) {
-          if (page >= 1 && page <= this.totalPages) {
-            this.currentPage = page;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
+        get hasMore() {
+          return this.displayCount < this.posts.length;
         },
 
-        nextPage() {
-          this.goToPage(this.currentPage + 1);
+        loadMore() {
+          this.loadingMore = true;
+          // Simulate slight delay for better UX
+          setTimeout(() => {
+            this.displayCount += this.postsPerLoad;
+            this.loadingMore = false;
+          }, 300);
         },
 
-        prevPage() {
-          this.goToPage(this.currentPage - 1);
-        },
-
-        formatDate(pubDate) {
-          if (!pubDate) return "";
-          const date = new Date(pubDate);
+        formatDate(dateStr) {
+          if (!dateStr) return "";
+          const date = new Date(dateStr);
           if (Number.isNaN(date.getTime())) return "";
-          return date.toLocaleDateString(undefined, {
+          return date.toLocaleDateString('en-US', {
             year: "numeric",
-            month: "short",
+            month: "long",
             day: "numeric"
           });
-        },
-
-        cleanDescription(desc) {
-          if (!desc) return "";
-
-          // Create a temporary div to parse HTML
-          const temp = document.createElement('div');
-          temp.innerHTML = desc;
-
-          // Remove links but keep the images
-          temp.querySelectorAll('a').forEach(link => {
-            // If the link contains an image, unwrap it but keep the image
-            const img = link.querySelector('img');
-            if (img) {
-              link.parentNode.replaceChild(img, link);
-            } else {
-              // For text links, replace with plain text
-              const text = document.createTextNode(link.textContent);
-              link.parentNode.replaceChild(text, link);
-            }
-          });
-
-          // Remove tracking pixels and hubspot tracking images
-          temp.querySelectorAll('img[src*="track.hubspot.com"]').forEach(img => img.remove());
-
-          // Return cleaned HTML
-          return temp.innerHTML;
         }
       };
     }

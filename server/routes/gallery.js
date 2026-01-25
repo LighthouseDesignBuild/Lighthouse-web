@@ -17,14 +17,26 @@ import { isRailwayStorageEnabled } from '../config/railway.js';
 
 const router = Router();
 
+// Valid gallery categories
+const GALLERY_CATEGORIES = ['kitchen', 'bathroom', 'outdoor', 'additions'];
+
 /**
  * GET /api/gallery
  * List all gallery items (public)
  * Returns presigned URLs for Railway storage items
+ * Optional query param: ?category=kitchen to filter by category
  */
 router.get('/', async (req, res) => {
   try {
-    const items = await GalleryItem.findAll();
+    const { category } = req.query;
+
+    // Get items - optionally filtered by category
+    let items;
+    if (category && GALLERY_CATEGORIES.includes(category)) {
+      items = await GalleryItem.findByCategory(category);
+    } else {
+      items = await GalleryItem.findAll();
+    }
 
     // Process items and generate presigned URLs for Railway items
     const enrichedItems = await Promise.all(items.map(async (item) => {
@@ -37,6 +49,7 @@ router.get('/', async (req, res) => {
         sizeClass: item.size_class,
         displayOrder: item.display_order,
         createdAt: item.created_at,
+        category: item.category, // Include category in response
       };
 
       // Check if this is a Railway storage item (has variant keys)
@@ -117,7 +130,16 @@ router.post('/', isEditor, upload.fields([
     }
 
     const sizeClass = req.body.sizeClass || 'medium';
+    const category = req.body.category || null;
     const useRailway = isRailwayStorageEnabled();
+
+    // Validate category if provided
+    if (category && !GALLERY_CATEGORIES.includes(category)) {
+      return res.status(400).json({
+        error: 'ValidationError',
+        message: `Invalid category. Must be one of: ${GALLERY_CATEGORIES.join(', ')}`
+      });
+    }
 
     // Parse thumbnail indices (which files have thumbnails)
     let thumbnailIndices = [];
@@ -157,6 +179,7 @@ router.post('/', isEditor, upload.fields([
               contentHash: processed.contentHash,
               blurData: processed.blurData, // Base64 blur placeholder
               sizeClass,
+              category,
               uploadedBy: req.session.userId,
             });
 
@@ -188,6 +211,7 @@ router.post('/', isEditor, upload.fields([
               contentHash: processed.contentHash,
               blurData: processed.blurData, // Base64 blur placeholder for video thumbnail
               sizeClass,
+              category,
               uploadedBy: req.session.userId,
             });
 
@@ -229,6 +253,7 @@ router.post('/', isEditor, upload.fields([
             filepath: processed.filepath,
             thumbnail: processed.thumbnail,
             sizeClass,
+            category,
             uploadedBy: req.session.userId,
           });
 
@@ -290,12 +315,20 @@ router.post('/', isEditor, upload.fields([
  */
 router.post('/embed', isEditor, async (req, res) => {
   try {
-    const { url, sizeClass = 'medium' } = req.body;
+    const { url, sizeClass = 'medium', category = null } = req.body;
 
     if (!url) {
       return res.status(400).json({
         error: 'ValidationError',
         message: 'URL is required'
+      });
+    }
+
+    // Validate category if provided
+    if (category && !GALLERY_CATEGORIES.includes(category)) {
+      return res.status(400).json({
+        error: 'ValidationError',
+        message: `Invalid category. Must be one of: ${GALLERY_CATEGORIES.join(', ')}`
       });
     }
 
@@ -317,6 +350,7 @@ router.post('/embed', isEditor, async (req, res) => {
       embedPlatform: platform,
       thumbnail,
       sizeClass,
+      category,
       uploadedBy: req.session.userId
     });
 
@@ -328,7 +362,8 @@ router.post('/embed', isEditor, async (req, res) => {
         embedUrl: item.embed_url,
         embedPlatform: item.embed_platform,
         thumbnail: item.thumbnail,
-        sizeClass: item.size_class
+        sizeClass: item.size_class,
+        category: item.category
       }
     });
   } catch (err) {
@@ -380,12 +415,12 @@ router.get('/:id', async (req, res) => {
 
 /**
  * PUT /api/gallery/:id
- * Update item (size class, order)
+ * Update item (size class, order, category)
  */
 router.put('/:id', isEditor, async (req, res) => {
   try {
     const itemId = parseInt(req.params.id);
-    const { sizeClass, displayOrder } = req.body;
+    const { sizeClass, displayOrder, category } = req.body;
 
     const existing = await GalleryItem.findById(itemId);
     if (!existing) {
@@ -403,7 +438,15 @@ router.put('/:id', isEditor, async (req, res) => {
       });
     }
 
-    const item = await GalleryItem.update(itemId, { sizeClass, displayOrder });
+    // Validate category
+    if (category && !GALLERY_CATEGORIES.includes(category)) {
+      return res.status(400).json({
+        error: 'ValidationError',
+        message: `Invalid category. Must be one of: ${GALLERY_CATEGORIES.join(', ')}`
+      });
+    }
+
+    const item = await GalleryItem.update(itemId, { sizeClass, displayOrder, category });
 
     res.json({
       success: true,
@@ -414,7 +457,8 @@ router.put('/:id', isEditor, async (req, res) => {
         embedUrl: item.embed_url,
         thumbnail: item.thumbnail,
         sizeClass: item.size_class,
-        displayOrder: item.display_order
+        displayOrder: item.display_order,
+        category: item.category
       }
     });
   } catch (err) {
@@ -517,6 +561,40 @@ router.post('/reorder', isEditor, async (req, res) => {
     res.status(500).json({
       error: 'ServerError',
       message: 'Failed to reorder items'
+    });
+  }
+});
+
+/**
+ * GET /api/gallery/categories
+ * Get list of categories with counts
+ */
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await GalleryItem.getCategories();
+
+    // Always return all valid categories with their counts (0 if no items)
+    const categoryCounts = GALLERY_CATEGORIES.map(cat => {
+      const found = categories.find(c => c.category === cat);
+      return {
+        id: cat,
+        name: cat === 'kitchen' ? 'Kitchen Remodeling' :
+              cat === 'bathroom' ? 'Bathroom Remodeling' :
+              cat === 'outdoor' ? 'Outdoor Living' :
+              cat === 'additions' ? 'Home Additions' : cat,
+        count: found ? found.count : 0
+      };
+    });
+
+    res.json({
+      categories: categoryCounts,
+      total: categoryCounts.reduce((sum, c) => sum + c.count, 0)
+    });
+  } catch (err) {
+    console.error('Categories error:', err);
+    res.status(500).json({
+      error: 'ServerError',
+      message: 'Failed to get categories'
     });
   }
 });

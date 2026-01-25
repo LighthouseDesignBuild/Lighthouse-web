@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Manager | Lighthouse Admin</title>
+  <link rel="stylesheet" href="/dist/css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+  <script defer src="https://unpkg.com/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+
+    /* Typography */
+    .font-display { font-family: 'Fraunces', Georgia, serif; }
+    .font-body { font-family: 'DM Sans', system-ui, sans-serif; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #FAFAF9;
+    }
+
+    /* Sidebar */
+    .sidebar { width: 280px; }
+    .main-content { margin-left: 280px; }
+
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); position: fixed; z-index: 50; }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+    }
+
+    .block-item { transition: all 0.2s ease; }
+    .block-item:hover { background-color: #f9fafb; }
+    .block-item.dragging { opacity: 0.5; }
+    .drop-zone { border: 2px dashed #d1d5db; }
+    .drop-zone.active { border-color: #D6B86A; background-color: rgba(214, 184, 106, 0.1); }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="font-body min-h-screen" x-data="blogManager()">
+
+  <!-- Sidebar -->
+  <aside class="sidebar fixed top-0 left-0 h-full text-white transition-transform duration-300"
+         style="background-color: #0f172a;"
+         :class="{ 'open': sidebarOpen }">
+    <div class="p-6" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+      <img src="/src/assets/images/logo/LightHouse-Logo-White.png" alt="Lighthouse" class="h-10">
+    </div>
+
+    <nav class="py-4">
+      <a href="/admin/dashboard.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="font-medium">Dashboard</span>
+      </a>
+      <a href="/admin/gallery-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <span class="font-medium">Gallery</span>
+      </a>
+      <a href="/admin/blog-manage.html"
+         class="flex items-center px-6 py-3 text-white"
+         style="background-color: rgba(255,255,255,0.1); border-right: 2px solid #D6B86A;">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+        </svg>
+        <span class="font-medium">Blog</span>
+      </a>
+      <a href="/admin/comments-manage.html"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+        </svg>
+        <span class="font-medium">Comments</span>
+        <span x-show="pendingComments > 0" x-text="pendingComments"
+              class="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full"></span>
+      </a>
+      <a href="/admin/users-manage.html" x-show="user?.role === 'admin'"
+         class="flex items-center px-6 py-3 transition-all"
+         style="color: rgba(255,255,255,0.6);"
+         onmouseover="this.style.backgroundColor='rgba(255,255,255,0.05)'; this.style.color='white';"
+         onmouseout="this.style.backgroundColor='transparent'; this.style.color='rgba(255,255,255,0.6)';">
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <span class="font-medium">Users</span>
+      </a>
+    </nav>
+
+    <div class="absolute bottom-0 left-0 right-0 p-6" style="border-top: 1px solid rgba(255,255,255,0.1);">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-white" x-text="user?.username"></p>
+          <p class="text-xs capitalize" style="color: rgba(255,255,255,0.4);" x-text="user?.role"></p>
+        </div>
+        <button @click="logout" class="p-2 rounded-lg transition-all" style="color: rgba(255,255,255,0.4);"
+                onmouseover="this.style.color='white'; this.style.backgroundColor='rgba(255,255,255,0.1)';"
+                onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.backgroundColor='transparent';">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Header -->
+  <header class="lg:hidden fixed top-0 left-0 right-0 text-white p-4 z-40 flex items-center justify-between"
+          style="background-color: #0f172a;">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+    <span class="font-display font-semibold">Blog</span>
+    <button @click="logout" class="p-2 rounded-lg transition-all"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)';"
+            onmouseout="this.style.backgroundColor='transparent';">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Overlay -->
+  <div x-show="sidebarOpen" @click="sidebarOpen = false" x-cloak
+       class="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-40"></div>
+
+  <!-- Main Content -->
+  <main class="main-content min-h-screen pt-16 lg:pt-0">
+    <div class="p-6 lg:p-8">
+
+      <!-- LIST VIEW -->
+      <template x-if="view === 'list'">
+        <div>
+          <!-- Header -->
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <div>
+              <h1 class="font-display text-2xl lg:text-3xl font-bold tracking-tight" style="color: #0f172a;">Blog Manager</h1>
+              <p class="text-slate-500 mt-1">
+                <span x-text="counts.total"></span> posts
+                (<span x-text="counts.published"></span> published,
+                <span x-text="counts.draft"></span> drafts)
+              </p>
+            </div>
+            <button @click="createNewPost"
+                    class="inline-flex items-center px-5 py-2.5 text-white rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
+                    style="background-color: #D6B86A;"
+                    onmouseover="this.style.backgroundColor='#c9a85a';"
+                    onmouseout="this.style.backgroundColor='#D6B86A';">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+              New Post
+            </button>
+          </div>
+
+          <!-- Posts Table -->
+          <div class="bg-white rounded-2xl shadow-sm overflow-hidden" style="box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);">
+            <div class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-100">
+                  <tr>
+                    <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">Title</th>
+                    <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">Category</th>
+                    <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">Status</th>
+                    <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">Author</th>
+                    <th class="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">Date</th>
+                    <th class="text-right px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <template x-for="post in posts" :key="post.id">
+                    <tr class="hover:bg-slate-50 transition-colors">
+                      <td class="px-6 py-4">
+                        <p class="font-medium" style="color: #0f172a;" x-text="post.title"></p>
+                        <p class="text-sm text-slate-400" x-text="'/' + post.slug"></p>
+                      </td>
+                      <td class="px-6 py-4">
+                        <span class="text-sm text-slate-600" x-text="post.categoryName"></span>
+                      </td>
+                      <td class="px-6 py-4">
+                        <span :class="post.status === 'published'
+                                       ? 'bg-emerald-50 text-emerald-700'
+                                       : 'bg-slate-100 text-slate-600'"
+                              class="px-2.5 py-1 text-xs font-medium rounded-full capitalize"
+                              x-text="post.status"></span>
+                      </td>
+                      <td class="px-6 py-4 text-sm text-slate-600" x-text="post.author_name"></td>
+                      <td class="px-6 py-4 text-sm text-slate-400" x-text="formatDate(post.created_at)"></td>
+                      <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-1">
+                          <button @click="editPost(post.id)"
+                                  class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-all"
+                                  title="Edit">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                          </button>
+                          <a :href="'/pages/blog-post.html?slug=' + post.slug" target="_blank"
+                             class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                             title="Preview">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                          </a>
+                          <button @click="deletePost(post.id)"
+                                  class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                  title="Delete">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                  <template x-if="posts.length === 0">
+                    <tr>
+                      <td colspan="6" class="px-6 py-12 text-center text-slate-500">
+                        No blog posts yet. Click "New Post" to create one.
+                      </td>
+                    </tr>
+                  </template>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!-- EDITOR VIEW -->
+      <template x-if="view === 'editor'">
+        <div>
+          <!-- Editor Header -->
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div class="flex items-center gap-4">
+              <button @click="cancelEdit"
+                      class="p-2 text-slate-600 hover:text-slate-800 transition rounded-lg hover:bg-slate-100">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+              </button>
+              <h1 class="font-display text-2xl font-bold tracking-tight" style="color: #0f172a;" x-text="editingPost.id ? 'Edit Post' : 'New Post'"></h1>
+            </div>
+            <div class="flex items-center gap-3">
+              <button @click="savePost('draft')"
+                      :disabled="saving"
+                      class="px-5 py-2.5 border border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-slate-50 hover:border-slate-300 transition-all disabled:opacity-50">
+                Save Draft
+              </button>
+              <button @click="savePost('published')"
+                      :disabled="saving"
+                      class="px-6 py-2.5 text-white rounded-xl font-medium transition-all disabled:opacity-50 shadow-sm hover:shadow-md"
+                      style="background-color: #D6B86A;"
+                      onmouseover="if(!this.disabled) this.style.backgroundColor='#c9a85a';"
+                      onmouseout="this.style.backgroundColor='#D6B86A';">
+                <span x-show="!saving">Publish</span>
+                <span x-show="saving">Saving...</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Main Editor -->
+            <div class="lg:col-span-2 space-y-6">
+              <!-- Title -->
+              <div class="bg-white rounded-2xl p-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);">
+                <input type="text"
+                       x-model="editingPost.title"
+                       @input="autoGenerateSlug"
+                       placeholder="Post Title"
+                       class="w-full text-2xl font-bold placeholder-slate-400 border-0 focus:ring-0 p-0"
+                       style="color: #0f172a;">
+              </div>
+
+              <!-- Featured Image -->
+              <div class="bg-white rounded-2xl p-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);">
+                <h3 class="font-semibold mb-4" style="color: #0f172a;">Featured Image</h3>
+                <div x-show="!editingPost.featuredImageUrl"
+                     class="drop-zone rounded-lg p-8 text-center cursor-pointer"
+                     :class="{ 'active': draggingFeatured }"
+                     @click="$refs.featuredImageInput.click()"
+                     @dragover.prevent="draggingFeatured = true"
+                     @dragleave="draggingFeatured = false"
+                     @drop.prevent="handleFeaturedImageDrop($event)">
+                  <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                  <p class="text-gray-600">Click or drag image here</p>
+                  <input type="file" x-ref="featuredImageInput" @change="uploadFeaturedImage($event)" accept="image/*" class="hidden">
+                </div>
+                <div x-show="editingPost.featuredImageUrl" class="relative group cursor-pointer">
+                  <img :src="editingPost.featuredImageUrl" alt="Featured image" class="w-full h-48 object-cover rounded-lg">
+                  <!-- Hover Overlay with Actions -->
+                  <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center gap-3">
+                    <button @click="$refs.featuredImageInput.click()"
+                            class="px-4 py-2 bg-white text-gray-800 rounded-lg font-medium hover:bg-gray-100 transition flex items-center gap-2 shadow-lg">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                      </svg>
+                      Replace
+                    </button>
+                    <button @click="removeFeaturedImage"
+                            class="px-4 py-2 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition flex items-center gap-2 shadow-lg">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                      </svg>
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <input type="text"
+                       x-model="editingPost.featuredImageAlt"
+                       placeholder="Image alt text (for SEO)"
+                       class="mt-4 w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+              </div>
+
+              <!-- Content Blocks -->
+              <div class="bg-white rounded-2xl p-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);">
+                <h3 class="font-semibold mb-4" style="color: #0f172a;">Content</h3>
+
+                <!-- Blocks List -->
+                <div class="space-y-4 mb-4">
+                  <template x-for="(block, index) in editingPost.content" :key="index">
+                    <div class="block-item border border-slate-200 rounded-xl overflow-hidden">
+                      <!-- Block Header Bar -->
+                      <div class="flex items-center justify-between px-3 py-2 bg-slate-50 border-b border-slate-200">
+                        <!-- Block Type Label -->
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-medium" x-text="block.type"></span>
+
+                        <!-- Block Controls -->
+                        <div class="flex items-center gap-1">
+                          <button @click="moveBlock(index, -1)" :disabled="index === 0"
+                                  class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+                                  title="Move up">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                            </svg>
+                          </button>
+                          <button @click="moveBlock(index, 1)" :disabled="index === editingPost.content.length - 1"
+                                  class="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200 rounded-lg disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+                                  title="Move down">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                          </button>
+                          <div class="w-px h-4 bg-slate-300 mx-1"></div>
+                          <button @click="removeBlock(index)"
+                                  class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                  title="Delete block">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Block Content -->
+                      <div class="p-4">
+
+                      <!-- Heading Block -->
+                      <template x-if="block.type === 'heading'">
+                        <div>
+                          <select x-model="block.data.level" class="mb-2 text-sm border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 bg-white appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2020%2020%22%3E%3Cpath%20stroke%3D%22%236b7280%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%221.5%22%20d%3D%22m6%208%204%204%204-4%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.25rem_center] bg-no-repeat focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent">
+                            <option value="2">H2</option>
+                            <option value="3">H3</option>
+                            <option value="4">H4</option>
+                          </select>
+                          <input type="text" x-model="block.data.text" placeholder="Heading text"
+                                 class="w-full text-lg font-bold border-0 border-b border-slate-200 focus:ring-0 focus:border-[#D6B86A]" style="color: #0f172a;">
+                        </div>
+                      </template>
+
+                      <!-- Paragraph Block -->
+                      <template x-if="block.type === 'paragraph'">
+                        <textarea x-model="block.data.text" placeholder="Write your paragraph..."
+                                  rows="6"
+                                  class="w-full border border-slate-200 rounded-xl p-4 focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent resize-y min-h-[150px] text-slate-700 leading-relaxed transition-all"></textarea>
+                      </template>
+
+                      <!-- Image Block -->
+                      <template x-if="block.type === 'image'">
+                        <div>
+                          <div x-show="!block.data.previewUrl"
+                               class="drop-zone rounded-xl p-6 text-center cursor-pointer"
+                               @click="triggerBlockImageUpload(index)">
+                            <p class="text-slate-500">Click to upload image</p>
+                          </div>
+                          <div x-show="block.data.previewUrl" class="relative">
+                            <img :src="block.data.previewUrl" class="w-full h-32 object-cover rounded-xl">
+                          </div>
+                          <input type="text" x-model="block.data.alt" placeholder="Alt text"
+                                 class="mt-2 w-full text-sm px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all">
+                          <input type="text" x-model="block.data.caption" placeholder="Caption (optional)"
+                                 class="mt-2 w-full text-sm px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all">
+                        </div>
+                      </template>
+
+                      <!-- List Block -->
+                      <template x-if="block.type === 'list'">
+                        <div>
+                          <select x-model="block.data.style" class="mb-2 text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent">
+                            <option value="unordered">Bullet List</option>
+                            <option value="ordered">Numbered List</option>
+                          </select>
+                          <template x-for="(item, itemIndex) in block.data.items" :key="itemIndex">
+                            <div class="flex items-center gap-2 mb-2">
+                              <span class="text-slate-400" x-text="block.data.style === 'ordered' ? (itemIndex + 1) + '.' : '•'"></span>
+                              <input type="text" x-model="block.data.items[itemIndex]"
+                                     class="flex-1 border-0 border-b border-slate-200 focus:ring-0 focus:border-[#D6B86A]">
+                              <button @click="block.data.items.splice(itemIndex, 1)" class="text-slate-400 hover:text-red-500 transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                              </button>
+                            </div>
+                          </template>
+                          <button @click="block.data.items.push('')"
+                                  class="text-sm font-medium hover:underline" style="color: #D6B86A;">+ Add item</button>
+                        </div>
+                      </template>
+
+                      <!-- Quote Block -->
+                      <template x-if="block.type === 'quote'">
+                        <div>
+                          <textarea x-model="block.data.text" placeholder="Quote text..."
+                                    rows="2"
+                                    class="w-full border-0 border-l-4 pl-4 focus:ring-0 italic text-slate-700" style="border-left-color: #D6B86A;"></textarea>
+                          <input type="text" x-model="block.data.attribution" placeholder="- Attribution"
+                                 class="mt-2 w-full text-sm px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all">
+                        </div>
+                      </template>
+
+                      <!-- Video Block -->
+                      <template x-if="block.type === 'video'">
+                        <div>
+                          <select x-model="block.data.platform" class="mb-2 text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent">
+                            <option value="youtube">YouTube</option>
+                            <option value="vimeo">Vimeo</option>
+                          </select>
+                          <input type="text" x-model="block.data.videoId"
+                                 :placeholder="block.data.platform === 'youtube' ? 'YouTube Video ID (e.g., dQw4w9WgXcQ)' : 'Vimeo Video ID'"
+                                 class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all">
+                        </div>
+                      </template>
+
+                      <!-- CTA Block -->
+                      <template x-if="block.type === 'cta'">
+                        <div class="flex gap-4">
+                          <input type="text" x-model="block.data.text" placeholder="Button text"
+                                 class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all">
+                          <input type="text" x-model="block.data.url" placeholder="URL"
+                                 class="flex-1 px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all">
+                        </div>
+                      </template>
+
+                      <!-- Divider Block -->
+                      <template x-if="block.type === 'divider'">
+                        <hr class="border-t-2 border-slate-200">
+                      </template>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+
+                <!-- Add Block Button -->
+                <div class="relative" x-data="{ showBlockMenu: false }">
+                  <button @click="showBlockMenu = !showBlockMenu"
+                          class="w-full py-3 border-2 border-dashed border-slate-300 rounded-xl text-slate-500 hover:border-[#D6B86A] hover:text-[#D6B86A] transition-all font-medium">
+                    + Add Block
+                  </button>
+                  <div x-show="showBlockMenu" @click.away="showBlockMenu = false" x-cloak
+                       class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-slate-200 p-2 z-10 grid grid-cols-3 gap-2">
+                    <button @click="addBlock('heading'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h8m-8 6h16"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">Heading</span>
+                    </button>
+                    <button @click="addBlock('paragraph'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h12"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">Paragraph</span>
+                    </button>
+                    <button @click="addBlock('image'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">Image</span>
+                    </button>
+                    <button @click="addBlock('list'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">List</span>
+                    </button>
+                    <button @click="addBlock('quote'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">Quote</span>
+                    </button>
+                    <button @click="addBlock('video'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">Video</span>
+                    </button>
+                    <button @click="addBlock('cta'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">CTA</span>
+                    </button>
+                    <button @click="addBlock('divider'); showBlockMenu = false"
+                            class="p-3 text-center hover:bg-slate-50 rounded-xl transition-all">
+                      <svg class="w-6 h-6 mx-auto mb-1 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 12H4"/>
+                      </svg>
+                      <span class="text-xs text-slate-600">Divider</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+              <!-- Status & Category -->
+              <div class="bg-white rounded-2xl p-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);">
+                <h3 class="font-semibold mb-4" style="color: #0f172a;">Settings</h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Category</label>
+                    <select x-model="editingPost.category"
+                            class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+                      <template x-for="cat in categories" :key="cat.slug">
+                        <option :value="cat.slug" x-text="cat.name"></option>
+                      </template>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Status</label>
+                    <div class="flex items-center gap-2">
+                      <span :class="editingPost.status === 'published' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'"
+                            class="px-3 py-1 text-sm font-medium rounded-full capitalize" x-text="editingPost.status"></span>
+                    </div>
+                  </div>
+                  <div x-show="editingPost.id">
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Author</label>
+                    <p class="text-slate-600" x-text="editingPost.author_name || user?.username"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SEO Settings -->
+              <div class="bg-white rounded-2xl p-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);" x-data="{ seoOpen: false }">
+                <button @click="seoOpen = !seoOpen" class="flex items-center justify-between w-full">
+                  <h3 class="font-semibold" style="color: #0f172a;">SEO Settings</h3>
+                  <svg class="w-5 h-5 text-slate-400 transition-transform" :class="{ 'rotate-180': seoOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+                <div x-show="seoOpen" x-collapse class="mt-4 space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">
+                      URL Slug
+                    </label>
+                    <input type="text" x-model="editingPost.slug"
+                           class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">
+                      Meta Title
+                      <span class="text-slate-400 font-normal" x-text="'(' + (editingPost.metaTitle?.length || 0) + '/60)'"></span>
+                    </label>
+                    <input type="text" x-model="editingPost.metaTitle" maxlength="60"
+                           class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">
+                      Meta Description
+                      <span class="text-slate-400 font-normal" x-text="'(' + (editingPost.metaDescription?.length || 0) + '/160)'"></span>
+                    </label>
+                    <textarea x-model="editingPost.metaDescription" maxlength="160" rows="3"
+                              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm"></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium mb-2" style="color: #0f172a;">Canonical URL</label>
+                    <input type="text" x-model="editingPost.canonicalUrl" placeholder="https://..."
+                           class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D6B86A] focus:border-transparent transition-all text-sm">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+    </div>
+  </main>
+
+  <!-- Hidden file input for block images -->
+  <input type="file" x-ref="blockImageInput" @change="handleBlockImageUpload($event)" accept="image/*" class="hidden">
+
+  <!-- Toast Notification -->
+  <div x-show="toast.show" x-cloak
+       x-transition:enter="transition ease-out duration-300"
+       x-transition:enter-start="opacity-0 translate-y-2"
+       x-transition:enter-end="opacity-100 translate-y-0"
+       x-transition:leave="transition ease-in duration-200"
+       x-transition:leave-start="opacity-100 translate-y-0"
+       x-transition:leave-end="opacity-0 translate-y-2"
+       :class="toast.type === 'error' ? 'bg-red-500' : 'bg-emerald-500'"
+       class="fixed bottom-4 right-4 px-6 py-3 rounded-xl text-white shadow-lg z-50 font-medium">
+    <span x-text="toast.message"></span>
+  </div>
+
+  <script>
+    function blogManager() {
+      return {
+        user: null,
+        sidebarOpen: false,
+        view: 'list', // 'list' or 'editor'
+        posts: [],
+        categories: [],
+        counts: { total: 0, published: 0, draft: 0 },
+        pendingComments: 0,
+        editingPost: {
+          id: null,
+          title: '',
+          slug: '',
+          category: 'kitchen',
+          content: [],
+          featuredImageKey: null,
+          featuredImageUrl: null,
+          featuredImageAlt: '',
+          metaTitle: '',
+          metaDescription: '',
+          canonicalUrl: '',
+          status: 'draft',
+          author_name: null,
+        },
+        saving: false,
+        draggingFeatured: false,
+        uploadingBlockIndex: null,
+        toast: { show: false, message: '', type: 'success' },
+
+        getEmptyPost() {
+          return {
+            id: null,
+            title: '',
+            slug: '',
+            category: 'kitchen',
+            content: [],
+            featuredImageKey: null,
+            featuredImageUrl: null,
+            featuredImageAlt: '',
+            metaTitle: '',
+            metaDescription: '',
+            canonicalUrl: '',
+            status: 'draft',
+            author_name: null,
+          };
+        },
+
+        async init() {
+          await this.checkAuth();
+          await this.loadCategories();
+          await this.loadPosts();
+          await this.loadPendingComments();
+        },
+
+        async checkAuth() {
+          try {
+            const res = await fetch('/api/auth/check');
+            const data = await res.json();
+            if (!data.authenticated) {
+              window.location.href = '/admin/';
+              return;
+            }
+            this.user = data.user;
+          } catch (err) {
+            console.error('Auth check failed:', err);
+            window.location.href = '/admin/';
+          }
+        },
+
+        async loadCategories() {
+          try {
+            const res = await fetch('/api/admin/blog/categories');
+            const data = await res.json();
+            if (data.success) {
+              this.categories = data.categories;
+            }
+          } catch (err) {
+            console.error('Failed to load categories:', err);
+          }
+        },
+
+        async loadPosts() {
+          try {
+            const res = await fetch('/api/admin/blog');
+            const data = await res.json();
+            if (data.success) {
+              this.posts = data.posts;
+              this.counts = data.counts;
+            }
+          } catch (err) {
+            console.error('Failed to load posts:', err);
+          }
+        },
+
+        async loadPendingComments() {
+          try {
+            const res = await fetch('/api/admin/blog/comments?status=pending');
+            const data = await res.json();
+            if (data.success) {
+              this.pendingComments = data.comments.length;
+            }
+          } catch (err) {
+            console.error('Failed to load pending comments:', err);
+          }
+        },
+
+        createNewPost() {
+          this.editingPost = this.getEmptyPost();
+          this.view = 'editor';
+        },
+
+        async editPost(id) {
+          try {
+            const res = await fetch(`/api/admin/blog/${id}`);
+            const data = await res.json();
+            if (data.success) {
+              this.editingPost = {
+                id: data.post.id,
+                title: data.post.title,
+                slug: data.post.slug,
+                category: data.post.category,
+                content: data.post.content || [],
+                featuredImageKey: data.post.featured_image_key,
+                featuredImageUrl: data.post.featuredImageUrl,
+                featuredImageAlt: data.post.featured_image_alt || '',
+                metaTitle: data.post.meta_title || '',
+                metaDescription: data.post.meta_description || '',
+                canonicalUrl: data.post.canonical_url || '',
+                status: data.post.status,
+                author_name: data.post.author_name,
+              };
+              this.view = 'editor';
+            }
+          } catch (err) {
+            console.error('Failed to load post:', err);
+            this.showToast('Failed to load post', 'error');
+          }
+        },
+
+        cancelEdit() {
+          this.view = 'list';
+          this.editingPost = this.getEmptyPost();
+        },
+
+        async savePost(status) {
+          if (!this.editingPost.title.trim()) {
+            this.showToast('Title is required', 'error');
+            return;
+          }
+
+          this.saving = true;
+          try {
+            const payload = {
+              title: this.editingPost.title,
+              slug: this.editingPost.slug,
+              category: this.editingPost.category,
+              content: this.editingPost.content,
+              featuredImageKey: this.editingPost.featuredImageKey,
+              featuredImageAlt: this.editingPost.featuredImageAlt,
+              metaTitle: this.editingPost.metaTitle,
+              metaDescription: this.editingPost.metaDescription,
+              canonicalUrl: this.editingPost.canonicalUrl,
+              status: status,
+            };
+
+            const url = this.editingPost.id
+              ? `/api/admin/blog/${this.editingPost.id}`
+              : '/api/admin/blog';
+            const method = this.editingPost.id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+              method,
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+            if (data.success) {
+              this.showToast(data.message || 'Post saved successfully', 'success');
+              await this.loadPosts();
+              this.view = 'list';
+              this.editingPost = this.getEmptyPost();
+            } else {
+              throw new Error(data.message);
+            }
+          } catch (err) {
+            console.error('Save failed:', err);
+            this.showToast(err.message || 'Failed to save post', 'error');
+          } finally {
+            this.saving = false;
+          }
+        },
+
+        async deletePost(id) {
+          if (!confirm('Are you sure you want to delete this post? This cannot be undone.')) return;
+
+          try {
+            const res = await fetch(`/api/admin/blog/${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+              this.showToast('Post deleted', 'success');
+              await this.loadPosts();
+            } else {
+              throw new Error(data.message);
+            }
+          } catch (err) {
+            console.error('Delete failed:', err);
+            this.showToast(err.message || 'Failed to delete post', 'error');
+          }
+        },
+
+        autoGenerateSlug() {
+          if (!this.editingPost.id) {
+            this.editingPost.slug = this.editingPost.title
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/-+/g, '-')
+              .replace(/^-|-$/g, '')
+              .substring(0, 100);
+          }
+        },
+
+        // Featured Image
+        async uploadFeaturedImage(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+          await this.uploadImage(file, 'featured');
+        },
+
+        async handleFeaturedImageDrop(event) {
+          this.draggingFeatured = false;
+          const file = event.dataTransfer.files[0];
+          if (file && file.type.startsWith('image/')) {
+            await this.uploadImage(file, 'featured');
+          }
+        },
+
+        removeFeaturedImage() {
+          this.editingPost.featuredImageKey = null;
+          this.editingPost.featuredImageUrl = null;
+        },
+
+        // Block Image
+        triggerBlockImageUpload(index) {
+          this.uploadingBlockIndex = index;
+          this.$refs.blockImageInput.click();
+        },
+
+        async handleBlockImageUpload(event) {
+          const file = event.target.files[0];
+          if (!file || this.uploadingBlockIndex === null) return;
+          await this.uploadImage(file, 'block', this.uploadingBlockIndex);
+          this.uploadingBlockIndex = null;
+          event.target.value = '';
+        },
+
+        async uploadImage(file, type, blockIndex = null) {
+          const formData = new FormData();
+          formData.append('image', file);
+
+          try {
+            const res = await fetch('/api/admin/blog/upload', {
+              method: 'POST',
+              body: formData,
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              if (type === 'featured') {
+                this.editingPost.featuredImageKey = data.key;
+                this.editingPost.featuredImageUrl = data.previewUrl;
+              } else if (type === 'block' && blockIndex !== null) {
+                this.editingPost.content[blockIndex].data.key = data.key;
+                this.editingPost.content[blockIndex].data.previewUrl = data.previewUrl;
+              }
+            } else {
+              throw new Error(data.message);
+            }
+          } catch (err) {
+            console.error('Upload failed:', err);
+            this.showToast('Failed to upload image', 'error');
+          }
+        },
+
+        // Block Management
+        addBlock(type) {
+          const blockData = {
+            heading: { level: 2, text: '' },
+            paragraph: { text: '' },
+            image: { key: null, alt: '', caption: '', previewUrl: null },
+            list: { style: 'unordered', items: [''] },
+            quote: { text: '', attribution: '' },
+            video: { platform: 'youtube', videoId: '' },
+            cta: { text: 'Schedule a Consultation', url: '/pages/consultation.html' },
+            divider: {},
+          };
+
+          this.editingPost.content.push({
+            type,
+            data: blockData[type],
+          });
+        },
+
+        removeBlock(index) {
+          this.editingPost.content.splice(index, 1);
+        },
+
+        moveBlock(index, direction) {
+          const newIndex = index + direction;
+          if (newIndex < 0 || newIndex >= this.editingPost.content.length) return;
+
+          const block = this.editingPost.content[index];
+          this.editingPost.content.splice(index, 1);
+          this.editingPost.content.splice(newIndex, 0, block);
+        },
+
+        formatDate(dateStr) {
+          if (!dateStr) return '';
+          return new Date(dateStr).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          });
+        },
+
+        showToast(message, type = 'success') {
+          this.toast = { show: true, message, type };
+          setTimeout(() => {
+            this.toast.show = false;
+          }, 3000);
+        },
+
+        async logout() {
+          try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin/';
+          } catch (err) {
+            console.error('Logout failed:', err);
+          }
+        },
+      };
+    }
+  </script>
+</body>
+</html>

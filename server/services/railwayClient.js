@@ -23,6 +23,15 @@ export function getRailwayClient() {
   // Validate configuration before creating client
   validateRailwayConfig();
 
+  // Log configuration for debugging (mask secrets)
+  console.log('=== Railway Buckets Configuration ===');
+  console.log('Bucket Name:', railwayConfig.bucketName);
+  console.log('Endpoint:', railwayConfig.endpoint);
+  console.log('Region:', railwayConfig.region);
+  console.log('Access Key ID:', railwayConfig.accessKeyId ? `${railwayConfig.accessKeyId.substring(0, 4)}...` : 'NOT SET');
+  console.log('Secret Key:', railwayConfig.secretAccessKey ? 'SET (hidden)' : 'NOT SET');
+  console.log('=====================================');
+
   railwayClient = new S3Client({
     region: railwayConfig.region,
     endpoint: railwayConfig.endpoint,
@@ -47,6 +56,8 @@ export function getRailwayClient() {
 export async function uploadToRailway(body, key, contentType) {
   const client = getRailwayClient();
 
+  console.log(`Uploading to Railway: Bucket="${railwayConfig.bucketName}", Key="${key}"`);
+
   const command = new PutObjectCommand({
     Bucket: railwayConfig.bucketName,
     Key: key,
@@ -55,8 +66,16 @@ export async function uploadToRailway(body, key, contentType) {
     CacheControl: 'public, max-age=31536000, immutable',
   });
 
-  await client.send(command);
-  return key;
+  try {
+    await client.send(command);
+    console.log(`✓ Upload successful: ${key}`);
+    return key;
+  } catch (err) {
+    console.error(`✗ Upload failed for ${key}:`, err.Code || err.name, err.message);
+    console.error('Bucket attempted:', railwayConfig.bucketName);
+    console.error('Endpoint used:', railwayConfig.endpoint);
+    throw err;
+  }
 }
 
 /**
