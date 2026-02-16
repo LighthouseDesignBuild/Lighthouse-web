@@ -497,7 +497,7 @@
 }
 
 
-#main-navigation a {
+#main-navigation a.scrolled,
+#main-navigation a.text-lighthouse-navy {
     color: #ffffff !important;
 }
-
