@@ -29,30 +29,28 @@ const app = express();
 
 // Trust proxy - required for Railway/Docker/cloud environments behind reverse proxy
 // This allows Express to trust X-Forwarded-* headers for secure cookies
-if (process.env.NODE_ENV === "production") {
-  app.set("trust proxy", 1);
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
 }
 
 // Initialize memory session store (with periodic cleanup)
 const MemoryStore = createMemoryStore(session);
 
 // Session configuration
-app.use(
-  session({
-    store: new MemoryStore({
-      checkPeriod: 86400000 // Prune expired entries every 24h
-    }),
-    secret: process.env.SESSION_SECRET || "lighthouse-admin-secret-change-in-production",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "lax", // Prevents CSRF while allowing same-site navigation
-      maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
-  })
-);
+app.use(session({
+  store: new MemoryStore({
+    checkPeriod: 86400000 // Prune expired entries every 24h
+  }),
+  secret: process.env.SESSION_SECRET || 'lighthouse-admin-secret-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'lax', // Prevents CSRF while allowing same-site navigation
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
 
 // JSON body parser
 app.use(express.json());
@@ -64,101 +62,31 @@ app.use(express.urlencoded({ extended: true }));
 const HUBSPOT_RSS_URL =
   process.env.HUBSPOT_RSS_URL || "https://blog.raymonddesignbuilders.com/news-info/rss.xml";
 
-/**
- * ============================================================
- * URL / ROUTING CHANGES
- * - Serve /pages/* content at root URLs (no /pages prefix)
- * - Keep old /pages/* working via 301 redirects
- * - Support “clean URLs” (no .html) at the root
- * - Add specific 301 redirects for renamed slugs (kitchen -> kitchen-remodeling, etc.)
- * ============================================================
- */
-
-// Your HTML lives in /pages on disk:
-const PAGES_DIR = path.join(__dirname, "pages");
-
-// 1) Specific 301 redirects for renamed slugs (from your spreadsheet)
-const customRedirects = {
-  "/pages/services/kitchen": "/services/kitchen-remodeling",
-  "/pages/services/bathroom": "/services/bathroom-remodeling",
-  "/pages/services/home_additions": "/services/home-additions",
-  "/pages/services/outdoor": "/services/outdoor-living"
-};
-
-// Optional: if you also want to catch trailing slashes for these old URLs:
-const normalizePath = (p) => (p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p);
-
+// Clean URL handler - serve .html files for URLs without extension
 app.use((req, res, next) => {
-  const reqPath = normalizePath(req.path);
-  const target = customRedirects[reqPath];
-  if (target) {
+  if (req.path.startsWith('/pages/') && !req.path.includes('.')) {
+    const htmlPath = path.join(__dirname, req.path + '.html');
+    if (fs.existsSync(htmlPath)) {
+      return res.sendFile(htmlPath);
+    }
+  }
+  next();
+});
+
+// Redirect .html URLs to clean URLs (301 permanent redirect for SEO)
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html') && req.path.startsWith('/pages/')) {
+    const cleanPath = req.path.slice(0, -5);
     // Preserve query string in redirect
-    const queryString = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
-    return res.redirect(301, target + queryString);
-  }
-  next();
-});
-
-// 2) Generic 301 redirect: /pages/... -> /...
-app.use((req, res, next) => {
-  const reqPath = normalizePath(req.path);
-  if (reqPath.startsWith("/pages/")) {
-    const cleanPath = reqPath.replace(/^\/pages/, "");
-    const queryString = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
     return res.redirect(301, cleanPath + queryString);
   }
   next();
 });
 
-// 3) Clean URL handler at ROOT: /about -> serves /pages/about.html
-//    (skips /api and /admin; skips requests that already have a file extension)
-app.use((req, res, next) => {
-  const reqPath = normalizePath(req.path);
-
-  if (
-    reqPath === "/" ||
-    reqPath.startsWith("/api") ||
-    reqPath.startsWith("/admin") ||
-    reqPath.includes(".")
-  ) {
-    return next();
-  }
-
-  const htmlPath = path.join(PAGES_DIR, reqPath + ".html");
-  if (fs.existsSync(htmlPath)) {
-    return res.sendFile(htmlPath);
-  }
-
-  next();
-});
-
-// 4) Redirect .html -> clean URL at ROOT (SEO)
-app.use((req, res, next) => {
-  const reqPath = normalizePath(req.path);
-
-  if (
-    reqPath.endsWith(".html") &&
-    !reqPath.startsWith("/admin") &&
-    !reqPath.startsWith("/api")
-  ) {
-    const cleanPath = reqPath.slice(0, -5);
-    const queryString = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
-    return res.redirect(301, cleanPath + queryString);
-  }
-
-  next();
-});
-
-// 5) Serve static files from /pages at the site root (so /services/x.html works)
-const STATIC_DIR = PAGES_DIR;
+// Serve static files. Adjust this path if the site assets live elsewhere.
+const STATIC_DIR = path.join(__dirname, ".");
 app.use(express.static(STATIC_DIR));
-
-/**
- * NOTE:
- * If you have assets that live OUTSIDE /pages (like /public, /dist, etc.)
- * and they must still be reachable, you can add additional static mounts here, e.g.:
- * app.use("/public", express.static(path.join(__dirname, "public")));
- */
 
 // Mount admin API routes
 app.use("/api/auth", authRoutes);
@@ -172,15 +100,20 @@ app.use("/api/admin/blog", adminBlogRoutes);
 // Mount backup routes (admin only)
 app.use("/api/admin/backup", backupRoutes);
 
+// Mount admin comment routes (under /api/admin for consistency)
+// Note: These are included in adminBlogRoutes at /api/admin/blog/comments/*
+
 // Serve admin pages
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "admin", "index.html"));
 });
 app.get("/admin/:page", (req, res) => {
+  // Extract the requested admin page
   const page = req.params.page || "index.html";
   const filePath = path.join(__dirname, "admin", page.endsWith(".html") ? page : `${page}.html`);
   res.sendFile(filePath, (err) => {
     if (err) {
+      // If file doesn't exist, serve the main admin page
       res.sendFile(path.join(__dirname, "admin", "index.html"));
     }
   });
@@ -191,7 +124,9 @@ async function fetchHubspotRss() {
   const resp = await fetch(HUBSPOT_RSS_URL);
 
   if (!resp.ok) {
-    throw new Error(`Failed RSS fetch: ${resp.status} ${resp.statusText} for ${HUBSPOT_RSS_URL}`);
+    throw new Error(
+      `Failed RSS fetch: ${resp.status} ${resp.statusText} for ${HUBSPOT_RSS_URL}`
+    );
   }
 
   const xml = await resp.text();
@@ -203,7 +138,9 @@ async function fetchHubspotRss() {
 
 // Helper: Normalize RSS item to consistent format
 function normalizeItem(item) {
-  const rawGuid = (item.guid && (item.guid._ || item.guid)) || item.link || item.title || "";
+  // GUID can be an object or string.
+  const rawGuid =
+    (item.guid && (item.guid._ || item.guid)) || item.link || item.title || "";
 
   const id = rawGuid;
   const title = item.title || "";
@@ -211,6 +148,8 @@ function normalizeItem(item) {
   const description = item.description || "";
   const pubDate = item.pubDate || "";
 
+  // Some HubSpot RSS feeds include full content in content:encoded.
+  // If not present, fall back to description.
   const contentHtml =
     item["content:encoded"] && item["content:encoded"].trim().length > 0
       ? item["content:encoded"]
@@ -239,30 +178,32 @@ async function scrapeHubSpotBlogPost(url) {
     const $ = cheerio.load(html);
 
     // Remove unwanted elements globally
-    $("script").remove();
-    $("style").remove();
-    $(".hs-cta-wrapper").remove();
-    $(".hs-form").remove();
-    $('img[src*="track.hubspot.com"]').remove();
-    $("nav").remove();
-    $("header").remove();
-    $("footer").remove();
-    $(".header").remove();
-    $(".footer").remove();
-    $(".navigation").remove();
+    $('script').remove();
+    $('style').remove();
+    $('.hs-cta-wrapper').remove();
+    $('.hs-form').remove();
+    $('img[src*="track.hubspot.com"]').remove(); // Remove tracking pixels
+    $('nav').remove(); // Remove navigation
+    $('header').remove(); // Remove header
+    $('footer').remove(); // Remove footer
+    $('.header').remove();
+    $('.footer').remove();
+    $('.navigation').remove();
 
-    let content = "";
+    // Try to find the main blog content using HubSpot-specific selectors
+    let content = '';
 
+    // Try different common HubSpot blog content selectors in order of specificity
     const selectors = [
-      "#main-content",
-      ".blog-post-content",
-      ".post-body",
-      ".hs-blog-post-body",
-      ".blog-index__post-content",
-      "article .post-content",
-      ".blog-post .body",
-      "main",
-      "article"
+      '#main-content',
+      '.blog-post-content',
+      '.post-body',
+      '.hs-blog-post-body',
+      '.blog-index__post-content',
+      'article .post-content',
+      '.blog-post .body',
+      'main',
+      'article'
     ];
 
     for (const selector of selectors) {
@@ -274,62 +215,66 @@ async function scrapeHubSpotBlogPost(url) {
       }
     }
 
+    // Clean up the content
     if (content) {
+      // Load content into new cheerio instance for cleaning
       const $content = cheerio.load(content);
 
-      $content("h1").first().remove();
+      // Remove the title (h1) since we display it separately from RSS feed
+      $content('h1').first().remove();
 
-      $content(".sidebar").remove();
-      $content(".related-posts").remove();
-      $content(".comments").remove();
-      $content(".share-buttons").remove();
-      $content("nav").remove();
-      $content(".hhs-blog-grid-cards").remove();
-      $content(".post-page").remove();
-      $content(".blog-index").remove();
+      // Remove any remaining unwanted elements from content
+      $content('.sidebar').remove();
+      $content('.related-posts').remove();
+      $content('.comments').remove();
+      $content('.share-buttons').remove();
+      $content('nav').remove();
+      $content('.hhs-blog-grid-cards').remove(); 
+      $content('.post-page').remove(); 
+      $content('.blog-index').remove(); 
 
       // Fix image paths to be absolute
-      $content("img").each((i, img) => {
-        const src = $content(img).attr("src");
-        if (src && src.startsWith("/")) {
+      $content('img').each((i, img) => {
+        const src = $content(img).attr('src');
+        if (src && src.startsWith('/')) {
           const baseUrl = new URL(url).origin;
-          $content(img).attr("src", baseUrl + src);
+          $content(img).attr('src', baseUrl + src);
         }
       });
 
       // Fix link paths - convert HubSpot blog internal links to point to our site
-      $content("a").each((i, link) => {
-        const href = $content(link).attr("href");
+      $content('a').each((i, link) => {
+        const href = $content(link).attr('href');
         if (href) {
-          if (href.includes("blog.raymonddesignbuilders.com/news-info")) {
-            const postPath = href.split("/news-info/")[1];
+          // Check if it's a HubSpot blog link
+          if (href.includes('blog.raymonddesignbuilders.com/news-info')) {
+            // This is a blog post link - convert to our blog-post.html format
+            const postPath = href.split('/news-info/')[1];
             if (postPath && postPath.trim()) {
-              $content(link).attr("href", `./blog-post.html?id=${encodeURIComponent(href)}`);
+              $content(link).attr('href', `./blog-post.html?id=${encodeURIComponent(href)}`);
             }
-          } else if (
-            href.includes("raymonddesignbuilders.com") &&
-            !href.includes("blog.raymonddesignbuilders.com")
-          ) {
-            if (href.includes("/contact") || href.toLowerCase().includes("contact")) {
-              $content(link).attr("href", "./consultation.html");
-            } else if (
-              href.includes("/portfolio") ||
-              href.includes("/projects") ||
-              href.includes("/our-work")
-            ) {
-              $content(link).attr("href", "./portfolio.html");
-            } else if (href.includes("/gallery")) {
-              $content(link).attr("href", "./gallery.html");
-            } else if (href.includes("/about")) {
-              $content(link).attr("href", "./about.html");
-            } else if (href.includes("/services")) {
-              $content(link).attr("href", "./services.html");
+          } else if (href.includes('raymonddesignbuilders.com') && !href.includes('blog.raymonddesignbuilders.com')) {
+            // This is a link to the old main site - convert to new site pages
+
+            // Map common old site URLs to new site pages
+            if (href.includes('/contact') || href.toLowerCase().includes('contact')) {
+              $content(link).attr('href', './consultation.html');
+            } else if (href.includes('/portfolio') || href.includes('/projects') || href.includes('/our-work')) {
+              $content(link).attr('href', './portfolio.html');
+            } else if (href.includes('/gallery')) {
+              $content(link).attr('href', './gallery.html');
+            } else if (href.includes('/about')) {
+              $content(link).attr('href', './about.html');
+            } else if (href.includes('/services')) {
+              $content(link).attr('href', './services.html');
             } else {
-              $content(link).attr("href", "./index.html");
+              // Default to home page for other old site links
+              $content(link).attr('href', './index.html');
             }
-          } else if (href.startsWith("/") && !href.startsWith("//")) {
+          } else if (href.startsWith('/') && !href.startsWith('//')) {
+            // Relative link - make absolute to HubSpot site
             const baseUrl = new URL(url).origin;
-            $content(link).attr("href", baseUrl + href);
+            $content(link).attr('href', baseUrl + href);
           }
         }
       });
@@ -338,21 +283,13 @@ async function scrapeHubSpotBlogPost(url) {
     }
 
     if (!content || content.trim().length < 50) {
-      return (
-        '<p>Content could not be extracted from this blog post. <a href="' +
-        url +
-        '" target="_blank">View original post</a></p>'
-      );
+      return '<p>Content could not be extracted from this blog post. <a href="' + url + '" target="_blank">View original post</a></p>';
     }
 
     return content;
   } catch (error) {
-    console.error("Error scraping blog post:", error);
-    return (
-      '<p>Unable to load blog post content. <a href="' +
-      url +
-      '" target="_blank">View original post</a></p>'
-    );
+    console.error('Error scraping blog post:', error);
+    return '<p>Unable to load blog post content. <a href="' + url + '" target="_blank">View original post</a></p>';
   }
 }
 
@@ -365,17 +302,17 @@ app.get("/health", (req, res) => {
 app.get("/sitemap.xml", async (req, res) => {
   try {
     const sitemap = await generateXMLSitemap();
-    res.header("Content-Type", "application/xml");
+    res.header('Content-Type', 'application/xml');
     res.send(sitemap);
   } catch (error) {
-    console.error("Error generating sitemap:", error);
-    res.status(500).send("Error generating sitemap");
+    console.error('Error generating sitemap:', error);
+    res.status(500).send('Error generating sitemap');
   }
 });
 
 // Serve home page at root
 app.get("/", (req, res) => {
-  res.sendFile(path.join(PAGES_DIR, "index.html"));
+  res.sendFile(path.join(__dirname, "pages", "index.html"));
 });
 
 // API: Fetch and return HubSpot RSS as JSON (blog listing)
@@ -384,13 +321,14 @@ app.get("/api/hubspot-blog", async (req, res) => {
     const items = await fetchHubspotRss();
     const posts = items.map((item) => {
       const normalized = normalizeItem(item);
+      // For the listing endpoint, we can omit contentHtml or keep it.
       return {
         id: normalized.id,
         title: normalized.title,
         link: normalized.link,
         description: normalized.description,
         pubDate: normalized.pubDate,
-        guid: normalized.id
+        guid: normalized.id // For backwards compatibility
       };
     });
 
@@ -425,6 +363,7 @@ app.get("/api/hubspot-blog/post", async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
+    // Scrape the full content from the HubSpot blog post URL
     console.log(`Fetching full content from: ${target.link}`);
     const scrapedContent = await scrapeHubSpotBlogPost(target.link);
 
@@ -445,7 +384,9 @@ app.get("/api/hubspot-blog/post", async (req, res) => {
 // Export for Vercel serverless
 export default app;
 
-// Start server (Railway will use this)
+// Start server
+// Note: Vercel ignores this and uses the exported app above
+// Railway and other PaaS platforms will use this
 const PORT = process.env.PORT || 4000;
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
@@ -453,15 +394,14 @@ if (!process.env.VERCEL) {
     console.log(`\n📍 Server listening on http://localhost:${PORT}`);
     console.log(`📂 Serving static files from: ${STATIC_DIR}`);
     console.log(`\n📄 Available Pages:`);
-    console.log(`   • Home:         http://localhost:${PORT}/`);
-    console.log(`   • Blog:         http://localhost:${PORT}/blog`);
-    console.log(`   • Portfolio:    http://localhost:${PORT}/portfolio`);
-    console.log(`   • Gallery:      http://localhost:${PORT}/gallery`);
-    console.log(`   • Consultation: http://localhost:${PORT}/consultation`);
-    console.log(`\n🔁  Old URLs (301 redirect):`);
-    console.log(`   • /pages/*  -> /*`);
+    console.log(`   • Home:         http://localhost:${PORT}/pages/index.html`);
+    console.log(`   • Blog:         http://localhost:${PORT}/pages/blog.html`);
+    console.log(`   • Portfolio:    http://localhost:${PORT}/pages/portfolio.html`);
+    console.log(`   • Gallery:      http://localhost:${PORT}/pages/gallery.html`);
+    console.log(`   • Consultation: http://localhost:${PORT}/pages/consultation.html`);
     console.log(`\n🔐 Admin Panel:`);
     console.log(`   • Admin Login:  http://localhost:${PORT}/admin`);
+    console.log(`   • Default Login: admin /lighthouse@2026!`);
     console.log(`\n🔌 API Endpoints:`);
     console.log(`   • Blog API:     http://localhost:${PORT}/api/blog`);
     console.log(`   • Gallery API:  http://localhost:${PORT}/api/gallery`);
