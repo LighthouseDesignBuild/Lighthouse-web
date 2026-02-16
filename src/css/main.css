@@ -501,3 +501,8 @@
 #main-navigation a.text-lighthouse-navy {
     color: #ffffff !important;
 }
+
+
+#main-navigation div[x-show] a {
+    color: #0f2e4a !important;   
+}
