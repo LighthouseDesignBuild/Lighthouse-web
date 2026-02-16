@@ -491,3 +491,13 @@
 .bg-transparent {
     background-color: #173d5a !important;
 }
+
+#main-navigation {
+    background-color: #0f2e4a !important; /* Navy */
+}
+
+
+.main-nav a {
+    color: #ffffff !important;
+}
+
