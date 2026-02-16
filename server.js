@@ -62,27 +62,77 @@ app.use(express.urlencoded({ extended: true }));
 const HUBSPOT_RSS_URL =
   process.env.HUBSPOT_RSS_URL || "https://blog.raymonddesignbuilders.com/news-info/rss.xml";
 
-// Clean URL handler - serve .html files for URLs without extension
+// ============================================================
+// URL cleanup + redirects
+// - Keep assets working (/dist, etc.) by continuing to serve STATIC_DIR = __dirname
+// - 301 redirect old /pages/* URLs to clean root URLs
+// - Support clean URLs without .html at root: /about -> /pages/about.html
+// - Add custom redirects for renamed slugs
+// ============================================================
+
+// Custom 301 redirects for renamed slugs (add more as needed)
+const customRedirects = {
+  "/pages/services/kitchen": "/services/kitchen-remodeling",
+  "/pages/services/bathroom": "/services/bathroom-remodeling",
+  "/pages/services/home_additions": "/services/home-additions",
+  "/pages/services/outdoor": "/services/outdoor-living"
+};
+
+const stripTrailingSlash = (p) => (p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p);
+
+// 1) Custom redirects first (preserve query string)
 app.use((req, res, next) => {
-  if (req.path.startsWith('/pages/') && !req.path.includes('.')) {
-    const htmlPath = path.join(__dirname, req.path + '.html');
-    if (fs.existsSync(htmlPath)) {
-      return res.sendFile(htmlPath);
-    }
+  const p = stripTrailingSlash(req.path);
+  const target = customRedirects[p];
+  if (target) {
+    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    return res.redirect(301, target + qs);
   }
   next();
 });
 
-// Redirect .html URLs to clean URLs (301 permanent redirect for SEO)
+// 2) Generic: /pages/... -> /...
 app.use((req, res, next) => {
-  if (req.path.endsWith('.html') && req.path.startsWith('/pages/')) {
-    const cleanPath = req.path.slice(0, -5);
-    // Preserve query string in redirect
-    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-    return res.redirect(301, cleanPath + queryString);
+  const p = stripTrailingSlash(req.path);
+  if (p.startsWith("/pages/")) {
+    const clean = p.replace(/^\/pages/, "");
+    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    return res.redirect(301, clean + qs);
   }
   next();
 });
+
+// 3) Clean URL support at root: /about -> serves /pages/about.html
+//    (do NOT intercept real asset folders like /dist)
+app.use((req, res, next) => {
+  const p = stripTrailingSlash(req.path);
+
+  const skipPrefixes = ["/api", "/admin", "/dist", "/src", "/uploads", "/public", "/assets", "/server"];
+  if (p === "/" || p.includes(".") || skipPrefixes.some((pre) => p.startsWith(pre))) {
+    return next();
+  }
+
+  const htmlPath = path.join(__dirname, "pages", p + ".html");
+  if (fs.existsSync(htmlPath)) {
+    return res.sendFile(htmlPath);
+  }
+
+  next();
+});
+
+// 4) Redirect .html -> clean URL (root + /pages), for SEO
+app.use((req, res, next) => {
+  const p = stripTrailingSlash(req.path);
+
+  if (p.endsWith(".html") && !p.startsWith("/admin") && !p.startsWith("/api")) {
+    const clean = p.slice(0, -5).replace(/^\/pages/, "");
+    const qs = req.url.includes("?") ? req.url.slice(req.url.indexOf("?")) : "";
+    return res.redirect(301, clean + qs);
+  }
+
+  next();
+});
+
 
 // Serve static files. Adjust this path if the site assets live elsewhere.
 const STATIC_DIR = path.join(__dirname, ".");
