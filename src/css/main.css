@@ -486,4 +486,8 @@
 }
 
 .font-body { font-family: "Lora", serif !important;
-  }
+}
+
+.bg-transparent {
+    background-color: #173d5a !important;
+}
