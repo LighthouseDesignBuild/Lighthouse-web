@@ -65,6 +65,14 @@
                     </div>
                 </div>
 
+
+                  <a href="/pages/portfolio"
+                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                    portfolio
+                </a>
+
+
                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                     <a href="/pages/services#services-intro" class="relative flex items-center text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
                             :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
@@ -97,12 +105,7 @@
                     </div>
                 </div>
 
-                <a href="/pages/process"
-                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
-                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
-                    Process
-                </a>
-
+              
                 <a href="/pages/gallery"
                     class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
                     :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
