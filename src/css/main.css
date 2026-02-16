@@ -480,3 +480,10 @@
     min-height: 140vh !important; 
   }
 }
+
+.font-display {
+    font-family: "Cinzel", serif !important;
+}
+
+p { font-family: "Lora", serif !important;
+  }
