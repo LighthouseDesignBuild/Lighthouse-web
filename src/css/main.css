@@ -477,6 +477,6 @@
 
 @layer utilities {
   .min-h-screen {
-    min-height: 140vh; 
+    min-height: 140vh !important; 
   }
 }
