@@ -66,12 +66,6 @@
                 </div>
 
 
-                  <a href="/pages/portfolio"
-                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
-                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
-                    portfolio
-                </a>
-
 
                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                     <a href="/pages/services#services-intro" class="relative flex items-center text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
@@ -105,18 +99,22 @@
                     </div>
                 </div>
 
+                
+                  <a href="/pages/portfolio"
+                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
+                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
+                    Portfolio
+                </a>
+
+
               
-                <a href="/pages/gallery"
+           <!--     <a href="/pages/gallery"
                     class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
                     :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
                     Gallery
-                </a>
+                </a> -->
 
-                <a href="/pages/blog"
-                    class="relative text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
-                    :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
-                    Blog
-                </a>
+               
                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
                     <a href="/pages/resources" class="relative flex items-center text-base font-semibold transition-colors duration-300 nav-link font-heading hover:text-lighthouse-teal"
                             :class="scrolled ? 'text-lighthouse-navy dark:text-gray-100' : 'text-white'">
@@ -132,6 +130,12 @@
                                 <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
                                 Service Area
                             </a>
+
+                             <a href="/pages/blog" class="flex items-center px-4 py-3 text-sm font-medium transition-all duration-300 rounded-xl text-lighthouse-navy dark:text-gray-100 hover:bg-lighthouse-accent-gold/10 hover:text-lighthouse-accent-gold group">
+                                <span class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-lighthouse-accent-gold/10 group-hover:bg-lighthouse-accent-gold/20"><svg class="w-4 h-4 text-lighthouse-accent-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></span>
+                                Blog
+                            </a>
+
                         </div>
                     </div>
                 </div>
