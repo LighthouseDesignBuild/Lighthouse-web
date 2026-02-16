@@ -474,3 +474,9 @@
   justify-content: center;
   cursor: ew-resize;
 }
+
+@layer utilities {
+  .min-h-screen {
+    min-height: 140vh; 
+  }
+}
