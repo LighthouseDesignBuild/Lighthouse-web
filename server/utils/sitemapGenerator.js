@@ -50,7 +50,8 @@ function scanPagesDirectory(dir, baseDir = dir, results = []) {
     } else if (file.endsWith('.html')) {
       // Get relative path from pages directory
       const relativePath = path.relative(baseDir, filePath);
-      const urlPath = '/' + relativePath.replace(/\\/g, '/').replace('.html', '');
+      // const urlPath = '/' + relativePath.replace(/\\/g, '/').replace('.html', '');
+      const urlPath = '/pages/' + relativePath.replace(/\\/g, '/').replace('.html', '');
 
       // Get file modification time for lastmod
       const lastmod = stat.mtime.toISOString().split('T')[0];
