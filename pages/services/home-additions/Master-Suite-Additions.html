@@ -118,22 +118,22 @@
     <div id="header-placeholder"></div>
 
     <!-- Main Content -->
- <main id="main-content">
+<main id="main-content">
 
     <!-- Hero Section - Full Screen with Image Background -->
     <section class="relative min-h-[70vh] md:min-h-[80vh] flex items-end overflow-hidden">
         <!-- Background Image -->
         <div class="absolute inset-0">
             <img src="/src/assets/images/services/home_additions/Primary Suites Additions.webp"
-                 alt="Master Suite Addition by Lighthouse Design Build"
+                 alt="Master suite addition project"
                  class="object-cover w-full h-full">
+            <!-- Gradient Overlay -->
             <div class="absolute inset-0 bg-gradient-to-t from-lighthouse-navy via-lighthouse-navy/60 to-transparent"></div>
         </div>
 
         <!-- Hero Content -->
         <div class="relative z-10 container-custom pb-16 md:pb-24">
             <div class="max-w-4xl" data-aos="fade-up" data-aos-duration="800">
-
                 <!-- Breadcrumb -->
                 <nav class="flex items-center gap-2 mb-6 text-sm text-white/70">
                     <a href="../index.html" class="transition-colors hover:text-white">Home</a>
@@ -144,10 +144,6 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                     </svg>
-                     <a href="../home_additions.html" class="transition-colors hover:text-white">Home Additions/a>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
                     <span class="text-white">Master Suite Additions</span>
                 </nav>
 
@@ -155,194 +151,304 @@
                     Master Suite<br class="hidden md:block" />
                     <span class="text-lighthouse-accent-gold">Additions</span>
                 </h1>
-
                 <p class="max-w-2xl text-xl text-white/90 md:text-2xl">
-                    Luxurious private spaces designed for comfort, relaxation, and privacy.
+                    Luxurious private spaces designed for comfort, relaxation, and refined living.
                 </p>
             </div>
         </div>
     </section>
 
-
-    <!-- Content Section -->
+    <!-- Intro Section (matches original layout vibe: badge + 2-col + image + CTAs) -->
     <section class="py-20 md:py-28 lg:py-36 bg-lighthouse-light dark:bg-gray-900">
-        <div class="container-custom max-w-5xl">
+        <div class="container-custom">
+            <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
 
-            <h2 class="mb-8 text-3xl font-bold md:text-4xl font-display text-lighthouse-navy dark:text-white">
-                Master Suite Additions
-            </h2>
+                <!-- Left - Content -->
+                <div data-aos="fade-right" data-aos-duration="800">
+                    <span class="inline-block px-4 py-2 mb-6 text-sm font-bold tracking-widest uppercase rounded-full bg-lighthouse-accent-gold/20 text-lighthouse-accent-gold">
+                        Master Suite Additions
+                    </span>
 
-            <div class="space-y-6 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
+                    <h2 class="mb-6 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl font-display text-lighthouse-navy dark:text-white">
+                        A Private Retreat Designed for Comfort, Relaxation, and Refined Living
+                    </h2>
 
-                <p>
-A thoughtfully designed master suite addition transforms your home by creating a private retreat dedicated to comfort, relaxation, and refined living. At Lighthouse Design Build, we specialize in designing and constructing luxurious master suites that blend seamlessly with your existing home while elevating both functionality and value. Whether you are looking to expand your square footage or reimagine how you use your space, a master suite addition offers a tailored solution that enhances everyday living.
+                    <!-- Keep content order exactly as provided -->
+                    <p class="mb-6 text-lg leading-relaxed text-gray-700 md:text-xl dark:text-gray-300">
+                        A thoughtfully designed master suite addition transforms your home by creating a private retreat dedicated to comfort, relaxation, and refined living. At Lighthouse Design Build, we specialize in designing and constructing luxurious master suites that blend seamlessly with your existing home while elevating both functionality and value. Whether you are looking to expand your square footage or reimagine how you use your space, a master suite addition offers a tailored solution that enhances everyday living.
+                    </p>
+
+                    <p class="mb-8 text-lg leading-relaxed text-gray-700 md:text-xl dark:text-gray-300">
+                        A master suite should feel like a destination within your home. It is where your day begins and ends, and it deserves the same level of attention and craftsmanship as any other significant investment. Our team approaches each project with careful planning, detailed design development, and expert construction practices to ensure your new space meets your expectations for comfort, beauty, and long-term durability.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col gap-4 sm:flex-row">
+                        <a href="../consultation.html"
+                           class="group inline-flex items-center justify-center gap-3 px-8 py-4 font-bold text-white transition-all duration-300 shadow-lg bg-lighthouse-accent-gold hover:bg-lighthouse-accent-gold/90 font-heading rounded-xl hover:shadow-xl hover:-translate-y-1">
+                            <span>Schedule Consultation</span>
+                            <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                            </svg>
+                        </a>
+                        <a href="../gallery.html"
+                           class="inline-flex items-center justify-center gap-2 px-8 py-4 font-bold transition-all duration-300 border-2 border-lighthouse-navy dark:border-gray-600 text-lighthouse-navy dark:text-white font-heading rounded-xl hover:bg-lighthouse-navy hover:text-white dark:hover:bg-gray-700">
+                            View Suite Projects
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right - Featured Image -->
+                <div data-aos="fade-left" data-aos-duration="800" data-aos-delay="200" class="relative">
+                    <!-- Gold Corner Accents -->
+                    <div class="absolute -top-4 -left-4 w-24 h-24 border-t-4 border-l-4 border-lighthouse-accent-gold rounded-tl-2xl z-10"></div>
+                    <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-4 border-r-4 border-lighthouse-accent-gold rounded-br-2xl z-10"></div>
+
+                    <div class="relative overflow-hidden shadow-2xl rounded-3xl group">
+                        <img src="/src/assets/images/services/home_additions/Primary Suites Additions.webp"
+                             alt="Master suite addition with seamless integration"
+                             class="w-full h-auto aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Services Breakdown Section (same look/feel as original; content stays in order) -->
+    <section class="py-20 md:py-28 lg:py-36 bg-gradient-to-br from-[#5C88A0] to-[#1C3D5A] dark:from-[#1C3D5A] dark:to-[#0a0a0a] relative overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-lighthouse-accent-gold/10 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-lighthouse-teal/10 rounded-full blur-[80px]"></div>
+
+        <div class="relative z-10 container-custom">
+            <!-- Section Header -->
+            <div class="max-w-3xl mx-auto mb-16 text-center" data-aos="fade-up" data-aos-duration="800">
+                <span class="inline-block px-4 py-2 mb-6 text-sm font-bold tracking-widest uppercase rounded-full bg-white/10 text-white">
+                    Details & Features
+                </span>
+                <h2 class="mb-4 text-3xl font-bold leading-tight text-white md:text-4xl lg:text-5xl font-display">
+                    What a Master Suite Addition Can Include
+                </h2>
+                <p class="text-lg text-white/80">
+                    Explore the core components that create a true private retreat.
+                </p>
+            </div>
+
+            <!-- Feature Cards Grid (styled like original flip cards, but content-forward for readability) -->
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+                <!-- Card 1 -->
+                <div class="h-full" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-full p-8 bg-white shadow-xl dark:bg-gray-800 rounded-3xl">
+                        <h3 class="mb-4 text-2xl font-bold text-lighthouse-navy dark:text-white font-display">
+                            Why Invest in a Master Suite Addition
+                        </h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300">
+                            A master suite addition is more than extra square footage. It is an opportunity to improve privacy, increase storage, and create a cohesive layout that supports your lifestyle. Many homeowners choose to add a master suite to accommodate changing needs, growing families, or a desire for more refined living spaces.
+                        </p>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            Key benefits of a master suite addition include:
+                        </p>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300 list-disc list-inside">
+                            <li>Increased home value and market appeal</li>
+                            <li>Enhanced privacy from other bedrooms and living areas</li>
+                            <li>Improved functionality with modern layouts and storage solutions</li>
+                            <li>Greater comfort through custom features and finishes</li>
+                            <li>A personalized retreat designed around your preferences</li>
+                        </ul>
+                        <p class="mt-4 text-gray-700 dark:text-gray-300">
+                            At Lighthouse Design Build, we ensure that every master suite addition integrates architecturally with your home’s style while offering modern amenities that reflect today’s standards of luxury.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="h-full" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-full p-8 bg-white shadow-xl dark:bg-gray-800 rounded-3xl">
+                        <h3 class="mb-4 text-2xl font-bold text-lighthouse-navy dark:text-white font-display">
+                            Spacious Bedroom Designs
+                        </h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300">
+                            The bedroom is the heart of any master suite addition. It should feel open, inviting, and proportioned for both comfort and elegance. Our design team carefully evaluates your home’s layout to create a spacious bedroom that feels connected yet private.
+                        </p>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            We consider factors such as natural light, ceiling height, furniture placement, and traffic flow to deliver a balanced and functional design. Features often included in our spacious bedroom designs include:
+                        </p>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300 list-disc list-inside">
+                            <li>Large windows for natural light and ventilation</li>
+                            <li>Tray or vaulted ceilings for added architectural interest</li>
+                            <li>Integrated lighting plans for layered illumination</li>
+                            <li>Built-in shelving or custom millwork</li>
+                            <li>Direct access to outdoor spaces when possible</li>
+                        </ul>
+                        <p class="mt-4 text-gray-700 dark:text-gray-300">
+                            Each master suite addition is tailored to your lifestyle. Whether you prefer a minimalist aesthetic or a more traditional and detailed approach, we ensure that the bedroom serves as a calm and comfortable sanctuary.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="h-full" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-full p-8 bg-white shadow-xl dark:bg-gray-800 rounded-3xl">
+                        <h3 class="mb-4 text-2xl font-bold text-lighthouse-navy dark:text-white font-display">
+                            Ensuite Bathroom with Luxury Finishes
+                        </h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300">
+                            A defining feature of any master suite addition is the ensuite bathroom. This space should combine practicality with spa-inspired luxury. Our team designs bathrooms that prioritize both daily convenience and indulgent comfort.
+                        </p>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            We collaborate with you to select materials and finishes that reflect your taste while maintaining durability and timeless appeal. Popular features in our ensuite bathroom designs include:
+                        </p>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300 list-disc list-inside">
+                            <li>Walk-in showers with frameless glass enclosures</li>
+                            <li>Freestanding soaking tubs</li>
+                            <li>Double vanities with custom cabinetry</li>
+                            <li>High-end tile and stone surfaces</li>
+                            <li>Heated flooring systems</li>
+                            <li>Thoughtfully designed lighting and mirrors</li>
+                        </ul>
+                        <p class="mt-4 text-gray-700 dark:text-gray-300">
+                            Functionality is just as important as aesthetics. We carefully plan plumbing layouts, ventilation, and storage solutions to ensure that your bathroom performs as beautifully as it looks. The result is a private space where you can unwind, refresh, and recharge.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="h-full" data-aos="fade-up" data-aos-delay="400">
+                    <div class="h-full p-8 bg-white shadow-xl dark:bg-gray-800 rounded-3xl">
+                        <h3 class="mb-4 text-2xl font-bold text-lighthouse-navy dark:text-white font-display">
+                            Walk-In Closet Systems
+                        </h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300">
+                            A well-designed walk-in closet is an essential component of a master suite addition. Beyond simple storage, it should offer organization, accessibility, and a sense of order that simplifies your daily routine.
+                        </p>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            Our custom walk-in closet systems are tailored to your wardrobe and lifestyle. We evaluate your storage needs and incorporate features such as:
+                        </p>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300 list-disc list-inside">
+                            <li>Adjustable shelving and hanging systems</li>
+                            <li>Built-in drawers and compartments</li>
+                            <li>Shoe and accessory displays</li>
+                            <li>Integrated lighting</li>
+                            <li>Island storage when space allows</li>
+                        </ul>
+                        <p class="mt-4 text-gray-700 dark:text-gray-300">
+                            By designing a closet that maximizes every square foot, we ensure that your master suite addition supports both functionality and style. The goal is to create a streamlined environment where everything has its place.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="h-full md:col-span-2 lg:col-span-1" data-aos="fade-up" data-aos-delay="500">
+                    <div class="h-full p-8 bg-white shadow-xl dark:bg-gray-800 rounded-3xl">
+                        <h3 class="mb-4 text-2xl font-bold text-lighthouse-navy dark:text-white font-display">
+                            Private Sitting Areas
+                        </h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300">
+                            For homeowners seeking an elevated experience, a private sitting area adds an additional layer of comfort to a master suite addition. This flexible space can serve as a quiet reading nook, a small home office, or a place to relax at the end of the day.
+                        </p>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            We design sitting areas that complement the bedroom layout while maintaining a sense of intimacy. Depending on available space and your preferences, features may include:
+                        </p>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300 list-disc list-inside">
+                            <li>Built-in window seats</li>
+                            <li>Fireplace accents</li>
+                            <li>Custom cabinetry</li>
+                            <li>Soft lighting for a relaxed ambiance</li>
+                            <li>Access to a balcony or patio</li>
+                        </ul>
+                        <p class="mt-4 text-gray-700 dark:text-gray-300">
+                            A private sitting area transforms your master suite addition into a true retreat within your home, offering versatility and enhanced privacy.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Long-form sections (kept in order, same page, same layout vibe) -->
+            <div class="max-w-4xl mx-auto mt-16 space-y-10 text-white/90" data-aos="fade-up" data-aos-duration="800">
+                <div class="p-8 bg-white/10 rounded-3xl backdrop-blur-sm">
+                    <h3 class="mb-4 text-2xl font-bold text-white font-display">Seamless Integration with Your Home</h3>
+                    <p>
+                        One of the most important aspects of any master suite addition is ensuring that it feels like a natural extension of your home rather than an afterthought. At Lighthouse Design Build, we take a comprehensive approach to design and construction. Our team evaluates structural considerations, rooflines, exterior finishes, and interior transitions to create a cohesive result.
+                    </p>
+                    <p class="mt-4">
+                        We also manage all permitting and code requirements, ensuring that your addition is compliant and built to the highest standards. Our commitment to craftsmanship and attention to detail ensures that your investment delivers long-term performance and satisfaction.
+                    </p>
+                </div>
+
+                <div class="p-8 bg-white/10 rounded-3xl backdrop-blur-sm">
+                    <h3 class="mb-4 text-2xl font-bold text-white font-display">Our Design Build Process</h3>
+                    <p>
+                        Choosing Lighthouse Design Build for your master suite addition means partnering with a team that values transparency, communication, and quality. Our design-build process streamlines your project from concept through completion.
+                    </p>
+                    <p class="mt-4">
+                        Our approach includes:
+                    </p>
+                    <ul class="mt-3 space-y-2 list-disc list-inside">
+                        <li>In-depth consultation to understand your goals</li>
+                        <li>Detailed design planning and material selection</li>
+                        <li>Clear budgeting and scheduling</li>
+                        <li>Skilled construction and project management</li>
+                        <li>Final walkthrough and quality assurance</li>
+                    </ul>
+                    <p class="mt-4">
+                        By managing both design and construction under one roof, we reduce complexity and maintain consistent quality throughout your project.
+                    </p>
+                </div>
+
+                <div class="p-8 bg-white/10 rounded-3xl backdrop-blur-sm">
+                    <h3 class="mb-4 text-2xl font-bold text-white font-display">A Personalized Retreat Built for You</h3>
+                    <p>
+                        Every homeowner has unique needs and preferences. Some prioritize expansive bedroom space, while others focus on a spa-like bathroom or an extensive closet system. Our role is to listen carefully and translate your vision into a master suite addition that reflects your lifestyle and enhances your home.
+                    </p>
+                    <p class="mt-4">
+                        From the initial concept to the final finishing touches, Lighthouse Design Build is dedicated to delivering luxurious private spaces designed for comfort, relaxation, and privacy. If you are considering a master suite addition, our team is ready to guide you through a professional and collaborative process that results in a space you will enjoy for years to come.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA Section (unchanged from original layout) -->
+    <section class="relative py-20 overflow-hidden text-white md:py-28 lg:py-36 bg-gradient-to-r from-lighthouse-navy to-gray-900 dark:from-gray-900 dark:to-black">
+        <!-- Decorative Elements -->
+        <div class="absolute top-0 right-0 rounded-full w-96 h-96 bg-lighthouse-teal/10 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 rounded-full w-80 h-80 bg-lighthouse-gold/5 blur-3xl"></div>
+
+        <div class="relative z-10 container-custom">
+            <div class="max-w-3xl mx-auto text-center" data-aos="fade-up" data-aos-duration="800">
+                <!-- Headline -->
+                <h2 class="mb-6 text-4xl font-bold leading-tight font-display md:text-5xl lg:text-6xl">
+                    Ready to Expand Your Home?
+                </h2>
+
+                <!-- Subtext -->
+                <p class="mb-8 text-xl leading-relaxed text-gray-200">
+                    Schedule a free consultation and let's discuss how we can add the space your family needs.
                 </p>
 
-                <p>
-A master suite should feel like a destination within your home. It is where your day begins and ends, and it deserves the same level of attention and craftsmanship as any other significant investment. Our team approaches each project with careful planning, detailed design development, and expert construction practices to ensure your new space meets your expectations for comfort, beauty, and long-term durability.
-                </p>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Why Invest in a Master Suite Addition
-                </h3>
-
-                <p>
-A master suite addition is more than extra square footage. It is an opportunity to improve privacy, increase storage, and create a cohesive layout that supports your lifestyle. Many homeowners choose to add a master suite to accommodate changing needs, growing families, or a desire for more refined living spaces.
-                </p>
-
-                <p>
-Key benefits of a master suite addition include:
-                </p>
-
-                <ul class="space-y-2 list-disc list-inside">
-                    <li>Increased home value and market appeal</li>
-                    <li>Enhanced privacy from other bedrooms and living areas</li>
-                    <li>Improved functionality with modern layouts and storage solutions</li>
-                    <li>Greater comfort through custom features and finishes</li>
-                    <li>A personalized retreat designed around your preferences</li>
-                </ul>
-
-                <p>
-At Lighthouse Design Build, we ensure that every master suite addition integrates architecturally with your home’s style while offering modern amenities that reflect today’s standards of luxury.
-                </p>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Spacious Bedroom Designs
-                </h3>
-
-                <p>
-The bedroom is the heart of any master suite addition. It should feel open, inviting, and proportioned for both comfort and elegance. Our design team carefully evaluates your home’s layout to create a spacious bedroom that feels connected yet private.
-                </p>
-
-                <p>
-We consider factors such as natural light, ceiling height, furniture placement, and traffic flow to deliver a balanced and functional design. Features often included in our spacious bedroom designs include:
-                </p>
-
-                <ul class="space-y-2 list-disc list-inside">
-                    <li>Large windows for natural light and ventilation</li>
-                    <li>Tray or vaulted ceilings for added architectural interest</li>
-                    <li>Integrated lighting plans for layered illumination</li>
-                    <li>Built-in shelving or custom millwork</li>
-                    <li>Direct access to outdoor spaces when possible</li>
-                </ul>
-
-                <p>
-Each master suite addition is tailored to your lifestyle. Whether you prefer a minimalist aesthetic or a more traditional and detailed approach, we ensure that the bedroom serves as a calm and comfortable sanctuary.
-                </p>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Ensuite Bathroom with Luxury Finishes
-                </h3>
-
-                <p>
-A defining feature of any master suite addition is the ensuite bathroom. This space should combine practicality with spa-inspired luxury. Our team designs bathrooms that prioritize both daily convenience and indulgent comfort.
-                </p>
-
-                <p>
-We collaborate with you to select materials and finishes that reflect your taste while maintaining durability and timeless appeal. Popular features in our ensuite bathroom designs include:
-                </p>
-
-                <ul class="space-y-2 list-disc list-inside">
-                    <li>Walk-in showers with frameless glass enclosures</li>
-                    <li>Freestanding soaking tubs</li>
-                    <li>Double vanities with custom cabinetry</li>
-                    <li>High-end tile and stone surfaces</li>
-                    <li>Heated flooring systems</li>
-                    <li>Thoughtfully designed lighting and mirrors</li>
-                </ul>
-
-                <p>
-Functionality is just as important as aesthetics. We carefully plan plumbing layouts, ventilation, and storage solutions to ensure that your bathroom performs as beautifully as it looks. The result is a private space where you can unwind, refresh, and recharge.
-                </p>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Walk-In Closet Systems
-                </h3>
-
-                <p>
-A well-designed walk-in closet is an essential component of a master suite addition. Beyond simple storage, it should offer organization, accessibility, and a sense of order that simplifies your daily routine.
-                </p>
-
-                <p>
-Our custom walk-in closet systems are tailored to your wardrobe and lifestyle. We evaluate your storage needs and incorporate features such as:
-                </p>
-
-                <ul class="space-y-2 list-disc list-inside">
-                    <li>Adjustable shelving and hanging systems</li>
-                    <li>Built-in drawers and compartments</li>
-                    <li>Shoe and accessory displays</li>
-                    <li>Integrated lighting</li>
-                    <li>Island storage when space allows</li>
-                </ul>
-
-                <p>
-By designing a closet that maximizes every square foot, we ensure that your master suite addition supports both functionality and style. The goal is to create a streamlined environment where everything has its place.
-                </p>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Private Sitting Areas
-                </h3>
-
-                <p>
-For homeowners seeking an elevated experience, a private sitting area adds an additional layer of comfort to a master suite addition. This flexible space can serve as a quiet reading nook, a small home office, or a place to relax at the end of the day.
-                </p>
-
-                <p>
-We design sitting areas that complement the bedroom layout while maintaining a sense of intimacy. Depending on available space and your preferences, features may include:
-                </p>
-
-                <ul class="space-y-2 list-disc list-inside">
-                    <li>Built-in window seats</li>
-                    <li>Fireplace accents</li>
-                    <li>Custom cabinetry</li>
-                    <li>Soft lighting for a relaxed ambiance</li>
-                    <li>Access to a balcony or patio</li>
-                </ul>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Seamless Integration with Your Home
-                </h3>
-
-                <p>
-One of the most important aspects of any master suite addition is ensuring that it feels like a natural extension of your home rather than an afterthought. At Lighthouse Design Build, we take a comprehensive approach to design and construction. Our team evaluates structural considerations, rooflines, exterior finishes, and interior transitions to create a cohesive result.
-                </p>
-
-                <p>
-We also manage all permitting and code requirements, ensuring that your addition is compliant and built to the highest standards. Our commitment to craftsmanship and attention to detail ensures that your investment delivers long-term performance and satisfaction.
-                </p>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-Our Design Build Process
-                </h3>
-
-                <p>
-Choosing Lighthouse Design Build for your master suite addition means partnering with a team that values transparency, communication, and quality. Our design-build process streamlines your project from concept through completion.
-                </p>
-
-                <p>
-Our approach includes:
-                </p>
-
-                <ul class="space-y-2 list-disc list-inside">
-                    <li>In-depth consultation to understand your goals</li>
-                    <li>Detailed design planning and material selection</li>
-                    <li>Clear budgeting and scheduling</li>
-                    <li>Skilled construction and project management</li>
-                    <li>Final walkthrough and quality assurance</li>
-                </ul>
-
-                <h3 class="pt-10 text-2xl font-bold font-display text-lighthouse-navy dark:text-white">
-A Personalized Retreat Built for You
-                </h3>
-
-                <p>
-Every homeowner has unique needs and preferences. Some prioritize expansive bedroom space, while others focus on a spa-like bathroom or an extensive closet system. Our role is to listen carefully and translate your vision into a master suite addition that reflects your lifestyle and enhances your home.
-                </p>
-
-                <p>
-From the initial concept to the final finishing touches, Lighthouse Design Build is dedicated to delivering luxurious private spaces designed for comfort, relaxation, and privacy. If you are considering a master suite addition, our team is ready to guide you through a professional and collaborative process that results in a space you will enjoy for years to come.
-                </p>
-
+                <!-- CTA Buttons -->
+                <div class="flex flex-col justify-center gap-4 sm:flex-row">
+                    <a href="../consultation.html"
+                       class="group inline-flex items-center justify-center gap-3 px-10 py-5 text-lg font-bold transition-all duration-300 shadow-lg bg-lighthouse-accent-gold hover:bg-lighthouse-accent-gold/90 text-lighthouse-navy font-heading rounded-xl hover:shadow-xl hover:-translate-y-1">
+                        <span>Get Started Today</span>
+                        <svg class="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </a>
+                    <a href="tel:+12032756543"
+                       class="inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold transition-all duration-300 border-2 border-white/30 text-white font-heading rounded-xl hover:bg-white/10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        (203) 275-6543
+                    </a>
+                </div>
             </div>
         </div>
     </section>
