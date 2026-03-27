@@ -144,12 +144,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// Clean URL handler - serve .html files for URLs without extension
+// Clean URL handler - serve .html files or folder index.html for URLs without extension
 app.use((req, res, next) => {
   if (req.path.startsWith("/pages/") && !req.path.includes(".")) {
     const htmlPath = path.join(__dirname, req.path + ".html");
+    const indexPath = path.join(__dirname, req.path, "index.html");
+
     if (fs.existsSync(htmlPath)) {
       return res.sendFile(htmlPath);
+    }
+
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
     }
   }
   next();
@@ -351,7 +357,10 @@ async function scrapeHubSpotBlogPost(url) {
             // This is a link to the old main site - convert to new site pages
 
             // Map common old site URLs to new site pages
-            if (href.includes("/contact") || href.toLowerCase().includes("contact")) {
+            if (
+              href.includes("/contact") ||
+              href.toLowerCase().includes("contact")
+            ) {
               $content(link).attr("href", "./consultation.html");
             } else if (
               href.includes("/portfolio") ||
