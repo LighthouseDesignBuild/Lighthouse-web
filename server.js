@@ -176,7 +176,7 @@ app.use((req, res, next) => {
 
 // Serve static files. Adjust this path if the site assets live elsewhere.
 const STATIC_DIR = path.join(__dirname, ".");
-app.use(express.static(STATIC_DIR));
+app.use(express.static(STATIC_DIR, { redirect: false }));
 
 // Mount admin API routes
 app.use("/api/auth", authRoutes);
