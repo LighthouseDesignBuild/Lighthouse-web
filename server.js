@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -29,28 +28,32 @@ const app = express();
 
 // Trust proxy - required for Railway/Docker/cloud environments behind reverse proxy
 // This allows Express to trust X-Forwarded-* headers for secure cookies
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
 }
 
 // Initialize memory session store (with periodic cleanup)
 const MemoryStore = createMemoryStore(session);
 
 // Session configuration
-app.use(session({
-  store: new MemoryStore({
-    checkPeriod: 86400000 // Prune expired entries every 24h
-  }),
-  secret: process.env.SESSION_SECRET || 'lighthouse-admin-secret-change-in-production',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: 'lax', // Prevents CSRF while allowing same-site navigation
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
-}));
+app.use(
+  session({
+    store: new MemoryStore({
+      checkPeriod: 86400000 // Prune expired entries every 24h
+    }),
+    secret:
+      process.env.SESSION_SECRET ||
+      "lighthouse-admin-secret-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax", // Prevents CSRF while allowing same-site navigation
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+  })
+);
 
 // JSON body parser
 app.use(express.json());
@@ -60,12 +63,91 @@ app.use(express.urlencoded({ extended: true }));
 // For example, if the blog is at https://blog.example.com/,
 // the RSS is often at: https://blog.example.com/rss.xml
 const HUBSPOT_RSS_URL =
-  process.env.HUBSPOT_RSS_URL || "https://blog.raymonddesignbuilders.com/news-info/rss.xml";
+  process.env.HUBSPOT_RSS_URL ||
+  "https://blog.raymonddesignbuilders.com/news-info/rss.xml";
+
+// Normalize trailing slashes (remove them for consistency, except root)
+app.use((req, res, next) => {
+  const hasTrailingSlash = req.path.length > 1 && req.path.endsWith("/");
+
+  if (hasTrailingSlash) {
+    const cleanPath = req.path.slice(0, -1);
+    const queryString = req.url.includes("?")
+      ? req.url.slice(req.url.indexOf("?"))
+      : "";
+
+    return res.redirect(301, cleanPath + queryString);
+  }
+
+  next();
+});
+
+// Custom legacy service redirects
+const redirectMap = {
+  "/pages/services/Master-Suite-Additions":
+    "/pages/services/home-additions/Master-Suite-Additions",
+
+  "/pages/services/room-additions":
+    "/pages/services/home-additions/room-additions",
+
+  "/pages/services/sunroom":
+    "/pages/services/home-additions/sunroom",
+
+  "/pages/services/kitchen":
+    "/pages/services/home-remodeling/kitchen",
+
+  "/pages/services/bathroom":
+    "/pages/services/home-remodeling/bathroom",
+
+  "/pages/services/basement-conversions":
+    "/pages/services/home-remodeling/basement-conversions",
+
+  "/pages/services/basement":
+    "/pages/services/home-remodeling/basement-conversions",
+
+  "/pages/services/garage-conversions":
+    "/pages/services/home-remodeling/garage-conversions",
+
+  "/pages/services/custom-patios":
+    "/pages/services/outdoor-living/custom-patios",
+
+  "/pages/services/custom-decks":
+    "/pages/services/outdoor-living/custom-decks",
+
+  "/pages/services/outdoor-kitchens":
+    "/pages/services/outdoor-living/outdoor-kitchens",
+
+  "/pages/services/screened-patios":
+    "/pages/services/outdoor-living/screened-patios",
+
+  "/pages/services/screened-in-porches":
+    "/pages/services/outdoor-living/screened-patios",
+
+  "/pages/services/index":
+    "/pages/services",
+
+  "/pages/services/gallery":
+    "/pages/gallery",
+
+  "/pages/services/services":
+    "/pages/services"
+};
+
+app.use((req, res, next) => {
+  const target = redirectMap[req.path];
+  if (target) {
+    const queryString = req.url.includes("?")
+      ? req.url.slice(req.url.indexOf("?"))
+      : "";
+    return res.redirect(301, target + queryString);
+  }
+  next();
+});
 
 // Clean URL handler - serve .html files for URLs without extension
 app.use((req, res, next) => {
-  if (req.path.startsWith('/pages/') && !req.path.includes('.')) {
-    const htmlPath = path.join(__dirname, req.path + '.html');
+  if (req.path.startsWith("/pages/") && !req.path.includes(".")) {
+    const htmlPath = path.join(__dirname, req.path + ".html");
     if (fs.existsSync(htmlPath)) {
       return res.sendFile(htmlPath);
     }
@@ -75,10 +157,12 @@ app.use((req, res, next) => {
 
 // Redirect .html URLs to clean URLs (301 permanent redirect for SEO)
 app.use((req, res, next) => {
-  if (req.path.endsWith('.html') && req.path.startsWith('/pages/')) {
+  if (req.path.endsWith(".html") && req.path.startsWith("/pages/")) {
     const cleanPath = req.path.slice(0, -5);
     // Preserve query string in redirect
-    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    const queryString = req.url.includes("?")
+      ? req.url.slice(req.url.indexOf("?"))
+      : "";
     return res.redirect(301, cleanPath + queryString);
   }
   next();
@@ -110,7 +194,11 @@ app.get("/admin", (req, res) => {
 app.get("/admin/:page", (req, res) => {
   // Extract the requested admin page
   const page = req.params.page || "index.html";
-  const filePath = path.join(__dirname, "admin", page.endsWith(".html") ? page : `${page}.html`);
+  const filePath = path.join(
+    __dirname,
+    "admin",
+    page.endsWith(".html") ? page : `${page}.html`
+  );
   res.sendFile(filePath, (err) => {
     if (err) {
       // If file doesn't exist, serve the main admin page
@@ -178,32 +266,32 @@ async function scrapeHubSpotBlogPost(url) {
     const $ = cheerio.load(html);
 
     // Remove unwanted elements globally
-    $('script').remove();
-    $('style').remove();
-    $('.hs-cta-wrapper').remove();
-    $('.hs-form').remove();
+    $("script").remove();
+    $("style").remove();
+    $(".hs-cta-wrapper").remove();
+    $(".hs-form").remove();
     $('img[src*="track.hubspot.com"]').remove(); // Remove tracking pixels
-    $('nav').remove(); // Remove navigation
-    $('header').remove(); // Remove header
-    $('footer').remove(); // Remove footer
-    $('.header').remove();
-    $('.footer').remove();
-    $('.navigation').remove();
+    $("nav").remove(); // Remove navigation
+    $("header").remove(); // Remove header
+    $("footer").remove(); // Remove footer
+    $(".header").remove();
+    $(".footer").remove();
+    $(".navigation").remove();
 
     // Try to find the main blog content using HubSpot-specific selectors
-    let content = '';
+    let content = "";
 
     // Try different common HubSpot blog content selectors in order of specificity
     const selectors = [
-      '#main-content',
-      '.blog-post-content',
-      '.post-body',
-      '.hs-blog-post-body',
-      '.blog-index__post-content',
-      'article .post-content',
-      '.blog-post .body',
-      'main',
-      'article'
+      "#main-content",
+      ".blog-post-content",
+      ".post-body",
+      ".hs-blog-post-body",
+      ".blog-index__post-content",
+      "article .post-content",
+      ".blog-post .body",
+      "main",
+      "article"
     ];
 
     for (const selector of selectors) {
@@ -221,60 +309,70 @@ async function scrapeHubSpotBlogPost(url) {
       const $content = cheerio.load(content);
 
       // Remove the title (h1) since we display it separately from RSS feed
-      $content('h1').first().remove();
+      $content("h1").first().remove();
 
       // Remove any remaining unwanted elements from content
-      $content('.sidebar').remove();
-      $content('.related-posts').remove();
-      $content('.comments').remove();
-      $content('.share-buttons').remove();
-      $content('nav').remove();
-      $content('.hhs-blog-grid-cards').remove(); 
-      $content('.post-page').remove(); 
-      $content('.blog-index').remove(); 
+      $content(".sidebar").remove();
+      $content(".related-posts").remove();
+      $content(".comments").remove();
+      $content(".share-buttons").remove();
+      $content("nav").remove();
+      $content(".hhs-blog-grid-cards").remove();
+      $content(".post-page").remove();
+      $content(".blog-index").remove();
 
       // Fix image paths to be absolute
-      $content('img').each((i, img) => {
-        const src = $content(img).attr('src');
-        if (src && src.startsWith('/')) {
+      $content("img").each((i, img) => {
+        const src = $content(img).attr("src");
+        if (src && src.startsWith("/")) {
           const baseUrl = new URL(url).origin;
-          $content(img).attr('src', baseUrl + src);
+          $content(img).attr("src", baseUrl + src);
         }
       });
 
       // Fix link paths - convert HubSpot blog internal links to point to our site
-      $content('a').each((i, link) => {
-        const href = $content(link).attr('href');
+      $content("a").each((i, link) => {
+        const href = $content(link).attr("href");
         if (href) {
           // Check if it's a HubSpot blog link
-          if (href.includes('blog.raymonddesignbuilders.com/news-info')) {
+          if (href.includes("blog.raymonddesignbuilders.com/news-info")) {
             // This is a blog post link - convert to our blog-post.html format
-            const postPath = href.split('/news-info/')[1];
+            const postPath = href.split("/news-info/")[1];
             if (postPath && postPath.trim()) {
-              $content(link).attr('href', `./blog-post.html?id=${encodeURIComponent(href)}`);
+              $content(link).attr(
+                "href",
+                `./blog-post.html?id=${encodeURIComponent(href)}`
+              );
             }
-          } else if (href.includes('raymonddesignbuilders.com') && !href.includes('blog.raymonddesignbuilders.com')) {
+          } else if (
+            href.includes("raymonddesignbuilders.com") &&
+            !href.includes("blog.raymonddesignbuilders.com")
+          ) {
             // This is a link to the old main site - convert to new site pages
 
             // Map common old site URLs to new site pages
-            if (href.includes('/contact') || href.toLowerCase().includes('contact')) {
-              $content(link).attr('href', './consultation.html');
-            } else if (href.includes('/portfolio') || href.includes('/projects') || href.includes('/our-work')) {
-              $content(link).attr('href', './portfolio.html');
-            } else if (href.includes('/gallery')) {
-              $content(link).attr('href', './gallery.html');
-            } else if (href.includes('/about')) {
-              $content(link).attr('href', './about.html');
-            } else if (href.includes('/services')) {
-              $content(link).attr('href', './services.html');
+            if (href.includes("/contact") || href.toLowerCase().includes("contact")) {
+              $content(link).attr("href", "./consultation.html");
+            } else if (
+              href.includes("/portfolio") ||
+              href.includes("/projects") ||
+              href.includes("/our-work")
+            ) {
+              $content(link).attr("href", "./portfolio.html");
+            } else if (href.includes("/gallery")) {
+              $content(link).attr("href", "./gallery.html");
+            } else if (href.includes("/about")) {
+              $content(link).attr("href", "./about.html");
+            } else if (href.includes("/services")) {
+              $content(link).attr("href", "./services.html");
             } else {
               // Default to home page for other old site links
-              $content(link).attr('href', './index.html');
+              $content(link).attr("href", "./index.html");
             }
-          } else if (href.startsWith('/') && !href.startsWith('//')) {
+          } else if (href.startsWith("/") && !href.startsWith("//")) {
             // Relative link - make absolute to HubSpot site
             const baseUrl = new URL(url).origin;
-            $content(link).attr('href', baseUrl + href);
+            $content(link).attr("href", baseUrl + href);
           }
         }
       });
@@ -283,13 +381,21 @@ async function scrapeHubSpotBlogPost(url) {
     }
 
     if (!content || content.trim().length < 50) {
-      return '<p>Content could not be extracted from this blog post. <a href="' + url + '" target="_blank">View original post</a></p>';
+      return (
+        '<p>Content could not be extracted from this blog post. <a href="' +
+        url +
+        '" target="_blank">View original post</a></p>'
+      );
     }
 
     return content;
   } catch (error) {
-    console.error('Error scraping blog post:', error);
-    return '<p>Unable to load blog post content. <a href="' + url + '" target="_blank">View original post</a></p>';
+    console.error("Error scraping blog post:", error);
+    return (
+      '<p>Unable to load blog post content. <a href="' +
+      url +
+      '" target="_blank">View original post</a></p>'
+    );
   }
 }
 
@@ -302,11 +408,11 @@ app.get("/health", (req, res) => {
 app.get("/sitemap.xml", async (req, res) => {
   try {
     const sitemap = await generateXMLSitemap();
-    res.header('Content-Type', 'application/xml');
+    res.header("Content-Type", "application/xml");
     res.send(sitemap);
   } catch (error) {
-    console.error('Error generating sitemap:', error);
-    res.status(500).send('Error generating sitemap');
+    console.error("Error generating sitemap:", error);
+    res.status(500).send("Error generating sitemap");
   }
 });
 
